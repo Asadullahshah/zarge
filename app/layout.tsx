@@ -1,0 +1,128 @@
+import type { Metadata } from "next"
+import { Inter, Playfair_Display, Montserrat } from "next/font/google"
+import "./globals.css"
+import { Header } from "@/components/layout/header"
+import { Footer } from "@/components/layout/footer"
+import { AuthProvider } from "@/components/providers/session-provider"
+import { ErrorBoundaryWrapper } from "@/components/error-boundary-wrapper"
+import { NetworkStatus } from "@/components/network-status"
+import { OrganizationSchema } from "@/components/seo/organization-schema"
+
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const playfair = Playfair_Display({ 
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+})
+
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-montserrat",
+  display: "swap",
+})
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com'),
+  title: {
+    default: "House of Noire - Premium Luxury Fashion & Home Essentials",
+    template: "%s | House of Noire"
+  },
+  description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles from House of Noire. Premium clothing for men and women, plus exclusive home essentials including bedsheets, quilts, blankets, and more.",
+  keywords: [
+    "premium clothing",
+    "luxury fashion",
+    "home essentials",
+    "premium fashion",
+    "formal wear",
+    "semi-formal apparel",
+    "premium home textiles",
+    "luxury bedsheets",
+    "premium quilts",
+    "designer clothing",
+    "high-end fashion",
+    "premium home decor",
+    "luxury clothing Pakistan",
+    "premium fashion store",
+    "home essentials store"
+  ],
+  authors: [{ name: "House of Noire" }],
+  creator: "House of Noire",
+  publisher: "House of Noire",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com',
+    siteName: "House of Noire",
+    title: "House of Noire - Premium Luxury Fashion & Home Essentials",
+    description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "House of Noire - Premium Luxury Fashion & Home Essentials",
+    description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    other: [
+      {
+        rel: "manifest",
+        url: "/favicon/site.webmanifest",
+      },
+    ],
+  },
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com',
+  },
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en" className={`${inter.variable} ${playfair.variable} ${montserrat.variable}`}>
+      <body className={inter.className}>
+        <OrganizationSchema />
+        <ErrorBoundaryWrapper>
+          <AuthProvider>
+            <NetworkStatus />
+            <Header />
+            {children}
+            <Footer />
+          </AuthProvider>
+        </ErrorBoundaryWrapper>
+      </body>
+    </html>
+  )
+}
+

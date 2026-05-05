@@ -1,0 +1,291 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 96%;
+    --card: 240 6% 8%;
+    --card-foreground: 0 0% 96%;
+    --popover: 240 6% 8%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 43 54% 58%;
+    --primary-foreground: 240 10% 4%;
+    --secondary: 0 0% 78%;
+    --secondary-foreground: 240 10% 4%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 96%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 96%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 43 54% 58%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-[#0B0B0C] text-[#F7F7F7] font-sans;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* House Noire Brand Font Styles */
+.font-brand {
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+.font-brand-bold {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-brand-outline {
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 100;
+  letter-spacing: 0.08em;
+  -webkit-text-stroke: 1px currentColor;
+  -webkit-text-fill-color: transparent;
+  text-stroke: 1px currentColor;
+  color: currentColor;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar styles for featured products */
+.featured-products-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.featured-products-scroll::-webkit-scrollbar-track {
+  background: #0B0B0C;
+  border-radius: 4px;
+}
+
+.featured-products-scroll::-webkit-scrollbar-thumb {
+  background: #1A1A1B;
+  border-radius: 4px;
+}
+
+.featured-products-scroll::-webkit-scrollbar-thumb:hover {
+  background: #2A2A2B;
+}
+
+/* Firefox scrollbar */
+.featured-products-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #1A1A1B #0B0B0C;
+}
+
+/* Custom scrollbar styles for product thumbnails */
+.product-thumbnails-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.product-thumbnails-scroll::-webkit-scrollbar-track {
+  background: #0B0B0C;
+  border-radius: 4px;
+}
+
+.product-thumbnails-scroll::-webkit-scrollbar-thumb {
+  background: #1A1A1B;
+  border-radius: 4px;
+}
+
+.product-thumbnails-scroll::-webkit-scrollbar-thumb:hover {
+  background: #2A2A2B;
+}
+
+/* Firefox scrollbar */
+.product-thumbnails-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #1A1A1B #0B0B0C;
+}
+
+/* Hide scrollbar for scrollable products */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Rich Text Editor Styles */
+.ProseMirror {
+  outline: none;
+  min-height: 300px;
+}
+
+.ProseMirror p {
+  margin: 1em 0;
+  line-height: 1.6;
+}
+
+.ProseMirror h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 1em 0 0.5em 0;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 1em 0 0.5em 0;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin: 1em 0 0.5em 0;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.ProseMirror li {
+  margin: 0.5em 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #1A1A1B;
+  padding-left: 1em;
+  margin: 1em 0;
+  font-style: italic;
+  color: #BDBDBD;
+}
+
+.ProseMirror a {
+  color: #D4AF37;
+  text-decoration: underline;
+}
+
+.ProseMirror a:hover {
+  color: #F4D03F;
+}
+
+.ProseMirror strong {
+  font-weight: bold;
+}
+
+.ProseMirror em {
+  font-style: italic;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #6B7280;
+  pointer-events: none;
+  height: 0;
+}
+
+/* Enhanced Blog Content Styling */
+.blog-content {
+  @apply text-[#F7F7F7] leading-relaxed;
+}
+
+.blog-content h1 {
+  @apply text-4xl md:text-5xl font-serif font-bold mt-12 mb-6 text-[#F7F7F7];
+}
+
+.blog-content h2 {
+  @apply text-3xl md:text-4xl font-serif font-bold mt-10 mb-5 text-[#F7F7F7] border-b border-[#1A1A1B] pb-3;
+}
+
+.blog-content h3 {
+  @apply text-2xl md:text-3xl font-serif font-semibold mt-8 mb-4 text-[#F7F7F7];
+}
+
+.blog-content h4 {
+  @apply text-xl md:text-2xl font-semibold mt-6 mb-3 text-[#F7F7F7];
+}
+
+.blog-content p {
+  @apply text-lg leading-relaxed mb-6 text-[#BDBDBD];
+}
+
+.blog-content ul,
+.blog-content ol {
+  @apply my-6 space-y-3;
+}
+
+.blog-content ul {
+  @apply list-disc list-inside;
+}
+
+.blog-content ol {
+  @apply list-decimal list-inside;
+}
+
+.blog-content li {
+  @apply text-lg leading-relaxed text-[#BDBDBD] pl-2;
+}
+
+.blog-content li::marker {
+  @apply text-primary;
+}
+
+.blog-content a {
+  @apply text-primary underline hover:text-primary/80 transition-colors font-medium;
+}
+
+.blog-content strong {
+  @apply font-bold text-[#F7F7F7];
+}
+
+.blog-content em {
+  @apply italic text-[#BDBDBD];
+}
+
+.blog-content blockquote {
+  @apply border-l-4 border-primary pl-6 py-4 my-8 bg-[#121213] rounded-r-lg italic text-[#BDBDBD] text-lg;
+}
+
+.blog-content code {
+  @apply bg-[#121213] px-2 py-1 rounded text-sm font-mono text-primary border border-[#1A1A1B];
+}
+
+.blog-content pre {
+  @apply bg-[#121213] p-4 rounded-lg my-6 overflow-x-auto border border-[#1A1A1B];
+}
+
+.blog-content pre code {
+  @apply bg-transparent p-0 border-0;
+}
+
+.blog-content img {
+  @apply rounded-lg my-8 shadow-xl border border-[#1A1A1B];
+}
+
+.blog-content hr {
+  @apply my-12 border-[#1A1A1B];
+}
+
+.blog-content table {
+  @apply w-full my-8 border-collapse border border-[#1A1A1B];
+}
+
+.blog-content th {
+  @apply bg-[#121213] border border-[#1A1A1B] px-4 py-3 text-left font-semibold text-[#F7F7F7];
+}
+
+.blog-content td {
+  @apply border border-[#1A1A1B] px-4 py-3 text-[#BDBDBD];
+}
+

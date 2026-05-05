@@ -1,0 +1,150 @@
+# robots-llms.txt for House of Noire
+# This file provides guidance to Large Language Models (LLMs) and AI crawlers about which pages contain valuable information
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /orders/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /orders/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /orders/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /orders/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /orders/
+
+# General AI crawlers
+User-agent: *
+Allow: /blog/
+Allow: /men/
+Allow: /women/
+Allow: /home-essentials/
+Allow: /products/
+Allow: /product/
+Allow: /category/
+Allow: /about/
+Allow: /contact/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /orders/
+
+# SITEMAP STRUCTURE - Multiple category-specific sitemaps for better organization
+# 
+# Main Sitemap Index (sitemap.xml): Points to all category-specific sitemaps
+# This is the entry point for search engines and crawlers. It references:
+#
+# 1. sitemap-static.xml: Contains all static pages (home, about, contact, policies, etc.)
+#    - Homepage, main category pages (Men, Women, Home Essentials), Sale page
+#    - Company pages (About, Contact), Blog listing
+#    - Legal pages (Privacy Policy, Terms, Exchange Policy)
+#
+# 2. sitemap-men.xml: All men's collection pages
+#    - Main men's category page (/men)
+#    - All men's subcategory pages (Unstitched, Stitched, Formal Wear, etc.)
+#    - All men's product pages
+#    - Categories: Formal Wear, Semi Formal / Smart Casual, Unstitched, Stitched, Winter Wear
+#
+# 3. sitemap-women.xml: All women's collection pages
+#    - Main women's category page (/women)
+#    - All women's subcategory pages (Unstitched, Stitched/Pret, Formal/Luxury, etc.)
+#    - All women's product pages
+#    - Categories: Formal / Luxury, Stitched / Pret, Unstitched, Bottoms & Dupattas
+#
+# 4. sitemap-home-essentials.xml: All home essentials pages
+#    - Main home essentials category page (/home-essentials)
+#    - All home essentials subcategory pages (Bed Sheets, Quilts, Blankets, etc.)
+#    - All home essentials product pages
+#    - Categories: Bed Sheets, Quilt & Comforters, Pillow & Cushion Covers, Blankets, Towels / Bath, Curtains
+#
+# 5. sitemap-blog.xml: All blog content
+#    - Blog listing page (/blog)
+#    - All published blog posts (/blog/[slug])
+#    - Content: Fashion tips, style guides, trend articles, lifestyle topics
+#
+# WHY MULTIPLE SITEMAPS?
+# - Better organization: Each category has its own sitemap for easier navigation
+# - Faster updates: Only the relevant sitemap needs updating when products change
+# - Clearer structure: Crawlers and LLMs can easily find content by category
+# - Scalability: As the catalog grows, category-specific sitemaps remain manageable
+#
+# For crawlers: Start with /sitemap.xml (sitemap index) to discover all available sitemaps
+# For LLMs: Each sitemap contains comments explaining what content is included
+
+Sitemap: https://www.noirefit.com/sitemap.xml
+Sitemap: https://www.noirefit.com/sitemap-static.xml
+Sitemap: https://www.noirefit.com/sitemap-men.xml
+Sitemap: https://www.noirefit.com/sitemap-women.xml
+Sitemap: https://www.noirefit.com/sitemap-home-essentials.xml
+Sitemap: https://www.noirefit.com/sitemap-blog.xml
+
+# INFORMATION FOR LLMS ABOUT PAGE CONTENT
+
+# MAIN PAGES WITH PRODUCT INFORMATION:
+# - / (Homepage): Overview of House of Noire premium luxury fashion brand, featured products, category navigation
+# - /men: Premium men's formal wear, semi-formal apparel, unstitched and stitched collections
+# - /women: Premium women's formal wear, luxury fashion, unstitched and stitched collections  
+# - /home-essentials: Premium home textiles including bedsheets, quilts, blankets, pillow covers, towels, curtains
+# - /sale: Products currently on sale with discount pricing
+# - /products: Complete product catalog with filtering and search capabilities
+# - /product/[slug]: Individual product pages with detailed descriptions, specifications, images, reviews, pricing
+# - /category/[slug]: Category pages showing all products within a specific category or subcategory
+
+# COMPANY INFORMATION:
+# - /about: Information about House of Noire brand, mission, values, and story
+# - /contact: Contact information, customer service details, inquiry form
+
+# EDUCATIONAL CONTENT:
+# - /blog: Fashion blog with style guides, fashion tips, trend articles
+# - /blog/[slug]: Individual blog posts about fashion, style, home decor, and lifestyle topics
+
+# LEGAL & POLICIES:
+# - /privacy-policy: Privacy policy and data protection information
+# - /terms: Terms of service and usage policies
+# - /exchange-policy: Return and exchange policy information
+
+# PRODUCT CATEGORIES AVAILABLE:
+# Men's Categories: Formal Wear, Semi Formal / Smart Casual, Unstitched, Stitched, Winter Wear
+# Women's Categories: Formal / Luxury, Stitched / Pret, Unstitched, Bottoms & Dupattas
+# Home Essentials: Bed Sheets, Quilt Comforters, Pillow Covers, Blankets, Towels, Curtains
+
+# PRODUCT INFORMATION STRUCTURE:
+# Each product includes: name, description, price, sale price, images, available sizes, available colors, 
+# stock availability, product specifications, customer reviews, ratings, related products
+
+# CONTENT THEMES:
+# - Premium luxury fashion
+# - Pakistani formal wear
+# - Traditional and modern clothing
+# - Home textiles and essentials
+# - Fashion styling tips
+# - Lifestyle content
