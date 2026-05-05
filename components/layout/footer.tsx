@@ -32,16 +32,6 @@ export function Footer() {
                   Men
                 </Link>
               </li>
-              <li>
-                <Link href="/women" className="hover:text-[#F7F7F7] transition-colors">
-                  Women
-                </Link>
-              </li>
-              <li>
-                <Link href="/home-essentials" className="hover:text-[#F7F7F7] transition-colors">
-                  Home Essentials
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -56,11 +46,6 @@ export function Footer() {
               <li>
                 <Link href="/contact" className="hover:text-[#F7F7F7] transition-colors">
                   Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-[#F7F7F7] transition-colors">
-                  Blog
                 </Link>
               </li>
             </ul>

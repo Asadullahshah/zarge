@@ -67,16 +67,11 @@ export function Header() {
               </Link>
             )}
             <CategoryDropdown label="Men" slug="men" />
-            <CategoryDropdown label="Women" slug="women" />
-            <CategoryDropdown label="Home Essentials" slug="home-essentials" />
             <Link href="/about" className="text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors">
               About
             </Link>
             <Link href="/contact" className="text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors">
               Contact
-            </Link>
-            <Link href="/blog" className="text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors">
-              Blog
             </Link>
           </nav>
 
@@ -115,16 +110,11 @@ export function Header() {
                   </Link>
                 )}
                 <CategoryDropdown label="Men" slug="men" mobile />
-                <CategoryDropdown label="Women" slug="women" mobile />
-                <CategoryDropdown label="Home Essentials" slug="home-essentials" mobile />
                 <Link href="/about" className="text-[#BDBDBD] hover:text-[#F7F7F7]" onClick={() => setMobileMenuOpen(false)}>
                   About
                 </Link>
                 <Link href="/contact" className="text-[#BDBDBD] hover:text-[#F7F7F7]" onClick={() => setMobileMenuOpen(false)}>
                   Contact
-                </Link>
-                <Link href="/blog" className="text-[#BDBDBD] hover:text-[#F7F7F7]" onClick={() => setMobileMenuOpen(false)}>
-                  Blog
                 </Link>
               </nav>
             </div>
