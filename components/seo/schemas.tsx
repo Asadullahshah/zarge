@@ -18,7 +18,7 @@ export function ProductSchema({ product }: ProductSchemaProps) {
     sku: product.sku,
     brand: {
       "@type": "Brand",
-      name: "House of Noire",
+      name: "Zarge",
     },
     offers: {
       "@type": "Offer",

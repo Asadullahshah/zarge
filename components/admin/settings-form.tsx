@@ -16,7 +16,7 @@ export function SettingsForm({ initialSettings }: SettingsFormProps) {
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      siteName: initialSettings.siteName || "House of Noire",
+      siteName: initialSettings.siteName || "Zarge",
       siteDescription: initialSettings.siteDescription || "Premium Luxury Fashion & Home Essentials",
       contactEmail: initialSettings.contactEmail || "",
       contactPhone: initialSettings.contactPhone || "",

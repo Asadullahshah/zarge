@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Premium Women's Clothing | Luxury Fashion Collection | House of Noire",
-  description: "Explore premium women's clothing at House of Noire. Shop elegant formal wear, luxury fashion, stitched and unstitched collections, bottoms, and dupattas. Premium quality with authentic Pakistani design and craftsmanship.",
+  title: "Premium Women's Clothing | Luxury Fashion Collection | Zarge",
+  description: "Explore premium women's clothing at Zarge. Shop elegant formal wear, luxury fashion, stitched and unstitched collections, bottoms, and dupattas. Premium quality with authentic Pakistani design and craftsmanship.",
   keywords: [
     "premium women's clothing",
     "women's luxury fashion",
@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     "elegant women's clothing"
   ],
   openGraph: {
-    title: "Premium Women's Clothing | Luxury Fashion Collection | House of Noire",
+    title: "Premium Women's Clothing | Luxury Fashion Collection | Zarge",
     description: "Explore premium women's clothing. Shop elegant formal wear, luxury fashion, stitched and unstitched collections.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Premium Women's Clothing | House of Noire",
+    title: "Premium Women's Clothing | Zarge",
     description: "Explore premium women's clothing. Shop elegant formal wear, luxury fashion, and more.",
   },
 }

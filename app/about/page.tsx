@@ -2,25 +2,25 @@ import { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "About Us | House of Noire",
-  description: "Learn about House of Noire - Your premier destination for fashion, home essentials, and quality lifestyle products.",
+  title: "About Us | Zarge",
+  description: "Learn about Zarge - Your premier destination for fashion, home essentials, and quality lifestyle products.",
 }
 
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-16">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-serif font-bold mb-8">About House of Noire</h1>
+        <h1 className="text-4xl font-serif font-bold mb-8">About Zarge</h1>
         
         <div className="prose prose-invert max-w-none space-y-6 text-[#BDBDBD]">
           <p className="text-lg">
-            Welcome to House of Noire, your premier destination for exquisite fashion, elegant home essentials, and quality lifestyle products.
+            Welcome to Zarge, your premier destination for exquisite fashion, elegant home essentials, and quality lifestyle products.
           </p>
 
           <section>
             <h2 className="text-2xl font-serif font-bold text-[#F7F7F7] mt-8 mb-4">Our Story</h2>
             <p>
-              House of Noire was founded with a vision to bring together the finest in fashion and home essentials under one roof. 
+              Zarge was founded with a vision to bring together the finest in fashion and home essentials under one roof. 
               We believe that style and quality should be accessible to everyone, and we&apos;re committed to offering products that 
               reflect elegance, sophistication, and timeless appeal.
             </p>
@@ -47,7 +47,7 @@ export default function AboutPage() {
           <section>
             <h2 className="text-2xl font-serif font-bold text-[#F7F7F7] mt-8 mb-4">Our Commitment</h2>
             <p>
-              At House of Noire, we are committed to:
+              At Zarge, we are committed to:
             </p>
             <ul className="list-disc list-inside space-y-2">
               <li>Providing exceptional customer service</li>

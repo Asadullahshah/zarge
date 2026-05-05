@@ -34,10 +34,10 @@ export async function generateMetadata({
     return {}
   }
 
-  const categoryDescription = category.description || `Shop premium ${category.name} at House of Noire. Discover our curated collection of ${category.name.toLowerCase()} featuring premium quality and authentic Pakistani craftsmanship.`
+  const categoryDescription = category.description || `Shop premium ${category.name} at Zarge. Discover our curated collection of ${category.name.toLowerCase()} featuring premium quality and authentic Pakistani craftsmanship.`
   
   return {
-    title: `Premium ${category.name} | Luxury Fashion & Home Essentials | House of Noire`,
+    title: `Premium ${category.name} | Luxury Fashion & Home Essentials | Zarge`,
     description: categoryDescription.substring(0, 160),
     keywords: [
       `premium ${category.name.toLowerCase()}`,
@@ -45,19 +45,19 @@ export async function generateMetadata({
       `${category.name.toLowerCase()} collection`,
       "premium clothing",
       "luxury fashion",
-      "House of Noire",
+      "Zarge",
       ...(category.name.includes("Men") || category.name.includes("Women") 
         ? ["premium fashion", "designer clothing", "high-end fashion"]
         : ["home essentials", "premium home textiles", "luxury home decor"])
     ],
     openGraph: {
-      title: `Premium ${category.name} | House of Noire`,
+      title: `Premium ${category.name} | Zarge`,
       description: categoryDescription.substring(0, 200),
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `Premium ${category.name} | House of Noire`,
+      title: `Premium ${category.name} | Zarge`,
       description: categoryDescription.substring(0, 200),
     },
   }

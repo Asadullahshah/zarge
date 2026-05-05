@@ -30,10 +30,10 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com'),
   title: {
-    default: "House of Noire - Premium Luxury Fashion & Home Essentials",
-    template: "%s | House of Noire"
+    default: "Zarge - Premium Luxury Fashion & Home Essentials",
+    template: "%s | Zarge"
   },
-  description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles from House of Noire. Premium clothing for men and women, plus exclusive home essentials including bedsheets, quilts, blankets, and more.",
+  description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles from Zarge. Premium clothing for men and women, plus exclusive home essentials including bedsheets, quilts, blankets, and more.",
   keywords: [
     "premium clothing",
     "luxury fashion",
@@ -51,9 +51,9 @@ export const metadata: Metadata = {
     "premium fashion store",
     "home essentials store"
   ],
-  authors: [{ name: "House of Noire" }],
-  creator: "House of Noire",
-  publisher: "House of Noire",
+  authors: [{ name: "Zarge" }],
+  creator: "Zarge",
+  publisher: "Zarge",
   formatDetection: {
     email: false,
     address: false,
@@ -63,13 +63,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com',
-    siteName: "House of Noire",
-    title: "House of Noire - Premium Luxury Fashion & Home Essentials",
+    siteName: "Zarge",
+    title: "Zarge - Premium Luxury Fashion & Home Essentials",
     description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "House of Noire - Premium Luxury Fashion & Home Essentials",
+    title: "Zarge - Premium Luxury Fashion & Home Essentials",
     description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles.",
   },
   robots: {

@@ -30,15 +30,14 @@ export function HeroSection() {
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-6">
           <Image
             src="/img/ICON WHT LOGO TRANSPARANT.png"
-            alt="House of Noire"
+            alt="Zarge"
             width={80}
             height={80}
             className="object-contain"
             priority
           />
           <h1 className="text-4xl md:text-7xl font-brand">
-            <span className="font-brand-bold">HOUSE</span>{" "}
-            <span className="font-brand-outline">NOIRE</span>
+            <span className="font-brand-bold">ZARGE</span>
           </h1>
         </div>
         <p className="text-xl md:text-2xl text-[#BDBDBD] mb-6 md:mb-8 max-w-2xl mx-auto px-4">

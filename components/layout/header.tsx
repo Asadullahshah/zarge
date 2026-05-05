@@ -46,15 +46,14 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <Image
               src="/img/ICON WHT LOGO TRANSPARANT.png"
-              alt="House of Noire"
+              alt="Zarge"
               width={40}
               height={40}
               className="object-contain"
               priority
             />
             <span className="text-2xl font-brand hidden sm:block">
-              <span className="font-brand-bold">HOUSE</span>{" "}
-              <span className="font-brand-outline">NOIRE</span>
+              <span className="font-brand-bold">ZARGE</span>
             </span>
           </Link>
 

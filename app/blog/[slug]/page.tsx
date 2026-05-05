@@ -143,7 +143,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: post.seo_title || `${post.title} | House of Noire Blog`,
+    title: post.seo_title || `${post.title} | Zarge Blog`,
     description: post.seo_desc || post.excerpt || post.content.substring(0, 160),
     openGraph: {
       title: post.title,
@@ -242,7 +242,7 @@ export default async function BlogPostPage({
                     {(post.author_name || "HO")[0]?.toUpperCase()}
                   </span>
                 </div>
-                <span className="font-medium">{post.author_name || "House of Noire"}</span>
+                <span className="font-medium">{post.author_name || "Zarge"}</span>
               </div>
               {post.published_at && (
                 <>
