@@ -6,7 +6,7 @@ import { Metadata } from "next"
 import Image from "next/image"
 import { format } from "date-fns"
 import dynamicImport from "next/dynamic"
-import { HeroSection } from "@/components/home/hero-section"
+import { HeroSectionV2 } from "@/components/home/HeroSectionV2"
 
 const ScrollableProducts = dynamicImport(
   () => import("@/components/product/scrollable-products").then((mod) => ({ default: mod.ScrollableProducts })),
@@ -130,7 +130,7 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <HeroSection />
+      <HeroSectionV2 />
 
       {/* Featured Products Section */}
       {featuredProducts.length > 0 && (
