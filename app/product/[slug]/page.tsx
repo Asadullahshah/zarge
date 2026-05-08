@@ -260,10 +260,10 @@ export async function generateMetadata({
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com'
   const productUrl = `${baseUrl}/product/${product.slug}`
-  const description = product.seo_desc || product.short_desc || product.description || `Shop ${product.name} at House of Noire. Premium quality ${product.gender?.toLowerCase() || ''} clothing and fashion.`
+  const description = product.seo_desc || product.short_desc || product.description || `Shop ${product.name} at Zarge. Premium quality ${product.gender?.toLowerCase() || ''} clothing and fashion.`
 
   return {
-    title: product.seo_title || `${product.name} | Premium Fashion | House of Noire`,
+    title: product.seo_title || `${product.name} | Premium Fashion | Zarge`,
     description: description.substring(0, 160),
     keywords: product.seo_keywords && product.seo_keywords.length > 0 
       ? product.seo_keywords 
@@ -272,7 +272,7 @@ export async function generateMetadata({
           `premium ${product.gender?.toLowerCase() || ''} clothing`,
           "luxury fashion",
           "premium clothing",
-          "House of Noire",
+          "Zarge",
           ...(product.categories?.map((cat: any) => cat.name) || [])
         ],
     openGraph: {
@@ -288,7 +288,7 @@ export async function generateMetadata({
       ] : [],
       type: "website",
       url: productUrl,
-      siteName: "House of Noire",
+      siteName: "Zarge",
     },
     twitter: {
       card: "summary_large_image",

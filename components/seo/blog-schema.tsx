@@ -14,11 +14,11 @@ export function BlogPostSchema({ post }: BlogPostSchemaProps) {
     dateModified: post.updated_at || post.created_at,
     author: {
       "@type": "Person",
-      name: post.author_name || "House of Noire",
+      name: post.author_name || "Zarge",
     },
     publisher: {
       "@type": "Organization",
-      name: "House of Noire",
+      name: "Zarge",
       logo: {
         "@type": "ImageObject",
         url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/logo.png`,

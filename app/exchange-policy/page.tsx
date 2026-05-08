@@ -1,8 +1,8 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Exchange Policy | House of Noire",
-  description: "Learn about House of Noire's exchange and return policy for products.",
+  title: "Exchange Policy | Zarge",
+  description: "Learn about Zarge's exchange and return policy for products.",
 }
 
 export default function ExchangePolicyPage() {

@@ -5,7 +5,7 @@ import { LogOut } from "lucide-react"
 export async function AdminHeader() {
   return (
     <header className="bg-[#121213] border-b border-[#1A1A1B] px-8 py-4 flex justify-between items-center">
-      <h1 className="text-xl font-serif font-bold">House of Noire Admin</h1>
+      <h1 className="text-xl font-serif font-bold">Zarge Admin</h1>
       <form
         action={async () => {
           "use server"

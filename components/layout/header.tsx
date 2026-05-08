@@ -43,41 +43,32 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-[#0B0B0C] border-b border-[#1A1A1B]">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-16">
-          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <Image
-              src="/img/ICON WHT LOGO TRANSPARANT.png"
-              alt="House of Noire"
-              width={40}
-              height={40}
-              className="object-contain"
-              priority
-            />
-            <span className="text-2xl font-brand hidden sm:block">
-              <span className="font-brand-bold">HOUSE</span>{" "}
-              <span className="font-brand-outline">NOIRE</span>
-            </span>
-          </Link>
+        <Link href="/" className="hover:opacity-80 transition-opacity">
+          <Image
+            src="/img/Zarge-removebg-preview.png"
+            alt="Zargé Logo"
+            width={140}
+            height={40}
+            className="object-contain mt-4"
+            priority
+          />
+        </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            {hasSale && (
+            {/* {hasSale && (
               <Link 
                 href="/sale" 
                 className="text-primary font-semibold hover:text-primary/80 transition-colors"
               >
                 SALE
               </Link>
-            )}
-            <CategoryDropdown label="Men" slug="men" />
-            <CategoryDropdown label="Women" slug="women" />
-            <CategoryDropdown label="Home Essentials" slug="home-essentials" />
+            )} */}
+            <CategoryDropdown label="Collections" slug="men" />
             <Link href="/about" className="text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors">
               About
             </Link>
             <Link href="/contact" className="text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors">
               Contact
-            </Link>
-            <Link href="/blog" className="text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors">
-              Blog
             </Link>
           </nav>
 
@@ -116,16 +107,11 @@ export function Header() {
                   </Link>
                 )}
                 <CategoryDropdown label="Men" slug="men" mobile />
-                <CategoryDropdown label="Women" slug="women" mobile />
-                <CategoryDropdown label="Home Essentials" slug="home-essentials" mobile />
                 <Link href="/about" className="text-[#BDBDBD] hover:text-[#F7F7F7]" onClick={() => setMobileMenuOpen(false)}>
                   About
                 </Link>
                 <Link href="/contact" className="text-[#BDBDBD] hover:text-[#F7F7F7]" onClick={() => setMobileMenuOpen(false)}>
                   Contact
-                </Link>
-                <Link href="/blog" className="text-[#BDBDBD] hover:text-[#F7F7F7]" onClick={() => setMobileMenuOpen(false)}>
-                  Blog
                 </Link>
               </nav>
             </div>

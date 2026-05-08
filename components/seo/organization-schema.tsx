@@ -4,7 +4,7 @@ export function OrganizationSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "House of Noire",
+    "name": "Zarge",
     "url": baseUrl,
     "logo": `${baseUrl}/img/ICON WHT LOGO TRANSPARANT.png`,
     "description": "Premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles.",
@@ -22,7 +22,7 @@ export function OrganizationSchema() {
     },
     "brand": {
       "@type": "Brand",
-      "name": "House of Noire"
+      "name": "Zarge"
     }
   }
 

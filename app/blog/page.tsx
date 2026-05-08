@@ -5,8 +5,8 @@ import { format } from "date-fns"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Blog | House of Noire",
-  description: "Fashion tips, style guides, and insights from House of Noire",
+  title: "Blog | Zarge",
+  description: "Fashion tips, style guides, and insights from Zarge",
 }
 
 export const dynamic = 'force-dynamic'
@@ -143,7 +143,7 @@ export default async function BlogPage({
                     </p>
                   )}
                   <div className="flex items-center justify-between text-xs text-[#BDBDBD]">
-                    <span>{hub.author_name || "House of Noire"}</span>
+                    <span>{hub.author_name || "Zarge"}</span>
                     {hub.published_at && (
                       <span>{format(new Date(hub.published_at), "MMM d, yyyy")}</span>
                     )}
@@ -219,7 +219,7 @@ export default async function BlogPage({
                     </p>
                   )}
                   <div className="flex items-center justify-between text-xs text-[#BDBDBD]">
-                    <span>{post.author_name || "House of Noire"}</span>
+                    <span>{post.author_name || "Zarge"}</span>
                     {post.published_at && (
                       <span>{format(new Date(post.published_at), "MMM d, yyyy")}</span>
                     )}

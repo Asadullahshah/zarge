@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Premium Home Essentials | Luxury Home Textiles | House of Noire",
-  description: "Shop premium home essentials at House of Noire. Discover luxury bedsheets, premium quilts, comfortable blankets, elegant pillow covers, soft towels, and beautiful curtains. Transform your home with quality home textiles.",
+  title: "Premium Home Essentials | Luxury Home Textiles | Zarge",
+  description: "Shop premium home essentials at Zarge. Discover luxury bedsheets, premium quilts, comfortable blankets, elegant pillow covers, soft towels, and beautiful curtains. Transform your home with quality home textiles.",
   keywords: [
     "home essentials",
     "premium home textiles",
@@ -28,13 +28,13 @@ export const metadata: Metadata = {
     "home essentials Pakistan"
   ],
   openGraph: {
-    title: "Premium Home Essentials | Luxury Home Textiles | House of Noire",
+    title: "Premium Home Essentials | Luxury Home Textiles | Zarge",
     description: "Shop premium home essentials. Discover luxury bedsheets, premium quilts, comfortable blankets, elegant pillow covers, and more.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Premium Home Essentials | House of Noire",
+    title: "Premium Home Essentials | Zarge",
     description: "Shop premium home essentials. Discover luxury bedsheets, premium quilts, comfortable blankets, and more.",
   },
 }

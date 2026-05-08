@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Premium Men's Clothing | Formal & Semi-Formal Wear | House of Noire",
-  description: "Shop premium men's clothing collection at House of Noire. Discover elegant formal wear, semi-formal apparel, unstitched and stitched collections, and winter wear. Premium quality clothing with authentic Pakistani craftsmanship.",
+  title: "Premium Men's Clothing | Formal & Semi-Formal Wear | Zarge",
+  description: "Shop premium men's clothing collection at Zarge. Discover elegant formal wear, semi-formal apparel, unstitched and stitched collections, and winter wear. Premium quality clothing with authentic Pakistani craftsmanship.",
   keywords: [
     "premium men's clothing",
     "men's formal wear",
@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     "men's stitched collection"
   ],
   openGraph: {
-    title: "Premium Men's Clothing | Formal & Semi-Formal Wear | House of Noire",
+    title: "Premium Men's Clothing | Formal & Semi-Formal Wear | Zarge",
     description: "Shop premium men's clothing collection. Discover elegant formal wear, semi-formal apparel, unstitched and stitched collections.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Premium Men's Clothing | House of Noire",
+    title: "Premium Men's Clothing | Zarge",
     description: "Shop premium men's clothing collection. Discover elegant formal wear, semi-formal apparel, and more.",
   },
 }

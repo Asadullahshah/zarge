@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Sale - Premium Fashion & Home Essentials | House of Noire",
+  title: "Sale - Premium Fashion & Home Essentials | Zarge",
   description: "Shop exclusive sale on premium luxury fashion and home essentials. Get discounted prices on formal wear, semi-formal apparel, luxury bedsheets, premium quilts, and more. Limited time offers on premium clothing and home textiles.",
   keywords: [
     "premium clothing sale",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "premium fashion offers"
   ],
   openGraph: {
-    title: "Sale - Premium Fashion & Home Essentials | House of Noire",
+    title: "Sale - Premium Fashion & Home Essentials | Zarge",
     description: "Shop exclusive sale on premium luxury fashion and home essentials. Get discounted prices on formal wear, semi-formal apparel, and more.",
     type: "website",
   },

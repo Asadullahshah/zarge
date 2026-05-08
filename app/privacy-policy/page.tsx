@@ -1,8 +1,8 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | House of Noire",
-  description: "Read our privacy policy to understand how House of Noire collects, uses, and protects your personal information.",
+  title: "Privacy Policy | Zarge",
+  description: "Read our privacy policy to understand how Zarge collects, uses, and protects your personal information.",
 }
 
 export default function PrivacyPolicyPage() {
@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-2xl font-serif font-bold text-[#F7F7F7] mt-8 mb-4">1. Introduction</h2>
             <p>
-              House of Noire (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains 
+              Zarge (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains 
               how we collect, use, disclose, and safeguard your information when you visit our website.
             </p>
           </section>

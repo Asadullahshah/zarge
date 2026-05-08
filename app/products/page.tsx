@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "All Products | House of Noire",
+  title: "All Products | Zarge",
   description: "Browse our complete collection of premium fashion and home essentials",
 }
 

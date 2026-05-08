@@ -18,8 +18,8 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Premium Luxury Fashion & Home Essentials | House of Noire",
-  description: "Discover premium luxury fashion and home essentials at House of Noire. Shop elegant formal wear, semi-formal apparel for men and women, plus exclusive home textiles including premium bedsheets, quilts, blankets, and pillow covers. Pakistani craftsmanship meets modern luxury.",
+  title: "Premium Luxury Fashion & Home Essentials | Zarge",
+  description: "Discover premium luxury fashion and home essentials at Zarge. Shop elegant formal wear, semi-formal apparel for men and women, plus exclusive home textiles including premium bedsheets, quilts, blankets, and pillow covers. Pakistani craftsmanship meets modern luxury.",
   keywords: [
     "premium clothing",
     "luxury fashion",
@@ -38,22 +38,22 @@ export const metadata: Metadata = {
     "luxury home decor"
   ],
   openGraph: {
-    title: "Premium Luxury Fashion & Home Essentials | House of Noire",
-    description: "Discover premium luxury fashion and home essentials at House of Noire. Shop elegant formal wear, semi-formal apparel for men and women, plus exclusive home textiles.",
+    title: "Premium Luxury Fashion & Home Essentials | Zarge",
+    description: "Discover premium luxury fashion and home essentials at Zarge. Shop elegant formal wear, semi-formal apparel for men and women, plus exclusive home textiles.",
     type: "website",
     images: [
       {
         url: "/img/ICON WHT LOGO TRANSPARANT.png",
         width: 1200,
         height: 630,
-        alt: "House of Noire - Premium Luxury Fashion & Home Essentials",
+        alt: "Zarge - Premium Luxury Fashion & Home Essentials",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Premium Luxury Fashion & Home Essentials | House of Noire",
-    description: "Discover premium luxury fashion and home essentials at House of Noire. Shop elegant formal wear, semi-formal apparel for men and women.",
+    title: "Premium Luxury Fashion & Home Essentials | Zarge",
+    description: "Discover premium luxury fashion and home essentials at Zarge. Shop elegant formal wear, semi-formal apparel for men and women.",
   },
 }
 
@@ -234,7 +234,7 @@ export default async function HomePage() {
                       </p>
                     )}
                     <div className="flex items-center justify-between text-xs text-[#BDBDBD]">
-                      <span>{post.author_name || "House of Noire"}</span>
+                      <span>{post.author_name || "Zarge"}</span>
                       {post.published_at && (
                         <span>{format(new Date(post.published_at), "MMM d, yyyy")}</span>
                       )}
@@ -250,7 +250,7 @@ export default async function HomePage() {
       {/* Additional Sections */}
       <section className="py-16 px-4">
         <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-serif font-bold mb-4">Why Choose House of Noire?</h2>
+          <h2 className="text-4xl font-serif font-bold mb-4">Why Choose Zarge?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-2">Premium Quality</h3>

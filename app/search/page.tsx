@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Search | House of Noire",
+  title: "Search | Zarge",
   description: "Search for products",
 }
 

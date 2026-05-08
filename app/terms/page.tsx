@@ -1,8 +1,8 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Terms of Service | House of Noire",
-  description: "Read our terms of service and understand the terms and conditions for using House of Noire.",
+  title: "Terms of Service | Zarge",
+  description: "Read our terms of service and understand the terms and conditions for using Zarge.",
 }
 
 export default function TermsPage() {
@@ -19,14 +19,14 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-serif font-bold text-[#F7F7F7] mt-8 mb-4">1. Acceptance of Terms</h2>
             <p>
-              By accessing and using the House of Noire website, you accept and agree to be bound by the terms and provision of this agreement.
+              By accessing and using the Zarge website, you accept and agree to be bound by the terms and provision of this agreement.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-serif font-bold text-[#F7F7F7] mt-8 mb-4">2. Use License</h2>
             <p>
-              Permission is granted to temporarily access the materials on House of Noire&apos;s website for personal, non-commercial transitory viewing only. 
+              Permission is granted to temporarily access the materials on Zarge&apos;s website for personal, non-commercial transitory viewing only. 
               This is the grant of a license, not a transfer of title, and under this license you may not:
             </p>
             <ul className="list-disc list-inside space-y-2">
@@ -72,7 +72,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-serif font-bold text-[#F7F7F7] mt-8 mb-4">7. Limitation of Liability</h2>
             <p>
-              House of Noire shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from 
+              Zarge shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from 
               your use of or inability to use the service.
             </p>
           </section>
