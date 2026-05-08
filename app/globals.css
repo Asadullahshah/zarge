@@ -4,24 +4,24 @@
 
 @layer base {
   :root {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 96%;
-    --card: 240 6% 8%;
-    --card-foreground: 0 0% 96%;
-    --popover: 240 6% 8%;
-    --popover-foreground: 0 0% 96%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
     --primary: 43 54% 58%;
     --primary-foreground: 240 10% 4%;
     --secondary: 0 0% 78%;
     --secondary-foreground: 240 10% 4%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 4% 16%;
-    --accent-foreground: 0 0% 96%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 30%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 96%;
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
     --ring: 43 54% 58%;
     --radius: 0.5rem;
   }
@@ -32,7 +32,37 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#0B0B0C] text-[#F7F7F7] font-sans;
+    @apply bg-white text-black font-sans;
+  }
+}
+
+@layer utilities {
+  /* Global light theme override for previously hardcoded dark classes */
+  .bg-\[\#0B0B0C\],
+  .bg-\[\#121213\],
+  .bg-\[\#1A1A1B\] {
+    background-color: #ffffff !important;
+  }
+
+  .text-\[\#F7F7F7\],
+  .text-\[\#BDBDBD\] {
+    color: #000000 !important;
+  }
+
+  .border-\[\#1A1A1B\] {
+    border-color: #d4d4d8 !important;
+  }
+
+  .from-\[\#0B0B0C\],
+  .from-\[\#121213\] {
+    --tw-gradient-from: #ffffff var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+  }
+
+  .to-\[\#0B0B0C\],
+  .to-\[\#121213\] {
+    --tw-gradient-to: #ffffff var(--tw-gradient-to-position) !important;
   }
 }
 
