@@ -74,14 +74,14 @@ export function HeroSectionV2() {
     return () => clearInterval(timer)
   }, [currentSlide])
 
-  useEffect(() => {
-    if (modalOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
-    return () => { document.body.style.overflow = "" }
-  }, [modalOpen])
+  // useEffect(() => {
+  //   if (modalOpen) {
+  //     document.body.style.overflow = "hidden"
+  //   } else {
+  //     document.body.style.overflow = ""
+  //   }
+  //   return () => { document.body.style.overflow = "" }
+  // }, [modalOpen])
 
   function goToNext() {
     setIsAnimating(true)
@@ -100,14 +100,14 @@ export function HeroSectionV2() {
   }
 
   return (
-    <section className="relative min-h-screen overflow-hidden">
+    <section className="relative overflow-hidden h-[calc(100vh-80px)] md:h-[calc(100vh-60px)] xl:h-[calc(100vh-50px)]">
 
       {/* ── DESKTOP LAYOUT (1280px+) ── */}
-      <div className="hidden xl:flex min-h-screen flex-row items-stretch">
+      <div className="hidden xl:flex h-full flex-row items-stretch">
 
         {/* LEFT SIDE */}
         <div className="flex w-[45%] flex-col justify-center px-3 py-6 text-white xl:py-16 xl:pl-60 xl:-mt-2">
-          <p className="text-[8px] xl:text-sm uppercase tracking-widest text-gray-500 transition-opacity duration-300">
+          <p className="text-[8px] xl:text-base uppercase tracking-widest text-gray-500 transition-opacity duration-300 xl:w-[500px">
             {slides[currentSlide].tagline}
           </p>
 
@@ -147,7 +147,7 @@ export function HeroSectionV2() {
         </div>
 
         {/* RIGHT SIDE - CAROUSEL */}
-        <div className="relative w-[55%] min-h-screen">
+        <div className="relative w-[55%] h-full">
           <div className="absolute inset-0">
             <Image
               src={slides[currentSlide].image}
@@ -197,7 +197,7 @@ export function HeroSectionV2() {
       </div>
 
       {/* ── MOBILE + TABLET LAYOUT (up to 1279px) ── */}
-      <div className="xl:hidden relative w-full min-h-screen h-screen pt-16 md:pt-20">
+      <div className="xl:hidden relative w-full h-full">
 
         {/* Full screen image — tappable to open modal */}
         <div
@@ -255,7 +255,7 @@ export function HeroSectionV2() {
 
         {/* ── MODAL (mobile + tablet) ── */}
         {modalOpen && (
-          <div className="fixed inset-0 z-50 bg-black/90 flex flex-col overflow-y-auto">
+          <div className="absolute inset-0 z-50 bg-black/90 flex flex-col overflow-y-auto">
 
             {/* Close button */}
             <button
