@@ -39,7 +39,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0B0B0C] border-b border-[#1A1A1B]">
+    <header className="sticky top-0 z-[60] bg-[#0B0B0C] border-b border-[#1A1A1B]">
       <div className="container mx-auto px-4">
 
         {/* HEADER ROW */}
