@@ -14,51 +14,52 @@ It unfolds.
 This design captures a truth we lived.
 A flower bends.
 Then it begins to rise.
-And finally, it stands-fully bloomed.
-Not instantly.
-Not perfectly.
-But step by step.`,
+And finally, it stands — fully bloomed.
+Not instantly. Not perfectly.
+But step by step, it finds its form.
+That is what it means to grow.`,
   },
   {
     image: "/img/SilentBloom.png",
     tagline: "Wearable narratives stitched through embroidery",
     story: `Zargé means beloved.
 But not everything that is meaningful is witnessed.
-
 Some things grow in silence.
-
-This piece reflects a kind of bloom that doesn't happen in the spotlight—
+This piece reflects a bloom that doesn't happen in the spotlight —
 but in moments of uncertainty, doubt, and isolation.
-
 Branches that feel restrained.
-Flowers that still find a way to emerge.`,
+Flowers that still find a way to emerge.
+Quietly. Persistently. On their own terms.
+This is what it means to bloom in the dark.
+Unseen. Unhurried. But always growing.`,
   },
   {
     image: "/img/R6.png",
     tagline: "Wearable narratives stitched through embroidery",
-    story: `Inspired by Naruto and the journey of Naruto Uzumaki
-
+    story: `Inspired by Naruto and the journey of Naruto Uzumaki.
 Zargé means beloved.
 But not everyone starts that way.
-
-Some are ignored.
-Some are misunderstood.
+Some are ignored. Some are misunderstood.
 Some grow up carrying something inside them the world fears.
-`,
+But that thing they carry — it becomes their strength.
+The ones who were never chosen
+are often the ones who change everything.
+That is the story stitched into this piece.
+Believe it.`,
   },
   {
     image: "/img/Sword.png",
     tagline: "Wearable narratives stitched through embroidery",
-    story: `Inspired by Bleach and the essence of Byakuya Kuchiki
-
+    story: `Inspired by Bleach and the essence of Byakuya Kuchiki.
 Zargé means beloved.
 But not in the loud, obvious sense.
-
-It's the kind of love that exists quietly
+It's the kind of love that exists quietly —
 carried in actions, in restraint, in sacrifice.
-
-This piece draws from the spirit of Byakuya Kuchiki—a man defined not by what he shows, but by what he carries within. Bound by honor, shaped by loss, and guided by a code that often demands silence over expression.
-`,
+A man defined not by what he shows,
+but by what he carries within.
+Bound by honor. Shaped by loss.
+Guided by a code that demands silence over expression.
+That silence — is the loudest thing he wears.`,
   },
 ]
 
@@ -104,11 +105,11 @@ export function HeroSectionV2() {
     <section className="relative overflow-hidden h-[calc(100vh-80px)] md:h-[calc(100vh-60px)] xl:h-[calc(100vh-50px)]">
 
       {/* ── DESKTOP LAYOUT (1280px+) ── */}
-      <div className="hidden xl:flex h-full flex-row items-stretch">
+      <div className="hidden xl:flex h-full min-h-0 flex-row items-stretch">
 
         {/* LEFT SIDE */}
-        <div className="flex w-[45%] flex-col justify-center px-3 py-6 text-white xl:py-16 xl:pl-60 xl:-mt-2">
-          <p className="text-[8px] xl:text-base uppercase tracking-widest text-gray-500 transition-opacity duration-300 xl:w-[500px">
+        <div className="flex w-[45%] h-full flex-col justify-center px-3 xl:pl-60 overflow-hidden min-h-0 shrink-0 basis-[45%]">
+          <p className="text-[8px] xl:text-base uppercase tracking-widest text-gray-500 transition-opacity duration-300 xl:w-[500px]">
             {slides[currentSlide].tagline}
           </p>
 
@@ -124,11 +125,11 @@ export function HeroSectionV2() {
           </div>
 
           <p
-            className={`mt-2 whitespace-pre-line text-[10px] xl:text-sm font-light leading-relaxed text-gray-700 xl:max-w-xl transition-opacity duration-300 ${
+            className={`mt-2 whitespace-pre-line text-[10px] xl:text-sm font-light leading-relaxed text-gray-700 xl:max-w-xl overflow-y-auto max-h-[40vh] transition-opacity duration-300 ${
               isAnimating ? "opacity-0" : "opacity-100"
             }`}
           >
-            {slides[currentSlide].story}
+            {slides[currentSlide].story.slice(0,300)}
           </p>
 
           <div className="mt-3 flex flex-wrap gap-2 xl:gap-4">
