@@ -132,27 +132,77 @@ export default async function HomePage() {
       {/* Hero Section */}
       <HeroSectionV2 />
 
-      {/* Featured Products Section */}
-      {featuredProducts.length > 0 && (
-        <section className="py-20 px-4 bg-gradient-to-b from-[#121213] to-[#0B0B0C]">
-          <div className="container mx-auto">
-            <div className="mb-12">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-1 h-12 bg-primary"></div>
-                <h2 className="text-3xl md:text-5xl font-serif font-bold">Featured Products</h2>
-              </div>
-              <p className="text-base md:text-lg text-[#BDBDBD] ml-4 mb-4">Handpicked selections from our premium collection</p>
-              <Link href="/products?featured=true" className="inline-block ml-4">
-                <Button variant="outline" size="lg" className="text-base px-6 py-3">
-                  View All Featured
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
+      
+      {/* Collections Section */}
+        <section className="py-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 min-h-[600px]">
+
+          {/* Collection 1 - Unspoken Resilience */}
+          <div className="relative group overflow-hidden min-h-[500px] md:min-h-[600px]">
+            {/* Background Image */}
+            <Image
+              src="/img/bloom.png"
+              alt="Unspoken Resilience"
+              fill
+              className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            />
+            {/* Dark overlay */}
+            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+
+            {/* Content */}
+            <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-8 md:p-12">
+              <p className="text-xs uppercase tracking-widest text-gray-300 mb-2">Collection</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                Unspoken Resilience
+              </h2>
+              <p className="text-sm md:text-base text-gray-300 mb-6 max-w-sm leading-relaxed">
+                Some things are carried quietly. This collection is for those who
+                endure without needing to announce it — strength stitched into
+                every thread.
+              </p>
+              <Link
+                href="/collections/unspoken-resilience"
+                className="inline-flex items-center justify-center w-fit bg-white text-black px-6 py-3 text-sm font-medium hover:bg-gray-200 transition-colors"
+              >
+                View Collection
               </Link>
             </div>
-            <ScrollableProducts products={featuredProducts} />
           </div>
-        </section>
-      )}
+
+          {/* Collection 2 - Still Becoming */}
+          <div className="relative group overflow-hidden min-h-[500px] md:min-h-[600px]">
+            {/* Background Image */}
+            <Image
+              src="/img/SilentBloom.png"
+              alt="Still Becoming"
+              fill
+              className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            />
+            {/* Dark overlay */}
+            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+
+            {/* Content */}
+            <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-8 md:p-12">
+              <p className="text-xs uppercase tracking-widest text-gray-300 mb-2">Collection</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                Still Becoming
+              </h2>
+              <p className="text-sm md:text-base text-gray-300 mb-6 max-w-sm leading-relaxed">
+                Growth is not a moment — it&apos;s a process. Pieces designed for those
+                still finding their shape, still rising, still unfolding into who
+                they are meant to be.
+              </p>
+              <Link
+                href="/collections/still-becoming"
+                className="inline-flex items-center justify-center w-fit bg-white text-black px-6 py-3 text-sm font-medium hover:bg-gray-200 transition-colors"
+              >
+                View Collection
+              </Link>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* Category Sections */}
       <section className="py-16 px-4 bg-[#121213]">
