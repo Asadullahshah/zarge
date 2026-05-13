@@ -128,7 +128,22 @@ export default async function HomePage() {
   `
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
+
+      {/* Global background image */}
+      <div className="aboslute inset-0 z-0">
+        <Image
+          src="/img/Background.jpeg"
+          alt=""
+          fill
+          className="object-cover object-center"
+          priority
+        />
+      </div>
+
+      {/* All content above the background */}
+      <div className="relative z-10">
+
       {/* Hero Section */}
       <HeroSectionV2 />
 
@@ -205,7 +220,7 @@ export default async function HomePage() {
       </section>
 
       {/* Category Sections */}
-      <section className="py-16 px-4 bg-[#121213]">
+      {/* <section className="py-16 px-4 bg-[#121213]">
         <div className="container mx-auto">
           <h2 className="text-4xl font-serif font-bold mb-8 text-center">Shop by Category</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -229,10 +244,10 @@ export default async function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Latest Blog Posts Section */}
-      {latestPosts.length > 0 && (
+      {/* {latestPosts.length > 0 && (
         <section className="py-16 px-4 bg-[#121213]">
           <div className="container mx-auto">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
@@ -295,10 +310,10 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
-      )}
+      )} */}
 
       {/* Additional Sections */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 pb-0">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-serif font-bold mb-4">Why Choose Zarge?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
@@ -323,6 +338,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   )
 }
