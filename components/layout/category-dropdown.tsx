@@ -90,7 +90,7 @@ export function CategoryDropdown({ label, slug, mobile }: CategoryDropdownProps)
     >
       <Link
         href={`/category/${slug}`}
-        className="text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors flex items-center gap-1"
+        className="flex items-center gap-1 text-[#F5F5F0] transition-colors hover:text-white"
       >
         {label}
         {subcategories.length > 0 && (

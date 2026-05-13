@@ -131,7 +131,7 @@ export default async function HomePage() {
     <div className="relative min-h-screen">
 
       {/* Global background image */}
-      <div className="aboslute inset-0 z-0">
+      <div className="fixed inset-0 z-0">
         <Image
           src="/img/Background.jpeg"
           alt=""

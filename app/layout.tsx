@@ -111,7 +111,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${montserrat.variable}`}>
-      <body className={inter.className}>
+      <body className={'${inter.className} bg-transparent'}>
         <OrganizationSchema />
         <ErrorBoundaryWrapper>
           <AuthProvider>

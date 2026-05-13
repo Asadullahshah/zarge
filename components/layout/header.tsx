@@ -12,6 +12,23 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [hasSale, setHasSale] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      if (currentScrollY < 10) {
+        setVisible(true)
+      } else {
+        setVisible(false)
+      }
+      setLastScrollY(currentScrollY)
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [lastScrollY])
 
   useEffect(() => {
     async function checkSale() {
@@ -39,31 +56,36 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-[60] bg-[#0B0B0C] border-b border-[#1A1A1B]">
+    <header className={`sticky top-0 z-[60] bg-transparent transition-transform duration-300 ${
+      visible ? "translate-y-0" : "-translate-y-full"}`}
+    >
       <div className="container mx-auto px-4">
 
         {/* HEADER ROW */}
-        <div className="flex items-center justify-between h-16 relative">
+        <div className="relative flex h-16 items-center justify-between">
 
-          {/* LOGO */}
-          <Link href="/" className="hover:opacity-80 transition-opacity">
+          {/* LOGO — high contrast over variable page background */}
+          <Link
+            href="/"
+            className="shrink-0 transition-opacity hover:opacity-90"
+          >
             <Image
               src="/img/Zarge-removebg-preview.png"
               alt="Zargé Logo"
-              width={140}
-              height={40}
-              className="object-contain mt-4"
+              width={168}
+              height={48}
+              className="mt-4 h-auto w-[140px] object-contain brightness-0 invert drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] sm:w-[152px] md:w-[160px]"
               priority
             />
           </Link>
 
           {/* NAV LINKS (FIXED CENTER, NEVER MOVES) */}
-          <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex [&_a]:drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
             <CategoryDropdown label="Collections" slug="men" />
-            <Link href="/about" className="text-[#BDBDBD] hover:text-[#F7F7F7]">
+            <Link href="/about" className="text-[#F5F5F0] transition-colors hover:text-white">
               About
             </Link>
-            <Link href="/contact" className="text-[#BDBDBD] hover:text-[#F7F7F7]">
+            <Link href="/contact" className="text-[#F5F5F0] transition-colors hover:text-white">
               Contact
             </Link>
           </nav>
@@ -92,22 +114,24 @@ export function Header() {
               variant="ghost"
               size="icon"
               onClick={toggleSearch}
-              className="text-[#BDBDBD] hover:text-[#F7F7F7]"
+              className="text-[#F5F5F0] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] hover:bg-white/10 hover:text-white"
             >
-              {searchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
+              {searchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
             </Button>
 
             {/* CART */}
-            <CartButton />
+            <div className="[&_button]:text-[#F5F5F0] [&_button]:drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] [&_button]:hover:bg-white/10 [&_button]:hover:text-white">
+              <CartButton />
+            </div>
 
             {/* MOBILE MENU BUTTON */}
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="text-[#F5F5F0] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] hover:bg-white/10 hover:text-white md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
 
           </div>
