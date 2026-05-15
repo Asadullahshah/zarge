@@ -7,6 +7,7 @@ import Image from "next/image"
 import { format } from "date-fns"
 import dynamicImport from "next/dynamic"
 import { HeroSectionV2 } from "@/components/home/HeroSectionV2"
+import { OurStory } from "@/components/OurStory"
 
 const ScrollableProducts = dynamicImport(
   () => import("@/components/product/scrollable-products").then((mod) => ({ default: mod.ScrollableProducts })),
@@ -215,129 +216,13 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* Category Sections */}
-      {/* <section className="py-16 px-4 bg-[#121213]">
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-serif font-bold mb-8 text-center">Shop by Category</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {categoryStats.map((category: any) => (
-              <Link
-                key={category.slug}
-                href={`/category/${category.slug}`}
-                className="group bg-[#0B0B0C] rounded-lg p-8 border border-[#1A1A1B] hover:border-primary transition-all hover:shadow-xl"
-              >
-                <h3 className="text-2xl font-serif font-bold mb-2 group-hover:text-primary transition-colors">
-                  {category.name}
-                </h3>
-                <p className="text-[#BDBDBD] mb-4">
-                  {category.product_count || 0} products available
-                </p>
-                <div className="flex items-center text-primary group-hover:gap-2 transition-all">
-                  <span>Explore Collection</span>
-                  <ArrowRight className="w-4 h-4 ml-1" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section> */}
+      {/* Our Story- Zarge */}
+      <OurStory />
 
-      {/* Latest Blog Posts Section */}
-      {/* {latestPosts.length > 0 && (
-        <section className="py-16 px-4 bg-[#121213]">
-          <div className="container mx-auto">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-1 h-10 bg-primary"></div>
-                  <h2 className="text-3xl md:text-4xl font-serif font-bold">Latest from Our Blog</h2>
-                </div>
-                <p className="text-sm md:text-base text-[#BDBDBD] ml-4">Fashion tips, style guides, and insights</p>
-              </div>
-              <Link href="/blog" className="w-full md:w-auto">
-                <Button variant="outline" className="w-full md:w-auto justify-center">
-                  View All Posts
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {latestPosts.map((post: any) => (
-                <Link
-                  key={post.id}
-                  href={`/blog/${post.slug}`}
-                  className="group bg-[#0B0B0C] rounded-lg overflow-hidden border border-[#1A1A1B] hover:border-primary transition-all hover:shadow-xl"
-                >
-                  {post.featured_image && (
-                    <div className="aspect-video relative overflow-hidden bg-[#0B0B0C]">
-                      <Image
-                        src={post.featured_image}
-                        alt={post.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform"
-                      />
-                      {post.is_hub_post && (
-                        <div className="absolute top-3 left-3">
-                          <span className="px-3 py-1 bg-primary/90 text-primary-foreground rounded-full text-xs font-semibold">
-                            Hub Post
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                      {post.title}
-                    </h3>
-                    {post.excerpt && (
-                      <p className="text-sm text-[#BDBDBD] mb-4 line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                    )}
-                    <div className="flex items-center justify-between text-xs text-[#BDBDBD]">
-                      <span>{post.author_name || "Zarge"}</span>
-                      {post.published_at && (
-                        <span>{format(new Date(post.published_at), "MMM d, yyyy")}</span>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )} */}
 
-      {/* Additional Sections */}
-      <section className="py-16 px-4 pb-0">
-        <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-serif font-bold mb-4">Why Choose Zarge?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            <div className="p-6">
-              <h3 className="text-xl font-semibold mb-2">Premium Quality</h3>
-              <p className="text-[#BDBDBD]">
-                Best quality products with handpicked premium fabrics and materials
-              </p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-semibold mb-2">Pakistani Craftsmanship</h3>
-              <p className="text-[#BDBDBD]">
-                Authentic Pakistani designs and traditional craftsmanship
-              </p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-semibold mb-2">Fast Delivery</h3>
-              <p className="text-[#BDBDBD]">
-                Quick and reliable shipping across Pakistan
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
       </div>
     </div>
   )
