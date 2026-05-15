@@ -31,12 +31,9 @@ export function CategoryDropdown({ label, slug, mobile }: CategoryDropdownProps)
     fetchSubcategories()
   }, [slug])
 
-  // Clear timeout on unmount
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
   }, [])
 
@@ -49,10 +46,7 @@ export function CategoryDropdown({ label, slug, mobile }: CategoryDropdownProps)
   }
 
   const handleMouseLeave = () => {
-    // Add a small delay before closing to allow moving mouse to dropdown
-    timeoutRef.current = setTimeout(() => {
-      setIsOpen(false)
-    }, 150)
+    timeoutRef.current = setTimeout(() => setIsOpen(false), 150)
   }
 
   if (mobile) {
@@ -88,42 +82,51 @@ export function CategoryDropdown({ label, slug, mobile }: CategoryDropdownProps)
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Trigger */}
       <Link
         href={`/category/${slug}`}
-        className="flex items-center gap-1 text-[#F5F5F0] transition-colors hover:text-white"
+        className="flex items-center gap-1 text-[#F5F5F0] transition-colors hover:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
       >
         {label}
         {subcategories.length > 0 && (
-          <ChevronDown 
-            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          <ChevronDown
+            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
           />
         )}
       </Link>
 
+      {/* Dropdown */}
       {isOpen && subcategories.length > 0 && (
-        <div 
-          className="absolute top-full left-0 w-64 bg-[#121213] border border-[#1A1A1B] rounded-lg shadow-xl py-2 z-50 mt-1"
+        <div
+          style={{ backgroundColor: '#ffffff' }}
+          className="absolute top-full left-0 w-52 rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 mt-2"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
+          {/* All Collections — bold header */}
           <Link
             href={`/category/${slug}`}
-            className="block px-4 py-2 hover:bg-[#1A1A1B] font-semibold text-[#F7F7F7] transition-colors"
+            className="block px-5 py-3 text-sm font-bold text-black hover:bg-gray-50 transition-colors border-b border-gray-100"
           >
             All {label}
           </Link>
-          {subcategories.map((subcat) => (
-            <Link
-              key={subcat.id}
-              href={`/category/${subcat.slug}`}
-              className="block px-4 py-2 hover:bg-[#1A1A1B] transition-colors text-[#BDBDBD] hover:text-[#F7F7F7]"
-            >
-              {subcat.name}
-            </Link>
-          ))}
+
+          {/* Subcategory items with dividers */}
+          <div className="max-h-48 overflow-y-auto">
+            {subcategories.map((subcat, index) => (
+              <Link
+                key={subcat.id}
+                href={`/category/${subcat.slug}`}
+                className={`block px-5 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors ${
+                  index < subcategories.length - 1 ? "border-b border-gray-100" : ""
+                }`}
+              >
+                {subcat.name}
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </div>
   )
 }
-

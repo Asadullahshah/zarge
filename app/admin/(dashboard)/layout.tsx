@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   await requireAuth()
 
   return (
-    <div className="min-h-screen bg-[#0B0B0C]">
+    <div className="min-h-screen admin-layout">
       <AdminHeader />
       <div className="flex">
         <AdminSidebar />

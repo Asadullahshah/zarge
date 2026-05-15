@@ -1,12 +1,15 @@
 import type { Metadata } from "next"
 import { Inter, Playfair_Display, Montserrat } from "next/font/google"
 import "./globals.css"
+import Image from "next/image"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footerV2"
 import { AuthProvider } from "@/components/providers/session-provider"
 import { ErrorBoundaryWrapper } from "@/components/error-boundary-wrapper"
 import { NetworkStatus } from "@/components/network-status"
 import { OrganizationSchema } from "@/components/seo/organization-schema"
+import { ScrollToHash } from "@/components/ScrollToHash"
+import { headers } from "next/headers"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -104,25 +107,47 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const headersList = await headers()
+  const pathname = headersList.get("x-pathname") || ""
+  const isAdmin = pathname.startsWith("/admin")
+
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${montserrat.variable}`}>
       <body className={'${inter.className} bg-transparent'}>
-        <OrganizationSchema />
-        <ErrorBoundaryWrapper>
-          <AuthProvider>
-            <NetworkStatus />
-            <Header />
-            {children}
-            <Footer />
-          </AuthProvider>
-        </ErrorBoundaryWrapper>
+
+        {/* Global background — hidden on admin pages */}
+        {!isAdmin && (
+          <div className="fixed inset-0 z-0">
+            <Image
+              src="/img/Background.jpeg"
+              alt=""
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          </div>
+        )}
+
+        {/* All content sits above the background */}
+        <div className="relative z-10">
+          <OrganizationSchema />
+          <ErrorBoundaryWrapper>
+            <AuthProvider>
+              <NetworkStatus />
+              {!isAdmin && <Header />}
+              <ScrollToHash />
+              {children}
+              {!isAdmin && <Footer />}
+            </AuthProvider>
+          </ErrorBoundaryWrapper>
+        </div>
+
       </body>
     </html>
   )
 }
-

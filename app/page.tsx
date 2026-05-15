@@ -157,7 +157,7 @@ export default async function HomePage() {
           <div className="relative group overflow-hidden min-h-[500px] md:min-h-[600px]">
             {/* Background Image */}
             <Image
-              src="/img/bloom.png"
+              src="/img/Sword.png"
               alt="Unspoken Resilience"
               fill
               className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
