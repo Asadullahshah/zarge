@@ -177,7 +177,7 @@ export default async function HomePage() {
               </p>
               <Link
                 href="/collections/unspoken-resilience"
-                className="inline-flex items-center justify-center w-fit bg-white text-black px-6 py-3 text-sm font-medium hover:bg-gray-200 transition-colors"
+                className="inline-flex items-center justify-center w-fit border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
               >
                 View Collection
               </Link>
@@ -209,7 +209,7 @@ export default async function HomePage() {
               </p>
               <Link
                 href="/collections/still-becoming"
-                className="inline-flex items-center justify-center w-fit bg-white text-black px-6 py-3 text-sm font-medium hover:bg-gray-200 transition-colors"
+                className="inline-flex items-center justify-center w-fit border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
               >
                 View Collection
               </Link>
