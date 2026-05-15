@@ -102,7 +102,7 @@ export function HeroSectionV2() {
   }
 
   return (
-    <section className="relative overflow-hidden h-[calc(100vh-80px)] md:h-[calc(100vh-60px)] xl:h-[calc(100vh-50px)]">
+    <section className="relative overflow-hidden h-screen -mt-16">
 
       {/* ── DESKTOP LAYOUT (1280px+) ── */}
       <div className="hidden xl:flex h-full min-h-0 flex-row items-stretch">
