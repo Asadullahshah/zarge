@@ -16,6 +16,7 @@ export function Header() {
   const [visible, setVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const [isDark, setIsDark] = useState(true)
 
   useEffect(() => {
     setMounted(true)
@@ -36,6 +37,7 @@ export function Header() {
     fetchSubcategories()
   }, [])
 
+  // Scroll — show/hide navbar
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
@@ -52,12 +54,50 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [lastScrollY])
 
+  // Scroll — detect which section the navbar is over
+  useEffect(() => {
+    const getSectionTheme = () => {
+      const navbarBottom = 64
+      const sections = document.querySelectorAll("[data-theme]")
+      let currentTheme = "dark" // default
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect()
+        if (rect.top <= navbarBottom && rect.bottom >= navbarBottom) {
+          currentTheme = section.getAttribute("data-theme") || "dark"
+        }
+      })
+
+      setIsDark(currentTheme === "dark")
+    }
+
+    window.addEventListener("scroll", getSectionTheme, { passive: true })
+    // Run once on mount
+    getSectionTheme()
+
+    return () => window.removeEventListener("scroll", getSectionTheme)
+  }, [])
+
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? "hidden" : "unset"
     return () => {
       document.body.style.overflow = "unset"
     }
   }, [mobileMenuOpen])
+
+  // Color tokens
+  const textColor = isDark ? "text-[#F5F5F0]" : "text-black"
+  const hoverColor = isDark ? "hover:text-white" : "hover:text-black/60"
+  const dropShadow = isDark ? "drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]" : ""
+  const logoClass = isDark
+    ? "brightness-0 invert"
+    : "brightness-0"
+  const iconClass = isDark
+    ? "text-[#F5F5F0] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] hover:bg-white/10 hover:text-white"
+    : "text-black hover:bg-black/10 hover:text-black"
+  const cartClass = isDark
+    ? "[&_button]:text-[#F5F5F0] [&_button]:drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] [&_button]:hover:bg-white/10 [&_button]:hover:text-white"
+    : "[&_button]:text-black [&_button]:hover:bg-black/10 [&_button]:hover:text-black"
 
   return (
     <>
@@ -74,31 +114,37 @@ export function Header() {
                 alt="Zargé Logo"
                 width={168}
                 height={48}
-                className="mt-4 h-auto w-[140px] object-contain brightness-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] sm:w-[152px] md:w-[160px]"
+                className={`mt-4 h-auto w-[140px] object-contain sm:w-[152px] md:w-[160px] transition-all duration-300 ${logoClass}`}
                 priority
               />
             </Link>
 
             {/* NAV LINKS — desktop */}
             <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
-              <CategoryDropdown label="Collections" slug="men" />
-              <Link href="/#our-story" className="text-[#F5F5F0] transition-colors hover:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+              <CategoryDropdown label="Collections" slug="men" isDark={isDark} />
+              <Link
+                href="/#our-story"
+                className={`${textColor} ${hoverColor} ${dropShadow} transition-colors duration-300`}
+              >
                 Brand
               </Link>
-              <Link href="/contact" className="text-[#F5F5F0] transition-colors hover:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+              <Link
+                href="/contact"
+                className={`${textColor} ${hoverColor} ${dropShadow} transition-colors duration-300`}
+              >
                 Contact
               </Link>
             </nav>
 
             {/* RIGHT SIDE ACTIONS */}
             <div className="flex items-center gap-2 relative z-[61]">
-              <div className="[&_button]:text-[#F5F5F0] [&_button]:drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] [&_button]:hover:bg-white/10 [&_button]:hover:text-white">
+              <div className={`transition-colors duration-300 ${cartClass}`}>
                 <CartButton />
               </div>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-[#F5F5F0] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] hover:bg-white/10 hover:text-white md:hidden"
+                className={`md:hidden transition-colors duration-300 ${iconClass}`}
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -119,7 +165,7 @@ export function Header() {
             WebkitBackdropFilter: "blur(20px)",
           }}
         >
-          {/* Close button */}
+          {/* Close Button */}
           <div className="flex justify-end px-4 pt-5">
             <Button
               variant="ghost"
@@ -130,9 +176,10 @@ export function Header() {
               <X className="h-6 w-6" />
             </Button>
           </div>
-
+          
           <div className="flex flex-col justify-center min-h-[80vh] px-10 py-6">
             <nav className="flex flex-col gap-8">
+
 
               {/* COLLECTIONS with dropdown */}
               <div className="flex flex-col gap-4">

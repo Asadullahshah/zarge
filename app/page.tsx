@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Premium Luxury Fashion & Home Essentials | Zarge",
+  title: "Zarge",
   description: "Discover premium luxury fashion and home essentials at Zarge. Shop elegant formal wear, semi-formal apparel for men and women, plus exclusive home textiles including premium bedsheets, quilts, blankets, and pillow covers. Pakistani craftsmanship meets modern luxury.",
   keywords: [
     "premium clothing",
@@ -150,7 +150,7 @@ export default async function HomePage() {
 
       
       {/* Collections Section */}
-        <section className="py-0">
+        <section data-theme="light" className="py-0">
         <div className="grid grid-cols-1 md:grid-cols-2 min-h-[600px]">
 
           {/* Collection 1 - Unspoken Resilience */}
@@ -220,8 +220,9 @@ export default async function HomePage() {
       </section>
 
       {/* Our Story- Zarge */}
+      <div data-theme="dark">
       <OurStory />
-
+      </div>
 
       </div>
     </div>
