@@ -7,19 +7,19 @@ export function OurStory() {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <section className="py-16 text-center">
+    <section id="our-story" className="py-16 text-center">
       <div className="max-w-2xl mx-auto space-y-6 px-8 md:px-16">
-        <p className="text-4xl font-serif font-bold mb-4">Our Story</p>
-        <p className="text-[#BDBDBD]">Zarg&eacute; was never meant to be just clothing.</p>
-        <p className="text-[#BDBDBD]">
+      <p className="text-4xl font-serif font-bold mb-4 text-black" style={{ color: '#000000' }}>Our Story</p>
+        <p className="text-[#000000]">Zarg&eacute; was never meant to be just clothing.</p>
+        <p className="text-[#000000]">
           It started with a feeling—one that&apos;s hard to translate, but impossible to ignore. A quiet strength. A softness that carries weight.
           In Pashto, Zarg&eacute; reflects something close to the heart—something emotional, personal, and deeply human. That meaning sits at the core of everything we create.
         </p>
-        <p className="text-[#BDBDBD]">
+        <p className="text-[#000000]">
           For six months, we worked behind the scenes in Lahore, obsessing over every detail—fabric, texture, thread, and form. Not just to make T-shirts, but to build pieces that feel like something.
           Something you don&apos;t just wear, but connect with.
         </p>
-        <p className="text-[#BDBDBD]">Each design tells a story without saying too much.</p>
+        <p className="text-[#000000]">Each design tells a story without saying too much.</p>
       </div>
 
       {/* Image container with modal inside */}

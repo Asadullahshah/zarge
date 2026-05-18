@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 @layer base {
   :root {
@@ -34,25 +38,15 @@
   body {
     @apply bg-white text-black font-sans;
   }
+  html {
+    scroll-behavior: smooth;
+  }
+  h1, h2, h3, h4, h5, h6, p, span, li, a {
+    color: inherit;
+  }
 }
 
 @layer utilities {
-  /* Global light theme override for previously hardcoded dark classes */
-  .bg-\[\#0B0B0C\],
-  .bg-\[\#121213\],
-  .bg-\[\#1A1A1B\] {
-    background-color: #ffffff !important;
-  }
-
-  .text-\[\#F7F7F7\],
-  .text-\[\#BDBDBD\] {
-    color: #000000 !important;
-  }
-
-  .border-\[\#1A1A1B\] {
-    border-color: #d4d4d8 !important;
-  }
-
   .from-\[\#0B0B0C\],
   .from-\[\#121213\] {
     --tw-gradient-from: #ffffff var(--tw-gradient-from-position) !important;
@@ -64,9 +58,29 @@
   .to-\[\#121213\] {
     --tw-gradient-to: #ffffff var(--tw-gradient-to-position) !important;
   }
-}
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+  .hero-tagline {
+    color: #000000 !important;
+  }
+
+  .font-serif {
+    color: #000000;
+  }
+
+  /* Fix dark input fields sitewide */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #d4d4d8 !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #9ca3af !important;
+  }
+}
 
 /* House Noire Brand Font Styles */
 .font-brand {
@@ -93,57 +107,53 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar styles for featured products */
+/* Scrollbars */
 .featured-products-scroll::-webkit-scrollbar {
   height: 8px;
 }
 
 .featured-products-scroll::-webkit-scrollbar-track {
-  background: #0B0B0C;
+  background: #f1f1f1;
   border-radius: 4px;
 }
 
 .featured-products-scroll::-webkit-scrollbar-thumb {
-  background: #1A1A1B;
+  background: #d4d4d4;
   border-radius: 4px;
 }
 
 .featured-products-scroll::-webkit-scrollbar-thumb:hover {
-  background: #2A2A2B;
+  background: #a0a0a0;
 }
 
-/* Firefox scrollbar */
 .featured-products-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #1A1A1B #0B0B0C;
+  scrollbar-color: #d4d4d4 #f1f1f1;
 }
 
-/* Custom scrollbar styles for product thumbnails */
 .product-thumbnails-scroll::-webkit-scrollbar {
   width: 8px;
 }
 
 .product-thumbnails-scroll::-webkit-scrollbar-track {
-  background: #0B0B0C;
+  background: #f1f1f1;
   border-radius: 4px;
 }
 
 .product-thumbnails-scroll::-webkit-scrollbar-thumb {
-  background: #1A1A1B;
+  background: #d4d4d4;
   border-radius: 4px;
 }
 
 .product-thumbnails-scroll::-webkit-scrollbar-thumb:hover {
-  background: #2A2A2B;
+  background: #a0a0a0;
 }
 
-/* Firefox scrollbar */
 .product-thumbnails-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #1A1A1B #0B0B0C;
+  scrollbar-color: #d4d4d4 #f1f1f1;
 }
 
-/* Hide scrollbar for scrollable products */
 .scrollbar-hide {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -193,11 +203,11 @@
 }
 
 .ProseMirror blockquote {
-  border-left: 4px solid #1A1A1B;
+  border-left: 4px solid #d4d4d8;
   padding-left: 1em;
   margin: 1em 0;
   font-style: italic;
-  color: #BDBDBD;
+  color: #555555;
 }
 
 .ProseMirror a {
@@ -206,7 +216,7 @@
 }
 
 .ProseMirror a:hover {
-  color: #F4D03F;
+  color: #b8960f;
 }
 
 .ProseMirror strong {
@@ -225,29 +235,29 @@
   height: 0;
 }
 
-/* Enhanced Blog Content Styling */
+/* Blog Content */
 .blog-content {
-  @apply text-[#F7F7F7] leading-relaxed;
+  @apply text-black leading-relaxed;
 }
 
 .blog-content h1 {
-  @apply text-4xl md:text-5xl font-serif font-bold mt-12 mb-6 text-[#F7F7F7];
+  @apply text-4xl md:text-5xl font-serif font-bold mt-12 mb-6 text-black;
 }
 
 .blog-content h2 {
-  @apply text-3xl md:text-4xl font-serif font-bold mt-10 mb-5 text-[#F7F7F7] border-b border-[#1A1A1B] pb-3;
+  @apply text-3xl md:text-4xl font-serif font-bold mt-10 mb-5 text-black border-b border-gray-200 pb-3;
 }
 
 .blog-content h3 {
-  @apply text-2xl md:text-3xl font-serif font-semibold mt-8 mb-4 text-[#F7F7F7];
+  @apply text-2xl md:text-3xl font-serif font-semibold mt-8 mb-4 text-black;
 }
 
 .blog-content h4 {
-  @apply text-xl md:text-2xl font-semibold mt-6 mb-3 text-[#F7F7F7];
+  @apply text-xl md:text-2xl font-semibold mt-6 mb-3 text-black;
 }
 
 .blog-content p {
-  @apply text-lg leading-relaxed mb-6 text-[#BDBDBD];
+  @apply text-lg leading-relaxed mb-6 text-gray-700;
 }
 
 .blog-content ul,
@@ -264,7 +274,7 @@
 }
 
 .blog-content li {
-  @apply text-lg leading-relaxed text-[#BDBDBD] pl-2;
+  @apply text-lg leading-relaxed text-gray-700 pl-2;
 }
 
 .blog-content li::marker {
@@ -276,23 +286,23 @@
 }
 
 .blog-content strong {
-  @apply font-bold text-[#F7F7F7];
+  @apply font-bold text-black;
 }
 
 .blog-content em {
-  @apply italic text-[#BDBDBD];
+  @apply italic text-gray-700;
 }
 
 .blog-content blockquote {
-  @apply border-l-4 border-primary pl-6 py-4 my-8 bg-[#121213] rounded-r-lg italic text-[#BDBDBD] text-lg;
+  @apply border-l-4 border-primary pl-6 py-4 my-8 bg-gray-50 rounded-r-lg italic text-gray-700 text-lg;
 }
 
 .blog-content code {
-  @apply bg-[#121213] px-2 py-1 rounded text-sm font-mono text-primary border border-[#1A1A1B];
+  @apply bg-gray-100 px-2 py-1 rounded text-sm font-mono text-primary border border-gray-200;
 }
 
 .blog-content pre {
-  @apply bg-[#121213] p-4 rounded-lg my-6 overflow-x-auto border border-[#1A1A1B];
+  @apply bg-gray-100 p-4 rounded-lg my-6 overflow-x-auto border border-gray-200;
 }
 
 .blog-content pre code {
@@ -300,22 +310,208 @@
 }
 
 .blog-content img {
-  @apply rounded-lg my-8 shadow-xl border border-[#1A1A1B];
+  @apply rounded-lg my-8 shadow-xl border border-gray-200;
 }
 
 .blog-content hr {
-  @apply my-12 border-[#1A1A1B];
+  @apply my-12 border-gray-200;
 }
 
 .blog-content table {
-  @apply w-full my-8 border-collapse border border-[#1A1A1B];
+  @apply w-full my-8 border-collapse border border-gray-200;
 }
 
 .blog-content th {
-  @apply bg-[#121213] border border-[#1A1A1B] px-4 py-3 text-left font-semibold text-[#F7F7F7];
+  @apply bg-gray-50 border border-gray-200 px-4 py-3 text-left font-semibold text-black;
 }
 
 .blog-content td {
-  @apply border border-[#1A1A1B] px-4 py-3 text-[#BDBDBD];
+  @apply border border-gray-200 px-4 py-3 text-gray-700;
 }
 
+/* ============================================
+   ADMIN PANEL — FORCE LIGHT / WHITE THEME
+   ============================================
+   Wrap your admin layout root with the class
+   "admin-layout" to activate these overrides.
+
+   Example (app/admin/layout.tsx):
+     <div className="admin-layout">
+       ...
+     </div>
+   ============================================ */
+
+.admin-layout {
+  background-color: #f5f5f5 !important;
+  color: #111111 !important;
+  min-height: 100vh;
+}
+
+/* Main content area */
+.admin-layout main,
+.admin-layout [role="main"] {
+  background-color: #f5f5f5 !important;
+  color: #111111 !important;
+}
+
+/* Sidebar / nav */
+.admin-layout aside,
+.admin-layout nav {
+  background-color: #ffffff !important;
+  border-right: 1px solid #e5e7eb !important;
+  color: #111111 !important;
+}
+
+/* All text inside admin */
+.admin-layout h1,
+.admin-layout h2,
+.admin-layout h3,
+.admin-layout h4,
+.admin-layout h5,
+.admin-layout h6,
+.admin-layout p,
+.admin-layout span:not(.badge):not([class*="stripe"]):not([class*="cod"]),
+.admin-layout label,
+.admin-layout li,
+.admin-layout td,
+.admin-layout th {
+  color: #111111 !important;
+}
+
+/* Cards / panels */
+.admin-layout .card,
+.admin-layout [class*="card"],
+.admin-layout [class*="panel"],
+.admin-layout [class*="box"] {
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #111111 !important;
+}
+
+/* Tables */
+.admin-layout table {
+  background-color: #ffffff !important;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.admin-layout thead {
+  background-color: #f9fafb !important;
+}
+
+.admin-layout thead tr {
+  background-color: #f9fafb !important;
+}
+
+.admin-layout tbody tr {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.admin-layout tbody tr:hover {
+  background-color: #f9fafb !important;
+}
+
+.admin-layout th,
+.admin-layout td {
+  background-color: transparent !important;
+  border-color: #e5e7eb !important;
+  color: #111111 !important;
+}
+
+/* Nav links */
+.admin-layout a {
+  color: #111111 !important;
+}
+
+.admin-layout a:hover {
+  color: #000000 !important;
+}
+
+/* Active nav item keeps the gold primary color */
+.admin-layout [class*="bg-primary"],
+.admin-layout [class*="active"] {
+  background-color: hsl(43, 54%, 58%) !important;
+  color: #111111 !important;
+}
+
+/* Buttons */
+.admin-layout button:not([class*="primary"]):not([class*="destructive"]) {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  border: 1px solid #d4d4d8 !important;
+}
+
+.admin-layout button[class*="primary"] {
+  background-color: hsl(43, 54%, 58%) !important;
+  color: #111111 !important;
+}
+
+/* Inputs, selects, textareas */
+.admin-layout input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.admin-layout textarea,
+.admin-layout select {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  border: 1px solid #d4d4d8 !important;
+}
+
+.admin-layout input::placeholder,
+.admin-layout textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Dropdowns / popovers */
+.admin-layout [role="listbox"],
+.admin-layout [role="menu"],
+.admin-layout [data-radix-popper-content-wrapper],
+.admin-layout [class*="dropdown"],
+.admin-layout [class*="popover"] {
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  color: #111111 !important;
+}
+
+/* Badges — keep colored (STRIPE blue, COD orange) */
+.admin-layout [class*="stripe"],
+.admin-layout [class*="cod"] {
+  color: #ffffff !important;
+}
+
+/* Scrollbars inside admin */
+.admin-layout ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.admin-layout ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.admin-layout ::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 3px;
+}
+
+.admin-layout ::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* Dark background utility overrides inside admin */
+.admin-layout [class*="bg-black"],
+.admin-layout [class*="bg-gray-900"],
+.admin-layout [class*="bg-gray-800"],
+.admin-layout [class*="bg-gray-700"],
+.admin-layout [class*="bg-zinc-900"],
+.admin-layout [class*="bg-zinc-800"],
+.admin-layout [class*="bg-neutral-900"],
+.admin-layout [class*="bg-neutral-800"],
+.admin-layout [class*="bg-\[#0B0B0C\]"],
+.admin-layout [class*="bg-\[#121213\]"] {
+  background-color: #ffffff !important;
+}
+
+/* Dark text overrides inside admin */
+.admin-layout [class*="text-white"] {
+  color: #111111 !important;
+}

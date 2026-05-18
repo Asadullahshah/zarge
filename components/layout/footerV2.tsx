@@ -17,7 +17,7 @@ export function Footer() {
               <p className="text-white text-base leading-8 font-light">
                 Zarg&eacute; was created to turn emotion into wearable form. Through intricate embroidery, premium fabrics, and understated design, the brand focuses on pieces that feel timeless yet deeply personal.
               </p>
-              <p className="text-[#666] text-sm tracking-widest uppercase mt-4">Pakistan</p>
+              {/* <p className="text-[#666] text-sm tracking-widest uppercase mt-4">Pakistan</p> */}
             </div>
 
             <div>
@@ -44,7 +44,7 @@ export function Footer() {
                 Collections
             </p>
             <div className="space-y-1">
-                <Link href="/about" className="flex items-center justify-between py-4 text-white text-sm hover:opacity-60 transition-opacity">
+                <Link href="/#our-story" className="flex items-center justify-between py-4 text-white text-sm hover:opacity-60 transition-opacity">
                 Brand
                 <span>&#8599;</span>
                 </Link>
@@ -53,7 +53,7 @@ export function Footer() {
                 <span>&#8599;</span>
                 </Link>
                 <a
-                href="https://instagram.com/zarge"
+                href="https://www.instagram.com/zargeofficial/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-between py-4 text-white text-sm hover:opacity-60 transition-opacity"

@@ -7,7 +7,9 @@ export async function middleware(request: NextRequest) {
 
   // Allow access to login page
   if (pathname === "/admin/login") {
-    return NextResponse.next()
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set("x-pathname", pathname)
+    return NextResponse.next({ request: { headers: requestHeaders } })
   }
 
   // Allow public API routes (non-admin)
@@ -44,7 +46,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next()
+  // Pass pathname header on all requests
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set("x-pathname", pathname)
+  return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
 export const config = {
