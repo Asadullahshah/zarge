@@ -109,7 +109,7 @@ export function HeroSectionV2() {
   return (
     <>
       {/* ── VIDEO SECTION ── */}
-      <section className="relative h-screen w-full overflow-hidden -mt-16">
+      <section data-theme="dark" className="relative min-h-[100svh] w-full overflow-hidden -mt-16">
         <video
           autoPlay
           muted
@@ -121,7 +121,7 @@ export function HeroSectionV2() {
         </video>
 
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/30" />
+        {/* <div className="absolute inset-0 bg-black/30" /> */}
 
         {/* Scroll down hint */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white z-10">
@@ -132,7 +132,7 @@ export function HeroSectionV2() {
 
       {/* ── HERO SECTION ── */}
       {/* No -mt-16 here so it sits cleanly below the video */}
-      <section className="relative overflow-hidden h-screen">
+      <section data-theme="light" className="relative overflow-hidden h-screen">
 
         {/* ── DESKTOP LAYOUT (1280px+) ── */}
         <div className="hidden xl:flex h-full min-h-0 flex-row items-stretch">

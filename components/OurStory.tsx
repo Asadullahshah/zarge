@@ -7,7 +7,7 @@ export function OurStory() {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <section id="our-story" className="py-16 text-center">
+    <section id="our-story" className="py-16 pb-0 text-center">
       <div className="max-w-2xl mx-auto space-y-6 px-8 md:px-16">
       <p className="text-4xl font-serif font-bold mb-4 text-black" style={{ color: '#000000' }}>Our Story</p>
         <p className="text-[#000000]">Zarg&eacute; was never meant to be just clothing.</p>
@@ -33,7 +33,7 @@ export function OurStory() {
 
         {/* Read More button */}
         {!modalOpen && (
-          <div className="absolute bottom-8 left-8">
+          <div className="relative top-5">
             <button
               onClick={() => setModalOpen(true)}
               className="border border-white text-white px-6 py-3 text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
