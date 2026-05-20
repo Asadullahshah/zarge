@@ -23,12 +23,12 @@ function SlideNumbers({
   onSelect: (i: number) => void
 }) {
   return (
-    <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4">
+    <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 z-10">
       {slides.map((_, index) => (
         <button
           key={index}
-          onClick={() => onSelect(index)}
-          className={`font-light transition-all duration-300 leading-none ${
+          onClick={(e) => { e.stopPropagation(); onSelect(index) }}
+          className={`font-sans font-light transition-all duration-300 leading-none ${
             index === current
               ? "text-black text-3xl font-bold"
               : "text-black/40 text-sm"
@@ -56,7 +56,7 @@ function NavArrows({
         variant="outline"
         size="icon"
         className="rounded-full bg-transparent border border-black text-black hover:bg-black/10 hover:text-black"
-        onClick={onPrev}
+        onClick={(e) => { e.stopPropagation(); onPrev() }}
       >
         <ArrowLeftIcon />
       </Button>
@@ -64,7 +64,7 @@ function NavArrows({
         variant="outline"
         size="icon"
         className="rounded-full bg-transparent border border-black text-black hover:bg-black/10 hover:text-black"
-        onClick={onNext}
+        onClick={(e) => { e.stopPropagation(); onNext() }}
       >
         <ArrowRightIcon />
       </Button>
@@ -99,12 +99,12 @@ export function HeroSectionV2() {
     }, 300)
   }
 
-  const imageClass = `transition-opacity duration-300 xl:object-contain object-cover object-center ${isAnimating ? "opacity-0" : "opacity-100"}`
+  const imageClass = `object-cover object-center transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`
 
   return (
     <>
-      {/* ── VIDEO SECTION ── */}
-      <section data-theme="dark" className="relative min-h-[100svh] w-full overflow-hidden -mt-16">
+      {/* ── VIDEO SECTION — DESKTOP (1280px+) ── */}
+      <section data-theme="dark" className="hidden xl:block relative min-h-[100svh] w-full overflow-hidden -mt-16">
         <video
           autoPlay
           muted
@@ -116,7 +116,7 @@ export function HeroSectionV2() {
         </video>
 
         {/* Dark overlay */}
-        {/* <div className="absolute inset-0 bg-black/30" /> */}
+        <div className="absolute inset-0 bg-black/30" />
 
         {/* Scroll down hint */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white z-10">
@@ -125,7 +125,51 @@ export function HeroSectionV2() {
         </div>
       </section>
 
-      {/* ── HERO SECTION ── */}
+      {/* ── VIDEO SECTION — MOBILE + TABLET (up to 1279px) ── */}
+      <section data-theme="dark" className="xl:hidden relative min-h-[100svh] w-full overflow-hidden -mt-16">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-contain object-center"
+        >
+          <source src="/video/zarge.MP4" type="video/mp4" />
+        </video>
+
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/30" />
+
+        {/* Scroll down hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white z-10">
+          <span className="font-sans text-xs uppercase tracking-widest opacity-70">Scroll</span>
+          <div className="w-px h-8 bg-white/50 animate-pulse" />
+        </div>
+      </section>
+
+      {/* ── VIDEO SECTION — MOBILE + TABLET (up to 1279px) ── */}
+      <section data-theme="dark" className="xl:hidden relative min-h-[100svh] w-full overflow-hidden -mt-16">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        >
+          <source src="/video/zarge.MP4" type="video/mp4" />
+        </video>
+
+        {/* Dark overlay */}
+        {/* <div className="absolute inset-0 bg-black/30" /> */}
+
+        {/* Scroll down hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white z-10">
+          <span className="font-sans text-xs uppercase tracking-widest opacity-70">Scroll</span>
+          <div className="w-px h-8 bg-white/50 animate-pulse" />
+        </div>
+      </section>
+
+      {/* ── HERO SECTION — all devices, click to open modal ── */}
       {/* No -mt-16 here so it sits cleanly below the video */}
       {/* Same click-to-modal behavior on ALL devices — desktop, tablet, mobile */}
       <section data-theme="light" className="relative overflow-hidden h-screen">
@@ -139,12 +183,15 @@ export function HeroSectionV2() {
             src={slides[currentSlide].image}
             alt="Product image"
             fill
-            className={imageClass}
+            className={`${imageClass} xl:object-contain`}
             priority
           />
 
+          {/* Gradient overlay at bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+
           {/* Tap/Click hint — different text per device */}
-          <div className="absolute bottom-24 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-4 py-2 rounded-full z-10 whitespace-nowrap">
+          <div className="absolute bottom-24 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-4 py-2 rounded-full z-10 whitespace-nowrap font-sans tracking-widest uppercase">
             <span className="xl:hidden">Tap to view details</span>
             <span className="hidden xl:inline">Click to view details</span>
           </div>
@@ -163,34 +210,41 @@ export function HeroSectionV2() {
         {/* ── MODAL — same on ALL devices (mobile, tablet, desktop) ── */}
         {modalOpen && (
           <div
-            className="absolute inset-0 z-10 flex flex-col overflow-y-auto"
+            className="absolute inset-0 z-20 flex flex-col"
             style={{
-              backgroundColor: "rgba(0,0,0,0.85)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
+              backgroundColor: "rgba(0,0,0,0.88)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
             }}
           >
             {/* Close button — top right */}
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-5  text-white text-sm uppercase tracking-widest flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
+              className="absolute top-5 right-6 text-white/50 hover:text-white transition-colors text-xs tracking-widest uppercase font-sans"
             >
-              ✕ Close
+              Close ✕
             </button>
 
-            {/* Centered buttons */}
-            <div className="flex flex-col justify-center items-center min-h-full px-8 gap-4">
+            {/* Centered content */}
+            <div className="flex flex-col justify-center items-center min-h-full px-8 gap-6">
+
+              {/* Tagline */}
+              <p className="font-serif italic text-white/70 text-lg md:text-xl text-center max-w-sm">
+                {TAGLINE}
+              </p>
+
+              {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/products"
-                  className="inline-flex items-center justify-center border border-white text-white px-6 py-3 text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
+                  className="font-sans inline-flex items-center justify-center border border-white text-white px-8 py-3 text-xs tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
                   onClick={() => setModalOpen(false)}
                 >
                   Shop This Piece
                 </Link>
                 <Link
                   href="/products"
-                  className="inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
+                  className="font-sans inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-8 py-3 text-xs tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
                   onClick={() => setModalOpen(false)}
                 >
                   View Collection
