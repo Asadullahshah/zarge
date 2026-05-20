@@ -8,15 +8,19 @@ import { CartButton } from "./cart-button"
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { CategoryDropdown } from "./category-dropdown"
+import { usePathname } from "next/navigation"
 
 export function Header() {
+  const pathname = usePathname()
+  const isHomePage = pathname === "/"
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [collectionsOpen, setCollectionsOpen] = useState(false)
   const [subcategories, setSubcategories] = useState<any[]>([])
   const [visible, setVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [mounted, setMounted] = useState(false)
-  const [isDark, setIsDark] = useState(true)
+  const [isDark, setIsDark] = useState(isHomePage)
 
   useEffect(() => {
     setMounted(true)
@@ -54,8 +58,13 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [lastScrollY])
 
-  // Scroll — detect which section the navbar is over
+  // Scroll — detect which section the navbar is over (home page only)
   useEffect(() => {
+    if (!isHomePage) {
+      setIsDark(false)
+      return
+    }
+
     const getSectionTheme = () => {
       const navbarBottom = 64
       const sections = document.querySelectorAll("[data-theme]")
@@ -76,7 +85,7 @@ export function Header() {
     getSectionTheme()
 
     return () => window.removeEventListener("scroll", getSectionTheme)
-  }, [])
+  }, [isHomePage])
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? "hidden" : "unset"
@@ -179,7 +188,6 @@ export function Header() {
           
           <div className="flex flex-col justify-center min-h-[80vh] px-10 py-6">
             <nav className="flex flex-col gap-8">
-
 
               {/* COLLECTIONS with dropdown */}
               <div className="flex flex-col gap-4">

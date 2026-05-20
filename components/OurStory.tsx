@@ -78,7 +78,7 @@ export function OurStory() {
               <p>This is not fast fashion.</p>
               <p>This is not just design.</p>
               <p className="font-serif italic text-lg">
-                This is Zarg&eacute;—<br />where emotion meets form,<br />and stories are worn, not told.
+                This is Zarg&eacute;<br />where emotion meets form,<br />and stories are worn, not told.
               </p>
             </div>
           </div>
