@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Premium Luxury Fashion & Home Essentials | Zarge",
+  title: "Zarge",
   description: "Discover premium luxury fashion and home essentials at Zarge. Shop elegant formal wear, semi-formal apparel for men and women, plus exclusive home textiles including premium bedsheets, quilts, blankets, and pillow covers. Pakistani craftsmanship meets modern luxury.",
   keywords: [
     "premium clothing",
