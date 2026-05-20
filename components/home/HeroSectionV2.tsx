@@ -171,6 +171,7 @@ export function HeroSectionV2() {
 
       {/* ── HERO SECTION — all devices, click to open modal ── */}
       {/* No -mt-16 here so it sits cleanly below the video */}
+      {/* Same click-to-modal behavior on ALL devices — desktop, tablet, mobile */}
       <section data-theme="light" className="relative overflow-hidden h-screen">
 
         {/* ── FULL SCREEN CLICKABLE IMAGE — all devices ── */}
