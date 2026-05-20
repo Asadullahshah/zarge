@@ -7,8 +7,8 @@ export function OurStory() {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <section id="our-story" className="pt-16 pb-0 text-center">
-
+    <section data-theme="light" id="our-story" className="pt-16 pb-0 text-center">
+      
       {/* Text content — light background */}
       <div className="max-w-2xl mx-auto space-y-6 px-8 md:px-16">
         <h2 className="font-serif text-4xl font-bold mb-4 text-black">
@@ -31,7 +31,7 @@ export function OurStory() {
       </div>
 
       {/* Image container with modal inside */}
-      <div className="relative w-full h-[80vh] mt-12 overflow-hidden">
+      <div data-theme="dark" className="relative w-full h-[80vh] mt-12 overflow-hidden">
         <Image
           src="/img/OurStory.jpeg"
           alt="Our Story"
