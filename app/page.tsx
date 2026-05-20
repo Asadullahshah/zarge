@@ -150,7 +150,7 @@ export default async function HomePage() {
 
       
       {/* Collections Section */}
-        <section data-theme="light" className="py-0">
+        <section data-theme="dark" className="py-0">
         <div className="grid grid-cols-1 md:grid-cols-2 min-h-[600px]">
 
           {/* Collection 1 - Unspoken Resilience */}
@@ -220,9 +220,9 @@ export default async function HomePage() {
       </section>
 
       {/* Our Story- Zarge */}
-      <div data-theme="dark">
+      {/* <div data-theme="dark"> */}
       <OurStory />
-      </div>
+      {/* </div> */}
 
       </div>
     </div>
