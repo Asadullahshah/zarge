@@ -116,7 +116,29 @@ export function HeroSectionV2() {
         </video>
 
         {/* Dark overlay */}
-        {/* <div className="absolute inset-0 bg-black/30" /> */}
+        <div className="absolute inset-0 bg-black/30" />
+
+        {/* Scroll down hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white z-10">
+          <span className="text-xs uppercase tracking-widest opacity-70">Scroll</span>
+          <div className="w-px h-8 bg-white/50 animate-pulse" />
+        </div>
+      </section>
+
+      {/* ── VIDEO SECTION — MOBILE + TABLET (up to 1279px) ── */}
+      <section data-theme="dark" className="xl:hidden relative min-h-[100svh] w-full overflow-hidden -mt-16">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-contain object-center"
+        >
+          <source src="/video/zarge.MP4" type="video/mp4" />
+        </video>
+
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/30" />
 
         {/* Scroll down hint */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white z-10">
