@@ -167,18 +167,18 @@ export default async function HomePage() {
 
             {/* Content */}
             <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-8 md:p-12">
-              <p className="text-xs uppercase tracking-widest text-gray-300 mb-2">Collection</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              <p className="font-sans text-xs uppercase tracking-[0.3em] text-gray-400 mb-3">Collection</p>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
                 Unspoken Resilience
               </h2>
-              <p className="text-sm md:text-base text-gray-300 mb-6 max-w-sm leading-relaxed">
+              <p className="font-sans text-sm text-gray-300 mb-8 max-w-sm leading-7 font-light">
                 Some things are carried quietly. This collection is for those who
                 endure without needing to announce it — strength stitched into
                 every thread.
               </p>
               <Link
                 href="/collections/unspoken-resilience"
-                className="inline-flex items-center justify-center w-fit border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
+                className="font-sans inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
               >
                 View Collection
               </Link>
@@ -200,7 +200,7 @@ export default async function HomePage() {
             {/* Content */}
             <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-8 md:p-12">
               <p className="text-xs uppercase tracking-widest text-gray-300 mb-2">Collection</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
                 Still Becoming
               </h2>
               <p className="text-sm md:text-base text-gray-300 mb-6 max-w-sm leading-relaxed">
