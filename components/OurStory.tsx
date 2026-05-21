@@ -28,6 +28,7 @@ export function OurStory() {
           src="/img/OurStory.jpeg"
           alt="Our Story"
           fill
+          sizes="100vw"
           className="object-cover object-center"
         />
 

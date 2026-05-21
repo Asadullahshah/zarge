@@ -102,6 +102,7 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
                 src={image.url}
                 alt={image.alt || `${productName} - Image ${index + 1}`}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
             </button>
@@ -115,6 +116,7 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
           src={currentImage.url}
           alt={currentImage.alt || productName}
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover"
           priority={selectedIndex === 0}
         />
