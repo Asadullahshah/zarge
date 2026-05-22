@@ -8,9 +8,10 @@ interface CategoryDropdownProps {
   label: string
   slug: string
   mobile?: boolean
+  isDark?: boolean
 }
 
-export function CategoryDropdown({ label, slug, mobile }: CategoryDropdownProps) {
+export function CategoryDropdown({ label, slug, mobile, isDark = false }: CategoryDropdownProps) {
   const [subcategories, setSubcategories] = useState<any[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -82,10 +83,14 @@ export function CategoryDropdown({ label, slug, mobile }: CategoryDropdownProps)
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Trigger */}
+      {/* Trigger — color based on isDark */}
       <Link
         href={`/category/${slug}`}
-        className="flex items-center gap-1 text-[#F5F5F0] transition-colors hover:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
+        className={`flex items-center gap-1 transition-colors duration-300 ${
+          isDark
+            ? "text-[#F5F5F0] hover:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
+            : "text-black hover:text-black/60"
+        }`}
       >
         {label}
         {subcategories.length > 0 && (
@@ -95,15 +100,14 @@ export function CategoryDropdown({ label, slug, mobile }: CategoryDropdownProps)
         )}
       </Link>
 
-      {/* Dropdown */}
+      {/* Dropdown panel — always light */}
       {isOpen && subcategories.length > 0 && (
         <div
-          style={{ backgroundColor: '#ffffff' }}
+          style={{ backgroundColor: "#ffffff" }}
           className="absolute top-full left-0 w-52 rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 mt-2"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          {/* All Collections — bold header */}
           <Link
             href={`/category/${slug}`}
             className="block px-5 py-3 text-sm font-bold text-black hover:bg-gray-50 transition-colors border-b border-gray-100"
@@ -111,7 +115,6 @@ export function CategoryDropdown({ label, slug, mobile }: CategoryDropdownProps)
             All {label}
           </Link>
 
-          {/* Subcategory items with dividers */}
           <div className="max-h-48 overflow-y-auto">
             {subcategories.map((subcat, index) => (
               <Link

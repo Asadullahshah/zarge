@@ -8,11 +8,6 @@ import { useState, useEffect } from "react"
 
 const TAGLINE = "Wearable narratives stitched through embroidery"
 
-const BTN_PRIMARY =
-  "inline-flex items-center justify-center border border-black text-black px-6 py-3 text-sm tracking-widest uppercase hover:bg-black hover:text-white transition-all duration-300"
-const BTN_SECONDARY =
-  "inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
-
 const slides = [
   { image: "/img/bloom.png" },
   { image: "/img/SilentBloom.png" },
@@ -28,12 +23,12 @@ function SlideNumbers({
   onSelect: (i: number) => void
 }) {
   return (
-    <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4">
+    <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 z-10">
       {slides.map((_, index) => (
         <button
           key={index}
-          onClick={() => onSelect(index)}
-          className={`font-light transition-all duration-300 leading-none ${
+          onClick={(e) => { e.stopPropagation(); onSelect(index) }}
+          className={`font-sans font-light transition-all duration-300 leading-none ${
             index === current
               ? "text-black text-3xl font-bold"
               : "text-black/40 text-sm"
@@ -61,7 +56,7 @@ function NavArrows({
         variant="outline"
         size="icon"
         className="rounded-full bg-transparent border border-black text-black hover:bg-black/10 hover:text-black"
-        onClick={onPrev}
+        onClick={(e) => { e.stopPropagation(); onPrev() }}
       >
         <ArrowLeftIcon />
       </Button>
@@ -69,7 +64,7 @@ function NavArrows({
         variant="outline"
         size="icon"
         className="rounded-full bg-transparent border border-black text-black hover:bg-black/10 hover:text-black"
-        onClick={onNext}
+        onClick={(e) => { e.stopPropagation(); onNext() }}
       >
         <ArrowRightIcon />
       </Button>
@@ -104,12 +99,12 @@ export function HeroSectionV2() {
     }, 300)
   }
 
-  const imageClass = `object-cover transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`
+  const imageClass = `object-cover object-center transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`
 
   return (
     <>
-      {/* ── VIDEO SECTION ── */}
-      <section className="relative h-screen w-full overflow-hidden -mt-16">
+      {/* ── VIDEO SECTION — DESKTOP (1280px+) ── */}
+      <section data-theme="dark" className="hidden xl:block relative min-h-[100svh] w-full overflow-hidden -mt-16">
         <video
           autoPlay
           muted
@@ -130,98 +125,113 @@ export function HeroSectionV2() {
         </div>
       </section>
 
-      {/* ── HERO SECTION ── */}
-      {/* No -mt-16 here so it sits cleanly below the video */}
-      <section className="relative overflow-hidden h-screen">
+      {/* ── VIDEO SECTION — MOBILE + TABLET (up to 1279px) ── */}
+      <section data-theme="dark" className="xl:hidden relative min-h-[100svh] w-full overflow-hidden -mt-16">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-contain object-center"
+        >
+          <source src="/video/zarge.MP4" type="video/mp4" />
+        </video>
 
-        {/* ── DESKTOP LAYOUT (1280px+) ── */}
-        <div className="hidden xl:flex h-full min-h-0 flex-row items-stretch">
-          <div className="flex w-[45%] h-full flex-col items-start justify-center px-3 xl:pl-60 overflow-hidden min-h-0 shrink-0 basis-[45%]">
-            <p className="text-2xl xl:text-5xl uppercase tracking-widest font-bold text-black max-w-2xl">
-              {TAGLINE}
-            </p>
-            <div className="mt-10 xl:mt-12 flex flex-wrap gap-2 xl:gap-4">
-              <Link href="/products" className={BTN_PRIMARY}>Shop This Piece</Link>
-              <Link href="/products" className={BTN_SECONDARY}>View Collection</Link>
-            </div>
-          </div>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/30" />
 
-          <div className="relative w-[55%] h-full">
-            <div className="absolute inset-0">
-              <Image
-                src={slides[currentSlide].image}
-                alt="Product image"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className={`${imageClass} object-[center_30%]`}
-                priority
-              />
-              <SlideNumbers current={currentSlide} onSelect={setCurrentSlide} />
-              <NavArrows onPrev={goToPrev} onNext={goToNext} className="absolute bottom-6 right-6" />
-            </div>
-          </div>
+        {/* Scroll down hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white z-10">
+          <span className="font-sans text-xs uppercase tracking-widest opacity-70">Scroll</span>
+          <div className="w-px h-8 bg-white/50 animate-pulse" />
         </div>
+      </section>
 
-        {/* ── MOBILE + TABLET LAYOUT (up to 1279px) ── */}
-        <div className="xl:hidden relative w-full h-full z-10">
+      {/* ── HERO SECTION — all devices, click to open modal ── */}
+      {/* No -mt-16 here so it sits cleanly below the video */}
+      {/* Same click-to-modal behavior on ALL devices — desktop, tablet, mobile */}
+      <section data-theme="light" className="relative overflow-hidden h-screen">
 
-          <div
-            className="absolute inset-0 cursor-pointer z-0"
-            onClick={() => setModalOpen(true)}
-          >
-            <Image
-              src={slides[currentSlide].image}
-              alt="Product image"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className={`${imageClass} object-top`}
-              priority
-            />
-            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-4 py-2 rounded-full">
-              Tap to view details
-            </div>
-          </div>
-
-          <SlideNumbers current={currentSlide} onSelect={setCurrentSlide} />
-          <NavArrows
-            onPrev={goToPrev}
-            onNext={goToNext}
-            className="absolute bottom-8 md:bottom-12 right-4 md:right-8 z-10"
+        {/* ── FULL SCREEN CLICKABLE IMAGE — all devices ── */}
+        <div
+          className="absolute inset-0 cursor-pointer z-0"
+          onClick={() => setModalOpen(true)}
+        >
+          <Image
+            src={slides[currentSlide].image}
+            alt="Product image"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className={`${imageClass} xl:object-contain`}
+            priority
           />
 
-          {/* ── MODAL (mobile + tablet) ── */}
-          {modalOpen && (
-            <div
-              className="absolute inset-0 z-10 flex flex-col overflow-y-auto"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.85)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-              }}
-            >
-              <button
-                onClick={() => setModalOpen(false)}
-                className="absolute bottom-10 left-8 text-black text-sm uppercase tracking-widest flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
-              >
-                ✕ Close
-              </button>
+          {/* Gradient overlay at bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
-              <div className="flex flex-col justify-center px-8 md:px-16 min-h-full max-w-2xl md:mx-auto w-full">
-                <p className="text-2xl md:text-4xl uppercase tracking-widest font-bold text-black max-w-sm md:max-w-lg">
-                  {TAGLINE}
-                </p>
-                <div className="mt-8 flex flex-col sm:flex-row flex-wrap gap-4">
-                  <Link href="/products" className={BTN_PRIMARY} onClick={() => setModalOpen(false)}>
-                    Shop This Piece
-                  </Link>
-                  <Link href="/products" className={BTN_SECONDARY} onClick={() => setModalOpen(false)}>
-                    View Collection
-                  </Link>
-                </div>
+          {/* Tap/Click hint — different text per device */}
+          <div className="absolute bottom-24 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-4 py-2 rounded-full z-10 whitespace-nowrap font-sans tracking-widest uppercase">
+            <span className="xl:hidden">Tap to view details</span>
+            <span className="hidden xl:inline">Click to view details</span>
+          </div>
+        </div>
+
+        {/* Slide numbers */}
+        <SlideNumbers current={currentSlide} onSelect={setCurrentSlide} />
+
+        {/* Nav arrows */}
+        <NavArrows
+          onPrev={goToPrev}
+          onNext={goToNext}
+          className="absolute bottom-8 right-10 md:right-14 z-10"
+        />
+
+        {/* ── MODAL — same on ALL devices (mobile, tablet, desktop) ── */}
+        {modalOpen && (
+          <div
+            className="absolute inset-0 z-20 flex flex-col"
+            style={{
+              backgroundColor: "rgba(0,0,0,0.88)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+            }}
+          >
+            {/* Close button — top right */}
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-5 right-6 text-white/50 hover:text-white transition-colors text-xs tracking-widest uppercase font-sans"
+            >
+              Close ✕
+            </button>
+
+            {/* Centered content */}
+            <div className="flex flex-col justify-center items-center min-h-full px-8 gap-6">
+
+              {/* Tagline */}
+              <p className="font-serif italic text-white/70 text-lg md:text-xl text-center max-w-sm">
+                {TAGLINE}
+              </p>
+
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/products"
+                  className="font-sans inline-flex items-center justify-center border border-white text-white px-8 py-3 text-xs tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
+                  onClick={() => setModalOpen(false)}
+                >
+                  Shop This Piece
+                </Link>
+                <Link
+                  href="/products"
+                  className="font-sans inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-8 py-3 text-xs tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
+                  onClick={() => setModalOpen(false)}
+                >
+                  View Collection
+                </Link>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
       </section>
     </>

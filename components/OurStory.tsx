@@ -7,23 +7,31 @@ export function OurStory() {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <section id="our-story" className="py-16 text-center">
+    <section data-theme="light" id="our-story" className="pt-16 pb-0 text-center">
+      
+      {/* Text content — light background */}
       <div className="max-w-2xl mx-auto space-y-6 px-8 md:px-16">
-      <p className="text-4xl font-serif font-bold mb-4 text-black" style={{ color: '#000000' }}>Our Story</p>
-        <p className="text-[#000000]">Zarg&eacute; was never meant to be just clothing.</p>
-        <p className="text-[#000000]">
+        <h2 className="font-serif text-4xl font-bold mb-4 text-black">
+          Our Story
+        </h2>
+        <p className="font-sans text-base leading-8 font-light text-black">
+          Zarg&eacute; was never meant to be just clothing.
+        </p>
+        <p className="font-sans text-base leading-8 font-light text-black">
           It started with a feeling—one that&apos;s hard to translate, but impossible to ignore. A quiet strength. A softness that carries weight.
           In Pashto, Zarg&eacute; reflects something close to the heart—something emotional, personal, and deeply human. That meaning sits at the core of everything we create.
         </p>
-        <p className="text-[#000000]">
+        <p className="font-sans text-base leading-8 font-light text-black">
           For six months, we worked behind the scenes in Lahore, obsessing over every detail—fabric, texture, thread, and form. Not just to make T-shirts, but to build pieces that feel like something.
           Something you don&apos;t just wear, but connect with.
         </p>
-        <p className="text-[#000000]">Each design tells a story without saying too much.</p>
+        <p className="font-sans text-base leading-8 font-light text-black">
+          Each design tells a story without saying too much.
+        </p>
       </div>
 
       {/* Image container with modal inside */}
-      <div className="relative w-full h-[80vh] mt-12 overflow-hidden">
+      <div data-theme="dark" className="relative w-full h-[80vh] mt-12 overflow-hidden">
         <Image
           src="/img/OurStory.jpeg"
           alt="Our Story"
@@ -34,10 +42,10 @@ export function OurStory() {
 
         {/* Read More button */}
         {!modalOpen && (
-          <div className="absolute bottom-8 left-8">
+          <div className="relative top-5">
             <button
               onClick={() => setModalOpen(true)}
-              className="border border-white text-white px-6 py-3 text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
+              className="font-sans border border-white text-white px-6 py-3 text-xs tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
             >
               Read More
             </button>
@@ -54,12 +62,12 @@ export function OurStory() {
             {/* Close button */}
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-6 text-[#666] hover:text-white transition-colors text-xs tracking-widest uppercase"
+              className="absolute top-4 right-6 text-[#666] hover:text-white transition-colors text-xs tracking-widest uppercase font-sans"
             >
               Close ✕
             </button>
 
-            <div className="space-y-4 text-white text-left text-sm leading-7 mt-6 max-w-lg mx-auto">
+            <div className="space-y-4 text-white text-left text-sm leading-8 font-light mt-6 max-w-lg mx-auto font-sans">
               <p>A bloom that happens in silence.</p>
               <p>A symbol of resilience wrapped in stillness.</p>
               <p>A reminder to believe, even when no one&apos;s watching.</p>
@@ -70,7 +78,9 @@ export function OurStory() {
               <p>For those who carry stories within them.</p>
               <p>This is not fast fashion.</p>
               <p>This is not just design.</p>
-              <p>This is Zarg&eacute;—<br />where emotion meets form,<br />and stories are worn, not told.</p>
+              <p className="font-serif italic text-lg">
+                This is Zarg&eacute;<br />where emotion meets form,<br />and stories are worn, not told.
+              </p>
             </div>
           </div>
         </div>
