@@ -137,6 +137,7 @@ export default async function HomePage() {
           src="/img/Background.jpeg"
           alt=""
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover object-center"
           priority
         />
@@ -160,6 +161,7 @@ export default async function HomePage() {
               src="/img/Sword.png"
               alt="Unspoken Resilience"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
             />
             {/* Dark overlay */}
@@ -192,6 +194,7 @@ export default async function HomePage() {
               src="/img/SilentBloom.png"
               alt="Still Becoming"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
             />
             {/* Dark overlay */}

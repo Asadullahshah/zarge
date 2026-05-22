@@ -161,6 +161,7 @@ export function HeroSectionV2() {
             src={slides[currentSlide].image}
             alt="Product image"
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className={`${imageClass} xl:object-contain`}
             priority
           />

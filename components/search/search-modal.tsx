@@ -191,6 +191,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             src={primaryImage.url}
                             alt={primaryImage.alt || product.name}
                             fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover group-hover:scale-105 transition-transform"
                           />
                         </div>

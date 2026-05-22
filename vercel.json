@@ -2,6 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "installCommand": "npm install"
+  "installCommand": "node scripts/verify-deploy-root.mjs && npm install"
 }
 

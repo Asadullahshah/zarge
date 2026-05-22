@@ -38,7 +38,5 @@ next-env.d.ts
 # prisma
 /prisma/migrations
 
-package.json
-package-lock.json
 public/img/zarge-logo.png
 public/img/Zarge-removebg-preview.png

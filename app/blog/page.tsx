@@ -119,6 +119,7 @@ export default async function BlogPage({
                       src={hub.featured_image}
                       alt={hub.title}
                       fill
+                      sizes="33vw"
                       className="object-cover group-hover:scale-105 transition-transform"
                     />
                     <div className="absolute top-3 left-3">
@@ -202,6 +203,7 @@ export default async function BlogPage({
                       src={post.featured_image}
                       alt={post.title}
                       fill
+                      sizes="33vw"
                       className="object-cover group-hover:scale-105 transition-transform"
                     />
                   </div>

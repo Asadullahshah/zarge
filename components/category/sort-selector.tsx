@@ -25,26 +25,25 @@ export function SortSelector() {
     } else {
       params.set("sort", value)
     }
-    params.delete("page") // Reset to page 1 when sorting changes
-    // Preserve subcategory filter if present
+    params.delete("page")
     router.push(`?${params.toString()}`)
   }
 
   return (
     <div className="flex items-center gap-2 flex-wrap">
-      <label htmlFor="sort" className="text-sm text-[#BDBDBD] whitespace-nowrap">
+      <label htmlFor="sort" className="text-sm text-gray-500 whitespace-nowrap">
         Sort by:
       </label>
       <Select value={currentSort} onValueChange={handleSortChange}>
-        <SelectTrigger id="sort" className="w-full sm:w-[200px] bg-[#121213] border-[#1A1A1B]">
+        <SelectTrigger id="sort" className="w-full sm:w-[200px] bg-white border-gray-200 text-black">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="bg-[#121213] border-[#1A1A1B]">
+        <SelectContent className="bg-white border-gray-200 text-black">
           {sortOptions.map((option) => (
             <SelectItem
               key={option.value}
               value={option.value}
-              className="hover:bg-[#1A1A1B] focus:bg-[#1A1A1B]"
+              className="hover:bg-gray-100 focus:bg-gray-100 text-black"
             >
               {option.label}
             </SelectItem>
@@ -54,4 +53,3 @@ export function SortSelector() {
     </div>
   )
 }
-

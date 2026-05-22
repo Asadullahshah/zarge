@@ -273,6 +273,7 @@ export default async function BlogPostPage({
                     src={post.featured_image}
                     alt={post.title}
                     fill
+                    sizes="100vw"
                     className="object-cover"
                     priority
                   />
@@ -329,6 +330,7 @@ export default async function BlogPostPage({
                         src={post.hubPost.featured_image}
                         alt={post.hubPost.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover group-hover:scale-105 transition-transform"
                       />
                     </div>
@@ -417,6 +419,7 @@ export default async function BlogPostPage({
                           src={related.featured_image}
                           alt={related.title}
                           fill
+                          sizes="33vw"
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>

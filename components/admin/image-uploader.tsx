@@ -135,6 +135,7 @@ export function ImageUploader({ images, onImagesChange, availableColors = [] }: 
                   src={image.url}
                   alt={image.alt || `Product image ${index + 1}`}
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"
                 />
                 {image.isPrimary && (
