@@ -9,10 +9,27 @@ import { useState, useEffect } from "react"
 const TAGLINE = "Wearable narratives stitched through embroidery"
 
 const slides = [
-  { image: "/img/bloom.png" },
-  { image: "/img/SilentBloom.png" },
-  { image: "/img/R6.png" },
-  { image: "/img/Sword.png" },
+  {
+    image: "/img/bloom.png",
+    name: "Blooming",
+    description: "A flower bends, then begins to rise, then stands fully bloomed. Not instantly. Not perfectly. But step by step. This design captures a truth — that nothing meaningful ever blooms all at once.",
+  },
+  {
+    image: "/img/silentbloom.png",
+    name: "Silent Bloom",
+    description: "Some things grow in silence. Branches that feel restrained. Flowers that still find a way to emerge. This piece is about becoming without announcement — evolving without applause.",
+  },
+  {
+    image: "/img/r6.png",
+    name: "The Fire Within",
+    description: "Rooted in the journey of Naruto Uzumaki — someone who began with nothing but rejection, yet refused to become defined by it. The 9 stands for that force within. Not something to hide, but something to grow into.",
+  },
+  {
+    image: "/img/sword.png",
+    name: "The Beloved Silence",
+    description: "Inspired by Byakuya Kuchiki — a man defined not by what he shows, but by what he carries within. Bound by honor, shaped by loss, guided by a code that demands silence over expression.",
+  },
+  
 ]
 
 function SlideNumbers({
@@ -76,6 +93,7 @@ export function HeroSectionV2() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
+  const [panelOpen, setPanelOpen] = useState(false)
 
   useEffect(() => {
     if (modalOpen) return
@@ -99,7 +117,7 @@ export function HeroSectionV2() {
     }, 300)
   }
 
-  const imageClass = `object-cover object-center transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`
+  const imageClass = `object-cover object-center xl:object-contain transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`
 
   return (
     <>
@@ -147,33 +165,62 @@ export function HeroSectionV2() {
         </div>
       </section>
 
-      {/* ── HERO SECTION — all devices, click to open modal ── */}
-      {/* No -mt-16 here so it sits cleanly below the video */}
-      {/* Same click-to-modal behavior on ALL devices — desktop, tablet, mobile */}
+      {/* ── HERO SECTION ── */}
       <section data-theme="light" className="relative overflow-hidden h-screen">
 
-        {/* ── FULL SCREEN CLICKABLE IMAGE — all devices ── */}
+        {/* ── LEFT INFO PANEL — slides in on image click, desktop only ── */}
+        <div className={`hidden xl:flex flex-col justify-center px-16 z-10 bg-white/95 backdrop-blur-sm
+          absolute left-0 top-0 h-full w-[420px] transition-transform duration-500 ease-in-out
+          ${panelOpen ? "translate-x-0" : "-translate-x-full"}`}>
+
+          {/* Close button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); setPanelOpen(false) }}
+            className="absolute top-6 right-6 text-black/40 hover:text-black text-xs tracking-widest uppercase font-sans"
+          >
+            Close ✕
+          </button>
+
+          <p className="font-sans text-xs tracking-widest uppercase text-black/40 mb-3">New Arrival</p>
+          <h1 className="font-serif text-5xl font-light leading-tight text-black mb-4">
+          {slides[currentSlide].name}
+          </h1>
+          <p className="font-sans text-sm text-black/60 leading-relaxed max-w-xs mb-8">
+          {slides[currentSlide].description}
+          </p>
+          <div className="flex gap-3">
+            <Link href="/products"
+              className="font-sans inline-flex items-center justify-center bg-black text-white px-4 py-5 text-xs tracking-widest uppercase hover:bg-black/80 transition-all duration-300">
+              Shop Now
+            </Link>
+            <button className="font-sans inline-flex items-center justify-center border border-black text-black px-5 py-3 text-xs tracking-widest uppercase hover:bg-black hover:text-white transition-all duration-300">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        {/* ── IMAGE — full screen, click opens panel (desktop) or modal (mobile) ── */}
         <div
           className="absolute inset-0 cursor-pointer z-0"
-          onClick={() => setModalOpen(true)}
+          onClick={() => {
+            if (window.innerWidth >= 1280) {
+              setPanelOpen(true)
+            } else {
+              setModalOpen(true)
+            }
+          }}
         >
           <Image
             src={slides[currentSlide].image}
             alt="Product image"
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={`${imageClass} xl:object-contain`}
+            sizes="(max-width: 768px) 100vw, 100vw"
+            className={imageClass}
             priority
           />
 
           {/* Gradient overlay at bottom */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-
-          {/* Tap/Click hint — different text per device */}
-          <div className="absolute bottom-24 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-4 py-2 rounded-full z-10 whitespace-nowrap font-sans tracking-widest uppercase">
-            <span className="xl:hidden">Tap to view details</span>
-            <span className="hidden xl:inline">Click to view details</span>
-          </div>
         </div>
 
         {/* Slide numbers */}
@@ -186,17 +233,17 @@ export function HeroSectionV2() {
           className="absolute bottom-8 right-10 md:right-14 z-10"
         />
 
-        {/* ── MODAL — same on ALL devices (mobile, tablet, desktop) ── */}
+        {/* ── MODAL — mobile + tablet only ── */}
         {modalOpen && (
           <div
-            className="absolute inset-0 z-20 flex flex-col"
+            className="absolute inset-0 z-20 flex flex-col xl:hidden"
             style={{
               backgroundColor: "rgba(0,0,0,0.88)",
               backdropFilter: "blur(16px)",
               WebkitBackdropFilter: "blur(16px)",
             }}
           >
-            {/* Close button — top right */}
+            {/* Close button */}
             <button
               onClick={() => setModalOpen(false)}
               className="absolute top-5 right-6 text-white/50 hover:text-white transition-colors text-xs tracking-widest uppercase font-sans"
@@ -205,30 +252,36 @@ export function HeroSectionV2() {
             </button>
 
             {/* Centered content */}
-            <div className="flex flex-col justify-center items-center min-h-full px-8 gap-6">
+            <div className="flex flex-col justify-center items-center min-h-full px-8 gap-4 text-center">
 
-              {/* Tagline */}
-              <p className="font-serif italic text-white/70 text-lg md:text-xl text-center max-w-sm">
-                {TAGLINE}
+              <p className="font-sans text-xs tracking-widest uppercase text-white/40">
+                New Arrival
               </p>
 
-              {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <h2 className="font-serif text-3xl font-light text-white leading-snug">
+              {slides[currentSlide].name}
+              </h2>
+
+              <p className="font-sans text-sm text-white/60 leading-relaxed max-w-xs">
+              {slides[currentSlide].description}
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3 mt-2">
                 <Link
                   href="/products"
-                  className="font-sans inline-flex items-center justify-center border border-white text-white px-8 py-3 text-xs tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
+                  className="font-sans inline-flex items-center justify-center bg-white text-black px-8 py-3 text-xs tracking-widest uppercase hover:bg-white/80 transition-all duration-300"
                   onClick={() => setModalOpen(false)}
                 >
-                  Shop This Piece
+                  Shop Now
                 </Link>
-                <Link
-                  href="/products"
+                <button
                   className="font-sans inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-8 py-3 text-xs tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
                   onClick={() => setModalOpen(false)}
                 >
-                  View Collection
-                </Link>
+                  Add to Cart
+                </button>
               </div>
+
             </div>
           </div>
         )}
