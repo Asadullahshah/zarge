@@ -40,15 +40,17 @@ function SlideNumbers({
   onSelect: (i: number) => void
 }) {
   return (
-    <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 z-10">
+    <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 z-10 border border-grey bg-white/30 px-3 py-4 shadow-lg"
+        style={{ borderRadius: "16px" }}
+    >
       {slides.map((_, index) => (
         <button
           key={index}
           onClick={(e) => { e.stopPropagation(); onSelect(index) }}
-          className={`font-sans font-light transition-all duration-300 leading-none ${
+          className={`font-sans font-light transition-all duration-300 leading-none text-black = ${
             index === current
-              ? "text-black text-3xl font-bold"
-              : "text-black/40 text-sm"
+              ? "text-3xl font-bold"
+              : "text-sm opacity-80"
           }`}
         >
           {String(index + 1).padStart(2, "0")}
@@ -72,7 +74,7 @@ function NavArrows({
       <Button
         variant="outline"
         size="icon"
-        className="rounded-full bg-transparent border border-black text-black hover:bg-black/10 hover:text-black"
+        className="rounded-full bg-white/30 border border-grey text-black hover:bg-white/50 hover:text-black"
         onClick={(e) => { e.stopPropagation(); onPrev() }}
       >
         <ArrowLeftIcon />
@@ -80,7 +82,7 @@ function NavArrows({
       <Button
         variant="outline"
         size="icon"
-        className="rounded-full bg-transparent border border-black text-black hover:bg-black/10 hover:text-black"
+        className="rounded-full bg-white/30 border border-grey text-black hover:bg-white/50 hover:text-black"
         onClick={(e) => { e.stopPropagation(); onNext() }}
       >
         <ArrowRightIcon />
