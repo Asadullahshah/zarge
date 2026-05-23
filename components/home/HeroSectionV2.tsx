@@ -150,9 +150,9 @@ export function HeroSectionV2() {
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-contain object-center"
+          className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src="/video/zarge.MP4" type="video/mp4" />
+          <source src="/video/zarge-mobile.MP4" type="video/mp4" />
         </video>
 
         {/* Dark overlay */}
