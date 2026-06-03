@@ -99,7 +99,7 @@ export function HeroSectionV2() {
 
   useEffect(() => {
     if (modalOpen) return
-    const timer = setInterval(goToNext, 5000)
+    const timer = setInterval(goToNext, 3000)
     return () => clearInterval(timer)
   }, [currentSlide, modalOpen])
 

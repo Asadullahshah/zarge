@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ProductCard } from "./product-card"
+import  ProductCardV2  from "./product-cardV2"
 import { GridLayoutSelector, getGridLayoutClass } from "./grid-layout-selector"
 
 interface ProductGridProps {
@@ -49,7 +49,16 @@ export function ProductGrid({ products }: ProductGridProps) {
       </div>
       <div className={getGridLayoutClass(columns)}>
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCardV2
+          key={product.id}
+          image={product.images?.find(img => img.isPrimary)?.url ?? product.images?.[0]?.url ?? ""}
+          name={product.name}
+          fit="Relaxed Fit"
+          category="Men"
+          price={product.salePrice ?? product.price}
+          colors={product.available_colors ?? []}
+          slug={product.slug}
+        />
         ))}
       </div>
     </>

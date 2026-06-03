@@ -170,7 +170,7 @@ export default async function CategoryPage({
   return (
     <>
       <CategoryFAQSchema category={category} faqs={faqs as any[]} />
-
+    <div className="relative z-10 bg-white min-h-screen">
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-serif font-bold mb-4">{category.name}</h1>
         {category.description && (
@@ -283,6 +283,7 @@ export default async function CategoryPage({
           </>
         )}
       </div>
+    </div>
     </>
   )
 }
