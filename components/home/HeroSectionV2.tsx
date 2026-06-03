@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { HeroBackgroundVideo } from "@/components/home/hero-background-video"
 
 const TAGLINE = "Wearable narratives stitched through embroidery"
 
@@ -125,15 +126,10 @@ export function HeroSectionV2() {
     <>
       {/* ── VIDEO SECTION — DESKTOP (1280px+) ── */}
       <section data-theme="dark" className="hidden xl:block relative min-h-[100svh] w-full overflow-hidden -mt-16">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/video/zarge.MP4" type="video/mp4" />
-        </video>
+        <HeroBackgroundVideo
+          src="/video/zarge.mp4"
+          poster="/video/zarge-poster.jpg"
+        />
 
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/30" />
@@ -147,15 +143,10 @@ export function HeroSectionV2() {
 
       {/* ── VIDEO SECTION — MOBILE + TABLET (up to 1279px) ── */}
       <section data-theme="dark" className="xl:hidden relative min-h-[100svh] w-full overflow-hidden -mt-16">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/video/zarge-mobile.MP4" type="video/mp4" />
-        </video>
+        <HeroBackgroundVideo
+          src="/video/zarge-mobile.mp4"
+          poster="/video/zarge-poster.jpg"
+        />
 
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/30" />

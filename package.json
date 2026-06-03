@@ -9,7 +9,8 @@
     "lint": "next lint",
     "db:migrate": "tsx scripts/migrate.ts",
     "create-admin": "tsx scripts/create-admin.ts",
-    "create-reviews-table": "tsx scripts/create-reviews-table.ts"
+    "create-reviews-table": "tsx scripts/create-reviews-table.ts",
+    "optimize-hero-videos": "bash scripts/optimize-hero-videos.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

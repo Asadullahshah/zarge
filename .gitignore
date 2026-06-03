@@ -40,3 +40,6 @@ next-env.d.ts
 
 public/img/zarge-logo.png
 public/img/Zarge-removebg-preview.png
+
+# Original hero uploads (keep locally; deploy the optimized .mp4 only)
+public/video/*.source.mp4

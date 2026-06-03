@@ -158,7 +158,7 @@ export default async function HomePage() {
           <div className="relative group overflow-hidden min-h-[500px] md:min-h-[600px]">
             {/* Background Image */}
             <Image
-              src="/img/Sword.png"
+              src="/img/sword.png"
               alt="Unspoken Resilience"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
@@ -191,7 +191,7 @@ export default async function HomePage() {
           <div className="relative group overflow-hidden min-h-[500px] md:min-h-[600px]">
             {/* Background Image */}
             <Image
-              src="/img/SilentBloom.png"
+              src="/img/silentbloom.png"
               alt="Still Becoming"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
