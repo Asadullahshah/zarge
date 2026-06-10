@@ -109,8 +109,25 @@ export default async function CategoryPage({
     `,
   ])
 
+  // const MOCK_PRODUCTS = Array.from({ length: 47 }, (_, i) => ({
+  //   id: `product-${i + 1}`,
+  //   name: `Test Product ${i + 1}`,
+  //   slug: `test-product-${i + 1}`,
+  //   price: parseFloat((Math.random() * 5000 + 500).toFixed(2)),
+  //   salePrice: i % 3 === 0 ? parseFloat((Math.random() * 3000 + 300).toFixed(2)) : undefined,
+  //   images: [`https://picsum.photos/seed/${i + 1}/400/500`],
+  //   available_colors: ["Black", "White", "Navy"].slice(0, (i % 3) + 1),
+  //   available_sizes: ["S", "M", "L", "XL"].slice(0, (i % 4) + 1),
+  //   stock: Math.floor(Math.random() * 50) + 1,
+  //   status: "PUBLISHED",
+  //   category_id: "mock-cat",
+  // }))
+
   const { processProductsWithVariants } = await import("@/lib/product-helpers")
   const products = await processProductsWithVariants(rawProducts as any[])
+
+  // const rawProcessed = await processProductsWithVariants(rawProducts as any[])
+  // const products = MOCK_PRODUCTS  
 
   let allProductsCount = products.length
   if (isParentCategory) {

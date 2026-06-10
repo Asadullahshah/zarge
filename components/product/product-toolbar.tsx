@@ -5,7 +5,7 @@ import GridLayoutSelectorV2, { getGridLayoutClass } from "./grid-layout-selector
 import { FilterDrawer } from "../category/filter-drawer"
 import ProductCardV2 from "./product-cardV2"
 
-const PRODUCTS_PER_PAGE = 10
+const PER_PAGE_OPTIONS = [10, 20, 30, 40]
 
 interface Product {
   id: string
@@ -41,30 +41,48 @@ export function ProductToolbar({ products = [] }: ProductToolbarProps) {
   const [filterOpen, setFilterOpen] = useState(false)
   const [columns, setColumns] = useState(4)
   const [sort, setSort] = useState("featured")
-  // ADDED: current page state, starts at 1
   const [currentPage, setCurrentPage] = useState(1)
+  const [perPage, setPerPage] = useState(PER_PAGE_OPTIONS[0])
 
-  // Sort the full products array in memory
   const sortedProducts = useMemo(() => sortProducts(products, sort), [products, sort])
 
-  // Pagination math
-  const totalPages = Math.ceil(sortedProducts.length / PRODUCTS_PER_PAGE)
-  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE
-  // ADDED: slice the sorted array to only show current page's products
-  const paginatedProducts = sortedProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE)
+  const totalPages = Math.ceil(sortedProducts.length / perPage)
+  const startIndex = (currentPage - 1) * perPage
+  const paginatedProducts = sortedProducts.slice(startIndex, startIndex + perPage)
 
-  // When sort changes, reset to page 1 so user isn't stuck on page 3 of new sort
   const handleSortChange = (value: string) => {
     setSort(value)
     setCurrentPage(1)
   }
 
+  const handlePerPageChange = (value: number) => {
+    setPerPage(value)
+    setCurrentPage(1)
+  }
+
+  
+
   return (
     <>
       <div className="flex items-center justify-between mb-6">
-        <p className="text-[#BDBDBD]">
-          Showing {startIndex + 1}–{Math.min(startIndex + PRODUCTS_PER_PAGE, sortedProducts.length)} of {sortedProducts.length} products
-        </p>
+        <div className="flex items-center gap-1">
+          <span className="text-xs text-[#BDBDBD]">Show:</span>
+          <div className="flex gap-1">
+            {PER_PAGE_OPTIONS.map((option) => (
+              <button
+                key={option}
+                onClick={() => handlePerPageChange(option)}
+                className={`px-2 py-0.5 text-xs rounded transition-colors ${
+                  perPage === option
+                    ? "bg-black text-white"
+                    : "text-[#BDBDBD] hover:text-black"
+                }`}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </div>
         <GridLayoutSelectorV2
           columns={columns}
           onLayoutChange={setColumns}
@@ -72,7 +90,6 @@ export function ProductToolbar({ products = [] }: ProductToolbarProps) {
         />
       </div>
 
-      {/* Only render the current page's slice */}
       <div className={getGridLayoutClass(columns)}>
         {paginatedProducts.map((product) => (
           <ProductCardV2
@@ -88,10 +105,8 @@ export function ProductToolbar({ products = [] }: ProductToolbarProps) {
         ))}
       </div>
 
-      {/* ADDED: client-side pagination UI */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-1 mt-12 mb-4">
-          {/* Previous */}
           {currentPage > 1 ? (
             <button
               onClick={() => setCurrentPage(p => p - 1)}
@@ -103,7 +118,6 @@ export function ProductToolbar({ products = [] }: ProductToolbarProps) {
             <span className="px-3 py-2 text-sm text-gray-300 cursor-not-allowed">Previous</span>
           )}
 
-          {/* Page numbers */}
           {(() => {
             const pages: (number | string)[] = []
             if (totalPages <= 7) {
@@ -134,7 +148,6 @@ export function ProductToolbar({ products = [] }: ProductToolbarProps) {
             )
           })()}
 
-          {/* Next */}
           {currentPage < totalPages ? (
             <button
               onClick={() => setCurrentPage(p => p + 1)}
