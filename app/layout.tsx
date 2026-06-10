@@ -115,13 +115,14 @@ export default async function RootLayout({
   const headersList = await headers()
   const pathname = headersList.get("x-pathname") || ""
   const isAdmin = pathname.startsWith("/admin")
+  const isCartPage = pathname.startsWith("/cart")
 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${montserrat.variable}`}>
-      <body className={'${inter.className} bg-transparent'}>
+      <body className={`${inter.className} bg-white`}>
 
-        {/* Global background — hidden on admin pages */}
-        {!isAdmin && (
+        {/* Global background — hidden on admin and cart pages */}
+        {!isAdmin && !isCartPage && (
           <div className="fixed inset-0 z-0">
             <Image
               src="/img/Background.jpeg"
@@ -135,14 +136,14 @@ export default async function RootLayout({
         )}
 
         {/* All content sits above the background */}
-        <div className="relative z-10">
+        <div className="relative z-10 flex min-h-screen flex-col">
           <OrganizationSchema />
           <ErrorBoundaryWrapper>
             <AuthProvider>
               <NetworkStatus />
               {!isAdmin && <Header />}
               <ScrollToHash />
-              {children}
+              <main className={`flex flex-1 flex-col ${isCartPage ? "bg-white" : ""}`}>{children}</main>
               {!isAdmin && <Footer />}
             </AuthProvider>
           </ErrorBoundaryWrapper>

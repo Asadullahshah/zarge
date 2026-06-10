@@ -2,19 +2,23 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { auth } from "@/lib/auth"
 
+function withPathnameHeader(request: NextRequest, pathname: string) {
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set("x-pathname", pathname)
+  return NextResponse.next({ request: { headers: requestHeaders } })
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-
-  // Allow access to login page
-  if (pathname === "/admin/login") {
-    const requestHeaders = new Headers(request.headers)
-    requestHeaders.set("x-pathname", pathname)
-    return NextResponse.next({ request: { headers: requestHeaders } })
-  }
 
   // Allow public API routes (non-admin)
   if (pathname.startsWith("/api/") && !pathname.startsWith("/api/admin")) {
     return NextResponse.next()
+  }
+
+  // Allow access to login page
+  if (pathname === "/admin/login") {
+    return withPathnameHeader(request, pathname)
   }
 
   // Protect all /admin routes (including /admin API routes)
@@ -46,12 +50,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Pass pathname header on all requests
-  const requestHeaders = new Headers(request.headers)
-  requestHeaders.set("x-pathname", pathname)
-  return NextResponse.next({ request: { headers: requestHeaders } })
+  return withPathnameHeader(request, pathname)
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)",
+  ],
 }
