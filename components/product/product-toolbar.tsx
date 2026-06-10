@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef, useEffect } from "react"
 import GridLayoutSelectorV2, { getGridLayoutClass } from "./grid-layout-selectorV2"
 import { FilterDrawer } from "../category/filter-drawer"
 import ProductCardV2 from "./product-cardV2"
+import { ChevronDown } from "lucide-react"
 
 const PER_PAGE_OPTIONS = [10, 20, 30, 40]
 
@@ -43,6 +44,21 @@ export function ProductToolbar({ products = [] }: ProductToolbarProps) {
   const [sort, setSort] = useState("featured")
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(PER_PAGE_OPTIONS[0])
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const isLocked = products.length <= 10
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   const sortedProducts = useMemo(() => sortProducts(products, sort), [products, sort])
 
@@ -58,31 +74,57 @@ export function ProductToolbar({ products = [] }: ProductToolbarProps) {
   const handlePerPageChange = (value: number) => {
     setPerPage(value)
     setCurrentPage(1)
+    setDropdownOpen(false)
   }
-
-  
 
   return (
     <>
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-1">
-          <span className="text-xs text-[#BDBDBD]">Show:</span>
-          <div className="flex gap-1">
-            {PER_PAGE_OPTIONS.map((option) => (
+
+        {/* Showing X of Z products */}
+        <div className="flex items-center gap-1.5 text-lg text-[#000000]">
+          <span>Showing</span>
+
+          {isLocked ? (
+            <span className="text-black font-medium">{products.length}</span>
+          ) : (
+            <div className="relative" ref={dropdownRef}>
+              {/* Trigger */}
               <button
-                key={option}
-                onClick={() => handlePerPageChange(option)}
-                className={`px-2 py-0.5 text-xs rounded transition-colors ${
-                  perPage === option
-                    ? "bg-black text-white"
-                    : "text-[#BDBDBD] hover:text-black"
-                }`}
+                onClick={() => setDropdownOpen((o) => !o)}
+                className="flex items-center gap-1 px-2.5 py-1 bg-white border border-[#E0E0E0] rounded-md text-sm font-medium text-black hover:border-black transition-colors"
               >
-                {option}
+                {perPage}
+                <ChevronDown
+                  size={13}
+                  className={`text-[#BDBDBD] transition-transform duration-150 ${dropdownOpen ? "rotate-180" : ""}`}
+                />
               </button>
-            ))}
-          </div>
+
+              {/* Panel */}
+              {dropdownOpen && (
+                <div className="absolute top-[calc(100%+4px)] left-0 z-50 bg-white border border-[#E0E0E0] rounded-md overflow-hidden shadow-sm min-w-full">
+                  {PER_PAGE_OPTIONS.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => handlePerPageChange(option)}
+                      className={`w-full text-left px-4 py-2 text-sm transition-colors ${
+                        perPage === option
+                          ? "text-black font-medium bg-[#F7F7F7]"
+                          : "text-[#BDBDBD] hover:text-black hover:bg-[#F7F7F7]"
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <span>of {products.length} products</span>
         </div>
+
         <GridLayoutSelectorV2
           columns={columns}
           onLayoutChange={setColumns}
