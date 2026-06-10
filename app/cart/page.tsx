@@ -79,7 +79,7 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
-        <p className="text-[#BDBDBD]">Loading cart...</p>
+        <p className="text-gray-500">Loading cart...</p>
       </div>
     )
   }
@@ -88,9 +88,9 @@ export default function CartPage() {
     return (
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto text-center">
-          <ShoppingBag className="w-16 h-16 mx-auto mb-4 text-[#BDBDBD]" />
-          <h1 className="text-3xl font-serif font-bold mb-4">Your cart is empty</h1>
-          <p className="text-[#BDBDBD] mb-8">
+          <ShoppingBag className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+          <h1 className="text-3xl font-serif font-bold mb-4 text-black">Your cart is empty</h1>
+          <p className="text-gray-500 mb-8">
             Looks like you haven&apos;t added anything to your cart yet.
           </p>
           <Link href="/">
@@ -103,17 +103,17 @@ export default function CartPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-serif font-bold mb-8">Shopping Cart</h1>
+      <h1 className="text-4xl font-serif font-bold mb-8 text-black">Shopping Cart</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
             <div
               key={item.id}
-              className="bg-[#121213] rounded-lg p-6 border border-[#1A1A1B] flex gap-4"
+              className="bg-white rounded-lg p-6 border border-gray-200 flex gap-4 shadow-sm"
             >
               <Link href={`/product/${item.productSlug}`} className="flex-shrink-0">
-                <div className="w-24 h-24 relative rounded overflow-hidden bg-[#0B0B0C]">
+                <div className="w-24 h-24 relative rounded overflow-hidden bg-gray-100">
                   {item.images && item.images.length > 0 ? (
                     <Image
                       src={item.images[0].url}
@@ -123,7 +123,7 @@ export default function CartPage() {
                       className="object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[#BDBDBD] text-xs">
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
                       No Image
                     </div>
                   )}
@@ -132,7 +132,7 @@ export default function CartPage() {
 
               <div className="flex-1">
                 <Link href={`/product/${item.productSlug}`}>
-                  <h3 className="font-semibold mb-2 hover:text-primary transition-colors">
+                  <h3 className="font-semibold mb-2 text-black hover:text-primary transition-colors">
                     {item.productName}
                   </h3>
                 </Link>
@@ -141,19 +141,19 @@ export default function CartPage() {
                 </p>
 
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 border border-[#1A1A1B] rounded">
+                  <div className="flex items-center gap-2 border border-gray-200 rounded">
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="p-2 hover:bg-[#1A1A1B] transition-colors"
+                      className="p-2 text-black hover:bg-gray-100 transition-colors"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
-                    <span className="px-4 py-2 min-w-[3rem] text-center">
+                    <span className="px-4 py-2 min-w-[3rem] text-center text-black">
                       {item.quantity}
                     </span>
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="p-2 hover:bg-[#1A1A1B] transition-colors"
+                      className="p-2 text-black hover:bg-gray-100 transition-colors"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -169,26 +169,26 @@ export default function CartPage() {
               </div>
 
               <div className="text-right">
-                <p className="font-bold text-lg">{formatPrice(item.total)}</p>
+                <p className="font-bold text-lg text-black">{formatPrice(item.total)}</p>
               </div>
             </div>
           ))}
         </div>
 
         <div className="lg:col-span-1">
-          <div className="bg-[#121213] rounded-lg p-6 border border-[#1A1A1B] sticky top-24">
-            <h2 className="text-2xl font-serif font-bold mb-6">Order Summary</h2>
+          <div className="bg-white rounded-lg p-6 border border-gray-200 sticky top-24 shadow-sm">
+            <h2 className="text-2xl font-serif font-bold mb-6 text-black">Order Summary</h2>
 
             <div className="space-y-4 mb-6">
-              <div className="flex justify-between text-[#BDBDBD]">
+              <div className="flex justify-between text-gray-600">
                 <span>Subtotal</span>
                 <span>{formatPrice(total)}</span>
               </div>
-              <div className="flex justify-between text-[#BDBDBD]">
+              <div className="flex justify-between text-gray-600">
                 <span>Shipping</span>
                 <span>Calculated at checkout</span>
               </div>
-              <div className="border-t border-[#1A1A1B] pt-4 flex justify-between text-xl font-bold">
+              <div className="border-t border-gray-200 pt-4 flex justify-between text-xl font-bold text-black">
                 <span>Total</span>
                 <span>{formatPrice(total)}</span>
               </div>
@@ -200,7 +200,7 @@ export default function CartPage() {
               </Button>
             </Link>
 
-            <Link href="/" className="block mt-4 text-center text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors">
+            <Link href="/" className="block mt-4 text-center text-gray-500 hover:text-black transition-colors">
               Continue Shopping
             </Link>
           </div>
