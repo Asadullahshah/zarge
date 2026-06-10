@@ -2,8 +2,6 @@ import { sql } from "@/lib/db"
 import { ProductGrid } from "@/components/product/product-grid"
 import { Metadata } from "next"
 import Link from "next/link"
-import { SortSelector } from "@/components/category/sort-selector"
-
 // Force dynamic rendering to show latest products
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -491,7 +489,6 @@ export default async function SalePage({
             Exclusive discounts on premium fashion and home essentials
           </p>
         </div>
-        <SortSelector />
       </div>
 
       {/* Category Filters */}
