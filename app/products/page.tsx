@@ -1,8 +1,6 @@
 import { sql } from "@/lib/db"
 import { ProductGrid } from "@/components/product/product-grid"
 import { Metadata } from "next"
-import { SortSelector } from "@/components/category/sort-selector"
-
 // Force dynamic rendering to show latest products
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -345,9 +343,6 @@ export default async function ProductsPage({
               ? "Handpicked selections from our premium collection"
               : "Browse our complete collection"}
           </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <SortSelector />
         </div>
       </div>
 

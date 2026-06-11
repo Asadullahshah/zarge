@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation"
 export function Header() {
   const pathname = usePathname()
   const isHomePage = pathname === "/"
+  const isCategoryPage = pathname.startsWith("/category/")
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [collectionsOpen, setCollectionsOpen] = useState(false)

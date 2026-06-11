@@ -35,10 +35,10 @@ export function GridLayoutSelector({ onLayoutChange }: GridLayoutSelectorProps) 
   }
 
   const buttonClasses = (isActive: boolean) => {
-    const base = "relative inline-flex items-center justify-center rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#121213]"
+    const base = "relative inline-flex items-center justify-center rounded-md transition-all duration-200 focus:outline-none"
     const size = "min-h-[44px] min-w-[44px] h-11 w-11 md:h-9 md:w-9 p-0"
     const active = isActive 
-      ? "bg-primary/20 text-primary" 
+      ? "bg-black/20 text-black" 
       : "bg-transparent text-[#BDBDBD] hover:bg-[#1A1A1B] hover:text-[#F7F7F7] active:bg-[#2A2A2B] active:scale-95"
     return `${base} ${size} ${active}`
   }
@@ -46,7 +46,7 @@ export function GridLayoutSelector({ onLayoutChange }: GridLayoutSelectorProps) 
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <span className="text-sm text-[#BDBDBD] mr-2 whitespace-nowrap">Layout:</span>
-      <div className="flex gap-1 border border-[#1A1A1B] rounded-lg p-1 bg-[#121213]">
+      <div className="flex gap-1 border border-[#000000] rounded-lg p-1 bg-[#ffffff]">
         <button
           type="button"
           onClick={() => handleLayoutChange(2)}
