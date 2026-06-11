@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation"
 export function Header() {
   const pathname = usePathname()
   const isHomePage = pathname === "/"
+  const isCategoryPage = pathname.startsWith("/category/")
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [collectionsOpen, setCollectionsOpen] = useState(false)
@@ -114,7 +115,8 @@ export function Header() {
     <>
       <header className={`sticky top-0 z-[60] transition-transform duration-300 ${headerBg} ${
         visible ? "translate-y-0" : "-translate-y-full"
-      }`}>
+      } ${!isHomePage ? "bg-white border-b border-gray-100" : ""}`}>
+
         <div className="container mx-auto px-4">
           <div className="relative flex h-16 items-center justify-between">
 
