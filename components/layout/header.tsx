@@ -109,15 +109,14 @@ export function Header() {
     ? "[&_button]:text-[#F5F5F0] [&_button]:drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] [&_button]:hover:bg-white/10 [&_button]:hover:text-white"
     : "[&_button]:text-black [&_button]:hover:bg-black/10 [&_button]:hover:text-black"
 
-  const headerBg = isHomePage && isDark ? "bg-transparent" : "bg-white"
+  const headerBg = isHomePage ? "bg-transparent" : "bg-white"
 
   return (
     <>
       <header className={`sticky top-0 z-[60] transition-transform duration-300 ${headerBg} ${
         visible ? "translate-y-0" : "-translate-y-full"
-      } ${!isHomePage ? "bg-white border-b border-gray-100" : ""}`}>
-
-        <div className="container mx-auto px-4">
+      }`}>
+        <div className="w-full px-4">
           <div className="relative flex h-16 items-center justify-between">
 
             {/* LOGO */}
