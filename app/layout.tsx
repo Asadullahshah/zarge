@@ -5,6 +5,8 @@ import Image from "next/image"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footerV2"
 import { AuthProvider } from "@/components/providers/session-provider"
+import { CartProvider } from "@/context/cart-context"
+import { MiniCart } from "@/components/mini-cart"
 import { ErrorBoundaryWrapper } from "@/components/error-boundary-wrapper"
 import { NetworkStatus } from "@/components/network-status"
 import { OrganizationSchema } from "@/components/seo/organization-schema"
@@ -140,11 +142,14 @@ export default async function RootLayout({
           <OrganizationSchema />
           <ErrorBoundaryWrapper>
             <AuthProvider>
-              <NetworkStatus />
-              {!isAdmin && <Header />}
-              <ScrollToHash />
-              <main className={`flex flex-1 flex-col ${isCartPage ? "bg-white" : ""}`}>{children}</main>
-              {!isAdmin && <Footer />}
+              <CartProvider>
+                <NetworkStatus />
+                {!isAdmin && <Header />}
+                <ScrollToHash />
+                <main className={`flex flex-1 flex-col ${isCartPage ? "bg-white" : ""}`}>{children}</main>
+                {!isAdmin && <Footer />}
+                <MiniCart />
+              </CartProvider>
             </AuthProvider>
           </ErrorBoundaryWrapper>
         </div>

@@ -160,6 +160,16 @@
   display: none;
 }
 
+/*Hides the Scrollbar on all pages */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
 /* Rich Text Editor Styles */
 .ProseMirror {
   outline: none;

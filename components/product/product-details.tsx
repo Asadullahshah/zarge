@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Package, Ruler, Palette, Info, MapPin, Scissors, Plus, Minus, Heart } from "lucide-react"
 import { safeFetch, formatErrorMessage } from "@/lib/error-handler"
+import { useCart } from "@/context/cart-context"
 
 // Color name to hex mapping
 function getColorHex(colorName: string): string {
@@ -82,6 +83,7 @@ interface ProductDetailsProps {
 
 export function ProductDetails({ product, selectedColor: externalSelectedColor, onColorChange, sizeChartImage, variants = [] }: ProductDetailsProps) {
   const router = useRouter()
+  const { openCart } = useCart()
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [internalSelectedColor, setInternalSelectedColor] = useState<string | null>(null)
   
@@ -293,6 +295,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
         
         // Show success feedback
         setAdded(true)
+        openCart()
         setLoading(false)
         
         // Reset after 2 seconds
