@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { HeroBackgroundVideo } from "@/components/home/hero-background-video"
+import { useCart } from "@/context/cart-context"
 
 const TAGLINE = "Wearable narratives stitched through embroidery"
 
@@ -93,6 +94,7 @@ function NavArrows({
 }
 
 export function HeroSectionV2() {
+  const { openCart } = useCart()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
@@ -186,7 +188,7 @@ export function HeroSectionV2() {
               className="font-sans inline-flex items-center justify-center bg-black text-white px-4 py-5 text-xs tracking-widest uppercase hover:bg-black/80 transition-all duration-300">
               Shop Now
             </Link>
-            <button className="font-sans inline-flex items-center justify-center border border-black text-black px-5 py-3 text-xs tracking-widest uppercase hover:bg-black hover:text-white transition-all duration-300">
+            <button onClick={openCart} className="font-sans inline-flex items-center justify-center border border-black text-black px-5 py-3 text-xs tracking-widest uppercase hover:bg-black hover:text-white transition-all duration-300">
               Add to Cart
             </button>
           </div>
@@ -269,7 +271,7 @@ export function HeroSectionV2() {
                 </Link>
                 <button
                   className="font-sans inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-8 py-3 text-xs tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
-                  onClick={() => setModalOpen(false)}
+                  onClick={() => { setModalOpen(false); openCart() }}
                 >
                   Add to Cart
                 </button>

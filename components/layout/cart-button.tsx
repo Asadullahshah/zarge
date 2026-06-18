@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
 import { ShoppingCart } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useCart } from "@/context/cart-context"
 
 export function CartButton() {
+  const { toggleCart } = useCart()
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -26,16 +27,19 @@ export function CartButton() {
   }, [])
 
   return (
-    <Link href="/cart">
-      <Button variant="ghost" size="icon" className="relative">
-        <ShoppingCart className="w-5 h-5" />
-        {count > 0 && (
-          <span className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {count > 9 ? "9+" : count}
-          </span>
-        )}
-      </Button>
-    </Link>
+    <Button
+      variant="ghost"
+      size="icon"
+      className="relative"
+      onClick={toggleCart}
+      aria-label="Open cart"
+    >
+      <ShoppingCart className="w-5 h-5" />
+      {count > 0 && (
+        <span className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          {count > 9 ? "9+" : count}
+        </span>
+      )}
+    </Button>
   )
 }
-
