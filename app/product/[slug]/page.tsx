@@ -423,13 +423,13 @@ export default async function ProductPage({
 
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumbs */}
-        <nav className="text-sm text-[#BDBDBD] mb-6">
+        <nav className="text-sm text-gray-500 mb-6">
           {breadcrumbs.map((crumb, i) => (
             <span key={i}>
               {i > 0 && " / "}
               <a
                 href={crumb.url}
-                className="hover:text-[#F7F7F7] transition-colors"
+                className="hover:text-primary transition-colors"
               >
                 {crumb.name}
               </a>
@@ -452,17 +452,17 @@ export default async function ProductPage({
           <div className="mb-12">
             <h2 className="text-2xl font-serif font-bold mb-4">Product Description</h2>
             <div
-              className="prose prose-invert max-w-none text-[#BDBDBD]"
+              className="prose prose-neutral max-w-none text-gray-600"
               dangerouslySetInnerHTML={{ __html: product.description }}
             />
           </div>
         )}
 
         {/* Size Chart Image - Display after description */}
-        {sizeChartImage && (
+        {/* {sizeChartImage && (
           <div id="size-chart" className="mb-12 scroll-mt-20">
             <h2 className="text-2xl font-serif font-bold mb-4">Size Chart</h2>
-            <div className="bg-[#121213] border border-[#1A1A1B] rounded-lg p-6">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
               <div className="relative w-full max-w-4xl mx-auto">
                 <img
                   src={sizeChartImage}
@@ -473,7 +473,7 @@ export default async function ProductPage({
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
 
         {/* Hidden Add to Cart Button for form submission */}
@@ -485,12 +485,12 @@ export default async function ProductPage({
         </div>
 
         {/* Reviews Section */}
-        <div className="mt-16 pt-12 border-t border-[#1A1A1B]">
+        <div className="mt-16 pt-12 border-t border-gray-200">
           <ReviewsSection productSlug={product.slug} />
         </div>
 
         {/* Similar Products */}
-        <div className="mt-16 pt-12 border-t border-[#1A1A1B]">
+        <div className="mt-16 pt-12 border-t border-gray-200">
           <h2 className="text-3xl font-serif font-bold mb-8">Similar Products</h2>
           {similarProducts.length > 0 ? (
             <ScrollableProducts
@@ -528,7 +528,7 @@ export default async function ProductPage({
                 })}
             />
           ) : (
-            <p className="text-[#BDBDBD] text-center py-8">No similar products found at this time.</p>
+            <p className="text-gray-500 text-center py-8">No similar products found at this time.</p>
           )}
         </div>
       </div>

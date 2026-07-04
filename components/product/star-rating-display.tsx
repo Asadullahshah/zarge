@@ -29,19 +29,19 @@ export function StarRatingDisplay({
           <Star
             key={`full-${i}`}
             size={starSize}
-            className="fill-[#BFA36A] text-[#BFA36A]"
+            className="fill-primary text-primary"
           />
         ))}
         {hasHalfStar && (
           <div className="relative" style={{ width: starSize, height: starSize }}>
             <Star
               size={starSize}
-              className="text-[#3A3A3B] absolute inset-0"
+              className="text-gray-300 absolute inset-0"
             />
             <div className="absolute inset-0 overflow-hidden" style={{ width: '50%' }}>
               <Star
                 size={starSize}
-                className="fill-[#BFA36A] text-[#BFA36A]"
+                className="fill-primary text-primary"
               />
             </div>
           </div>
@@ -50,17 +50,17 @@ export function StarRatingDisplay({
           <Star
             key={`empty-${i}`}
             size={starSize}
-            className="text-[#3A3A3B]"
+            className="text-gray-300"
           />
         ))}
       </div>
       {showNumbers && (
         <div className="flex items-center gap-2">
-          <span className="text-[#BFA36A] font-semibold text-sm">
+          <span className="text-primary font-semibold text-sm">
             {rating.toFixed(1)}
           </span>
           {totalReviews !== undefined && totalReviews > 0 && (
-            <span className="text-[#BDBDBD] text-sm">
+            <span className="text-gray-500 text-sm">
               ({totalReviews} {totalReviews === 1 ? 'review' : 'reviews'})
             </span>
           )}
@@ -69,5 +69,3 @@ export function StarRatingDisplay({
     </div>
   )
 }
-
-

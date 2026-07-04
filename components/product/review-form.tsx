@@ -33,8 +33,6 @@ export function ReviewForm({ productSlug, onSuccess }: ReviewFormProps) {
       return
     }
     
-    // Comment is optional
-    
     if (!userName.trim()) {
       setError("Please enter your name")
       return
@@ -87,7 +85,7 @@ export function ReviewForm({ productSlug, onSuccess }: ReviewFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <Label className="text-[#F7F7F7] mb-3 block">Your Rating *</Label>
+        <Label className="mb-3 block">Your Rating *</Label>
         <div className="flex items-center gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -102,8 +100,8 @@ export function ReviewForm({ productSlug, onSuccess }: ReviewFormProps) {
                 size={28}
                 className={
                   star <= (hoveredRating || rating)
-                    ? "fill-[#BFA36A] text-[#BFA36A] cursor-pointer"
-                    : "text-[#3A3A3B] cursor-pointer"
+                    ? "fill-primary text-primary cursor-pointer"
+                    : "text-gray-300 cursor-pointer hover:text-primary/50"
                 }
               />
             </button>
@@ -112,21 +110,21 @@ export function ReviewForm({ productSlug, onSuccess }: ReviewFormProps) {
       </div>
       
       <div>
-        <Label htmlFor="userName" className="text-[#F7F7F7]">
+        <Label htmlFor="userName">
           Your Name *
         </Label>
         <Input
           id="userName"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
-          className="mt-2 bg-[#121213] border-[#1A1A1B] text-[#F7F7F7]"
+          className="mt-2"
           placeholder="Enter your name"
           required
         />
       </div>
       
       <div>
-        <Label htmlFor="userEmail" className="text-[#F7F7F7]">
+        <Label htmlFor="userEmail">
           Your Email (Optional)
         </Label>
         <Input
@@ -134,20 +132,20 @@ export function ReviewForm({ productSlug, onSuccess }: ReviewFormProps) {
           type="email"
           value={userEmail}
           onChange={(e) => setUserEmail(e.target.value)}
-          className="mt-2 bg-[#121213] border-[#1A1A1B] text-[#F7F7F7]"
+          className="mt-2"
           placeholder="Enter your email"
         />
       </div>
       
       <div>
-        <Label htmlFor="comment" className="text-[#F7F7F7]">
+        <Label htmlFor="comment">
           Your Review (Optional)
         </Label>
         <Textarea
           id="comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="mt-2 bg-[#121213] border-[#1A1A1B] text-[#F7F7F7] min-h-[120px]"
+          className="mt-2 min-h-[120px]"
           placeholder="Share your thoughts about this product..."
         />
       </div>
@@ -159,7 +157,7 @@ export function ReviewForm({ productSlug, onSuccess }: ReviewFormProps) {
       )}
       
       {success && (
-        <div className="p-3 bg-green-500/10 border border-green-500/20 rounded text-green-500 text-sm">
+        <div className="p-3 bg-green-50 border border-green-200 rounded text-green-700 text-sm">
           Thank you! Your review has been submitted.
         </div>
       )}
@@ -167,11 +165,10 @@ export function ReviewForm({ productSlug, onSuccess }: ReviewFormProps) {
       <Button
         type="submit"
         disabled={loading || rating === 0 || !userName.trim()}
-        className="w-full bg-[#BFA36A] hover:bg-[#A8925F] text-black"
+        className="w-full bg-primary hover:bg-primary/85 text-primary-foreground"
       >
         {loading ? "Submitting..." : "Submit Review"}
       </Button>
     </form>
   )
 }
-

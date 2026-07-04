@@ -36,7 +36,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-white text-black font-sans;
+    @apply text-black font-sans;
   }
   html {
     scroll-behavior: smooth;
@@ -44,6 +44,12 @@
   h1, h2, h3, h4, h5, h6, p, span, li, a {
     color: inherit;
   }
+}
+
+/* Apply this class to the wrapper of every page EXCEPT the homepage
+   to give it a white background. Do not add it to app/page.tsx. */
+.site-page {
+  @apply bg-white;
 }
 
 @layer utilities {

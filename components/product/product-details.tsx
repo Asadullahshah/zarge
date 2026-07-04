@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Package, Ruler, Palette, Info, MapPin, Scissors, Plus, Minus, Heart } from "lucide-react"
 import { safeFetch, formatErrorMessage } from "@/lib/error-handler"
 import { useCart } from "@/context/cart-context"
+import { createPortal } from "react-dom"
+import Image from "next/image";
 
 // Color name to hex mapping
 function getColorHex(colorName: string): string {
@@ -101,6 +103,9 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
   const [added, setAdded] = useState(false)
   const [currentStock, setCurrentStock] = useState(product.stock)
   const [error, setError] = useState<string | null>(null)
+  const [isSizeChartOpen, setIsSizeChartOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
 
   // Helper function to normalize color names for comparison (memoized)
@@ -329,10 +334,10 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
       <div>
         {hasSale && (
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-xl text-[#BDBDBD] line-through">
+            <span className="text-xl text-gray-400 line-through">
               {formatPrice(originalPrice!)}
             </span>
-            <span className="px-2 py-1 bg-primary/20 text-primary text-sm font-semibold rounded">
+            <span className="px-2 py-1 bg-primary/15 text-primary text-sm font-semibold rounded">
               SALE
             </span>
           </div>
@@ -341,7 +346,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
           {formatPrice(displayPrice)}
         </div>
         {product.sku && (
-          <p className="text-sm text-[#BDBDBD] mt-2 font-mono">SKU: {product.sku}</p>
+          <p className="text-sm text-gray-500 mt-2 font-mono">SKU: {product.sku}</p>
         )}
       </div>
 
@@ -349,20 +354,47 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
       {currentStock > 0 && (
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="text-green-400 font-semibold">
+          <span className="text-green-600 font-semibold">
             In Stock ({currentStock} available)
           </span>
         </div>
       )}
 
+      {/* Size Chart Model */}
+
+      {/*   Black Overley 
+            Size Chart White Card    // */}
+
+      {isSizeChartOpen && sizeChartImage && createPortal (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80"        
+          onClick={() => setIsSizeChartOpen(false)}
+          >
+            <div
+            onClick= {(e) => e.stopPropagation()}
+            className="bg-white rounded-lg p-6 max-w-2xl max-h-[90vh] overflow-auto relative"          
+            >
+              <div className="relative w-[70vh] h-[70vh]">
+              <Image
+                src={sizeChartImage} 
+                alt="Size Chart" 
+                fill
+                className="object-contain"
+              />
+              </div>
+            </div>
+        </div>,
+        document.body
+      )}
+
       {/* Short Description */}
       {product.short_desc && (
-        <p className="text-lg text-[#BDBDBD]">{product.short_desc}</p>
+        <p className="text-lg text-gray-600">{product.short_desc}</p>
       )}
 
       {/* Piece Count (for stitched items) */}
       {product.piece_count && (
-        <div className="flex items-center gap-2 text-[#BDBDBD]">
+        <div className="flex items-center gap-2 text-gray-600">
           <Scissors className="w-5 h-5" />
           <span>
             <strong>Piece Count:</strong> {product.piece_count.replace("_", " ")}
@@ -373,9 +405,9 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
       {/* Size Selection */}
       {product.available_sizes && product.available_sizes.length > 0 && (
         <div>
-          <label className="block text-sm font-semibold mb-3 flex items-center gap-2">
+          <label className="text-sm font-semibold mb-3 flex items-center gap-2">
             <Ruler className="w-4 h-4" />
-            Select Size <span className="text-red-400">*</span>
+            Select Size <span className="text-red-500">*</span>
           </label>
           <div className="flex flex-wrap gap-2">
             {product.available_sizes.map((size) => {
@@ -396,8 +428,8 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
                     isSelected
                       ? "border-primary bg-primary/10 text-primary font-semibold"
                       : !isAvailable
-                      ? "border-[#1A1A1B] text-[#666] opacity-60 cursor-not-allowed"
-                      : "border-[#1A1A1B] hover:border-[#2A2A2B] text-[#BDBDBD]"
+                      ? "border-gray-200 text-gray-400 opacity-60 cursor-not-allowed"
+                      : "border-gray-200 hover:border-primary hover:bg-primary/5 text-gray-700"
                   }`}
                 >
                   {!isAvailable && (
@@ -411,12 +443,12 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
             })}
           </div>
           {selectedSize && (
-            <p className="text-sm text-[#BDBDBD] mt-2">
+            <p className="text-sm text-gray-500 mt-2">
               Selected: <span className="text-primary font-semibold">{selectedSize}</span>
             </p>
           )}
           {selectedSize && product.available_colors && product.available_colors.length > 1 && !selectedColor && (
-            <p className="text-sm text-yellow-400 mt-2">
+            <p className="text-sm text-amber-600 mt-2">
               Please select a color as well
             </p>
           )}
@@ -424,12 +456,9 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
             <button
               type="button"
               onClick={() => {
-                const sizeChartElement = document.getElementById('size-chart')
-                if (sizeChartElement) {
-                  sizeChartElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                }
+                setIsSizeChartOpen(true)
               }}
-              className="text-sm text-[#BDBDBD] hover:text-primary flex items-center gap-1 mt-2"
+              className="text-sm text-gray-500 hover:text-primary flex items-center gap-1 mt-2 transition-colors"
             >
               <Ruler className="w-4 h-4" />
               SIZE CHART
@@ -441,9 +470,9 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
       {/* Available Colors Display */}
       {product.available_colors && product.available_colors.length > 0 && (
         <div>
-          <label className="block text-sm font-semibold mb-3 flex items-center gap-2">
+          <label className="text-sm font-semibold mb-3 flex items-center gap-2">
             <Palette className="w-4 h-4" />
-            Select Color {product.available_colors.length > 1 && <span className="text-red-400">*</span>}
+            Select Color {product.available_colors.length > 1 && <span className="text-red-500">*</span>}
           </label>
           <div className="flex flex-wrap gap-2">
             {product.available_colors.map((color) => {
@@ -465,12 +494,12 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
                     isSelected
                       ? "border-primary bg-primary/10 text-primary font-semibold"
                       : !isAvailable
-                      ? "border-[#1A1A1B] text-[#666] opacity-60 cursor-not-allowed"
-                      : "border-[#1A1A1B] hover:border-primary/50 text-[#BDBDBD] hover:text-[#F7F7F7]"
+                      ? "border-gray-200 text-gray-400 opacity-60 cursor-not-allowed"
+                      : "border-gray-200 hover:border-primary hover:bg-primary/5 text-gray-700"
                   }`}
                 >
                   <span
-                    className={`w-5 h-5 rounded-full border-2 border-[#1A1A1B] flex-shrink-0 ${!isAvailable ? 'opacity-60' : ''}`}
+                    className={`w-5 h-5 rounded-full border-2 border-gray-300 flex-shrink-0 ${!isAvailable ? 'opacity-60' : ''}`}
                     style={{ backgroundColor: colorHex }}
                     aria-label={`${color} color swatch`}
                   />
@@ -483,12 +512,12 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
             })}
           </div>
           {selectedColor && (
-            <p className="text-sm text-[#BDBDBD] mt-2">
+            <p className="text-sm text-gray-500 mt-2">
               Selected: <span className="text-primary font-semibold capitalize">{selectedColor}</span>
             </p>
           )}
           {selectedColor && product.available_sizes && product.available_sizes.length > 0 && !selectedSize && (
-            <p className="text-sm text-yellow-400 mt-2">
+            <p className="text-sm text-amber-600 mt-2">
               Please select a size as well
             </p>
           )}
@@ -501,7 +530,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
           type="button"
           onClick={() => setQuantity(Math.max(1, quantity - 1))}
           disabled={quantity <= 1}
-          className="w-10 h-10 flex items-center justify-center border-2 border-[#1A1A1B] rounded hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-10 h-10 flex items-center justify-center border-2 border-gray-200 rounded hover:border-primary hover:bg-primary/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Minus className="w-4 h-4" />
         </button>
@@ -514,13 +543,13 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
             const value = parseInt(e.target.value) || 1
             setQuantity(Math.max(1, Math.min(value, currentStock)))
           }}
-          className="w-16 h-10 text-center border-2 border-[#1A1A1B] rounded bg-[#0B0B0C] text-[#F7F7F7]"
+          className="w-16 h-10 text-center border-2 border-gray-200 rounded bg-white text-black focus:border-primary focus:outline-none transition-colors"
         />
         <button
           type="button"
           onClick={() => setQuantity(Math.min(currentStock, quantity + 1))}
           disabled={quantity >= currentStock}
-          className="w-10 h-10 flex items-center justify-center border-2 border-[#1A1A1B] rounded hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-10 h-10 flex items-center justify-center border-2 border-gray-200 rounded hover:border-primary hover:bg-primary/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -545,7 +574,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
           }
           size="lg"
           variant="outline"
-          className={`flex-1 ${added ? "bg-green-500 hover:bg-green-600 border-green-500" : ""}`}
+          className={`flex-1 border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors ${added ? "bg-green-500 hover:bg-green-600 border-green-500 text-white" : ""}`}
         >
           <Package className="w-5 h-5 mr-2" />
           {added 
@@ -631,21 +660,21 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
             (product.available_colors && product.available_colors.length > 1 && !selectedColor)
           }
           size="lg"
-          className="flex-1 bg-primary hover:bg-primary/90"
+          className="flex-1 bg-primary hover:bg-primary/85 text-primary-foreground transition-colors"
         >
           Buy Now
         </Button>
         <Button
           variant="outline"
           size="lg"
-          className="border-[#1A1A1B] hover:border-primary"
+          className="border-gray-300 hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
         >
           <Heart className="w-5 h-5" />
         </Button>
       </div>
 
       {/* Detailed Information */}
-      <div className="pt-6 border-t border-[#1A1A1B] space-y-4">
+      <div className="pt-6 border-t border-gray-200 space-y-4">
         {/* Fabric Information */}
         {(product.fabric_type || product.fabric_material) && (
           <div>
@@ -653,7 +682,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
               <Info className="w-4 h-4" />
               Fabric & Material
             </h3>
-            <div className="space-y-1 text-sm text-[#BDBDBD]">
+            <div className="space-y-1 text-sm text-gray-600">
               {product.fabric_type && (
                 <p><strong>Type:</strong> {product.fabric_type}</p>
               )}
@@ -668,7 +697,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
         {product.care_instructions && (
           <div>
             <h3 className="font-semibold mb-2">Care Instructions</h3>
-            <p className="text-sm text-[#BDBDBD]">{product.care_instructions}</p>
+            <p className="text-sm text-gray-600">{product.care_instructions}</p>
           </div>
         )}
 
@@ -676,7 +705,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
         {product.measurements && Object.keys(product.measurements).length > 0 && (
           <div>
             <h3 className="font-semibold mb-2">Measurements</h3>
-            <div className="space-y-1 text-sm text-[#BDBDBD]">
+            <div className="space-y-1 text-sm text-gray-600">
               {Object.entries(product.measurements).map(([key, value]) => (
                 <p key={key}>
                   <strong>{key}:</strong> {value}
@@ -687,7 +716,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
         )}
 
         {/* Additional Info */}
-        <div className="space-y-1 text-sm text-[#BDBDBD]">
+        <div className="space-y-1 text-sm text-gray-600">
           {product.country_of_origin && (
             <p className="flex items-center gap-2">
               <MapPin className="w-4 h-4" />
@@ -709,7 +738,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
               {product.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-3 py-1 bg-[#121213] rounded-full text-sm border border-[#1A1A1B]"
+                  className="px-3 py-1 bg-gray-50 rounded-full text-sm border border-gray-200 text-gray-600"
                 >
                   {tag}
                 </span>

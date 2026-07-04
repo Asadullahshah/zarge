@@ -118,13 +118,14 @@ export default async function RootLayout({
   const pathname = headersList.get("x-pathname") || ""
   const isAdmin = pathname.startsWith("/admin")
   const isCartPage = pathname.startsWith("/cart")
+  const isHomePage = pathname === "/"
 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${montserrat.variable}`}>
       <body className={`${inter.className} bg-white`}>
 
-        {/* Global background — hidden on admin and cart pages */}
-        {!isAdmin && !isCartPage && (
+        
+        {!isHomePage && (
           <div className="fixed inset-0 z-0">
             <Image
               src="/img/Background.jpeg"
@@ -146,7 +147,7 @@ export default async function RootLayout({
                 <NetworkStatus />
                 {!isAdmin && <Header />}
                 <ScrollToHash />
-                <main className={`flex flex-1 flex-col ${isCartPage ? "bg-white" : ""}`}>{children}</main>
+                <main className={`flex flex-1 flex-col ${isHomePage ? "" : "bg-white"}`}>{children}</main>
                 {!isAdmin && <Footer />}
                 <MiniCart />
               </CartProvider>

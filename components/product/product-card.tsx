@@ -107,8 +107,8 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={`/product/${product.slug}`} className="group">
-      <div className="bg-[#121213] rounded-lg overflow-hidden border border-[#1A1A1B] hover:border-primary transition-colors h-full flex flex-col min-h-[450px]">
-        <div className="aspect-[4/3] relative overflow-hidden bg-[#0B0B0C] group/image flex-shrink-0">
+      <div className="bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-primary transition-colors h-full flex flex-col min-h-[450px]">
+        <div className="aspect-[4/3] relative overflow-hidden bg-[#f0f0ed] group/image flex-shrink-0">
           {currentImage ? (
             <Image
               src={currentImage.url}
@@ -118,7 +118,7 @@ export function ProductCard({ product }: ProductCardProps) {
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-[#BDBDBD]">
+            <div className="w-full h-full flex items-center justify-center text-gray-500">
               No Image
             </div>
           )}
@@ -129,7 +129,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 transition-opacity z-10 opacity-0 group-hover/image:opacity-100"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-black shadow-sm transition-opacity z-10 opacity-0 group-hover/image:opacity-100"
                 onClick={prevImage}
                 aria-label="Previous image"
               >
@@ -138,14 +138,14 @@ export function ProductCard({ product }: ProductCardProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 transition-opacity z-10 opacity-0 group-hover/image:opacity-100"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-black shadow-sm transition-opacity z-10 opacity-0 group-hover/image:opacity-100"
                 onClick={nextImage}
                 aria-label="Next image"
               >
                 <ChevronRight className="w-5 h-5" />
               </Button>
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover/image:opacity-100 transition-opacity">
-                <span className="text-sm bg-black/70 text-white px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <span className="text-sm bg-white/90 text-black px-3 py-1.5 rounded-full shadow-sm">
                   {currentImageIndex + 1} / {sortedImages.length}
                 </span>
               </div>
@@ -162,7 +162,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Out of Stock Horizontal Bar */}
         {isOutOfStock && (
           <div className="w-full bg-red-500/20 border-t-2 border-red-500 px-4 py-2">
-            <p className="text-sm font-semibold text-red-400 text-center">Out of Stock</p>
+            <p className="text-sm font-semibold text-red-600 text-center">Out of Stock</p>
           </div>
         )}
         <div className="p-4 flex-1 flex flex-col min-h-[180px]">
@@ -170,7 +170,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.name}
           </h3>
           {product.shortDesc && (
-            <p className="text-sm text-[#BDBDBD] mb-3 line-clamp-2 min-h-[2.5rem]">
+            <p className="text-sm text-gray-500 mb-3 line-clamp-2 min-h-[2.5rem]">
               {product.shortDesc}
             </p>
           )}
@@ -188,18 +188,18 @@ export function ProductCard({ product }: ProductCardProps) {
                       title={color}
                     >
                       <span
-                        className="w-5 h-5 rounded-full border-2 border-[#1A1A1B] flex-shrink-0"
+                        className="w-5 h-5 rounded-full border-2 border-gray-300 flex-shrink-0"
                         style={{ backgroundColor: colorHex }}
                         aria-label={`${color} color`}
                       />
-                      <span className="text-sm text-[#BDBDBD] capitalize hidden sm:inline">
+                      <span className="text-sm text-gray-500 capitalize hidden sm:inline">
                         {color}
                       </span>
                     </div>
                   )
                 })}
                 {allAvailableColors.length > 5 && (
-                  <span className="text-sm text-[#BDBDBD] ml-1">
+                  <span className="text-sm text-gray-500 ml-1">
                     +{allAvailableColors.length - 5}
                   </span>
                 )}
@@ -210,18 +210,18 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Available Sizes - Only show if product has stock */}
           {!isOutOfStock && product.available_sizes && product.available_sizes.length > 0 && (
             <div className="mb-3">
-              <p className="text-xs text-[#BDBDBD] mb-1.5">Available Sizes:</p>
+              <p className="text-xs text-gray-500 mb-1.5">Available Sizes:</p>
               <div className="flex flex-wrap gap-1.5">
                 {product.available_sizes.slice(0, 6).map((size) => (
                   <span
                     key={size}
-                    className="text-xs px-2 py-1 bg-[#1A1A1B] border border-[#2A2A2B] rounded text-[#BDBDBD]"
+                    className="text-xs px-2 py-1 bg-gray-50 border border-gray-200 rounded text-gray-600"
                   >
                     {size}
                   </span>
                 ))}
                 {product.available_sizes.length > 6 && (
-                  <span className="text-xs text-[#BDBDBD] px-2 py-1">
+                  <span className="text-xs text-gray-500 px-2 py-1">
                     +{product.available_sizes.length - 6}
                   </span>
                 )}
@@ -231,7 +231,7 @@ export function ProductCard({ product }: ProductCardProps) {
           
           <div className="flex items-center gap-2 mt-auto">
             {hasSale && (
-              <span className="text-sm text-[#BDBDBD] line-through">
+              <span className="text-sm text-gray-400 line-through">
                 {formatPrice(product.price)}
               </span>
             )}

@@ -77,8 +77,8 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
 
   if (!images || images.length === 0) {
     return (
-      <div className="aspect-square relative rounded-lg overflow-hidden bg-[#121213] border border-[#1A1A1B] flex items-center justify-center">
-        <span className="text-[#BDBDBD]">No Image Available</span>
+      <div className="aspect-square relative rounded-lg overflow-hidden bg-[#f0f0ed] border border-gray-200 flex items-center justify-center">
+        <span className="text-gray-500">No Image Available</span>
       </div>
     )
   }
@@ -95,7 +95,7 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
               className={`relative w-20 h-20 rounded overflow-hidden border-2 transition-all flex-shrink-0 ${
                 selectedIndex === index
                   ? "border-primary ring-2 ring-primary/20"
-                  : "border-[#1A1A1B] hover:border-[#2A2A2B]"
+                  : "border-gray-200 hover:border-primary/60"
               }`}
             >
               <Image
@@ -111,7 +111,7 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
       )}
 
       {/* Main Image - Right Side */}
-      <div className="relative aspect-square flex-1 rounded-lg overflow-hidden bg-[#121213] border border-[#1A1A1B] group">
+      <div className="relative aspect-square flex-1 rounded-lg overflow-hidden bg-[#f0f0ed] border border-gray-200 group">
         <Image
           src={currentImage.url}
           alt={currentImage.alt || productName}
@@ -125,7 +125,7 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 transition-opacity z-10 opacity-0 group-hover:opacity-100"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-black shadow-sm transition-opacity z-10 opacity-0 group-hover:opacity-100"
               onClick={prevImage}
               aria-label="Previous image"
             >
@@ -134,7 +134,7 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 transition-opacity z-10 opacity-0 group-hover:opacity-100"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-black shadow-sm transition-opacity z-10 opacity-0 group-hover:opacity-100"
               onClick={nextImage}
               aria-label="Next image"
             >
