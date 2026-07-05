@@ -374,7 +374,7 @@ function CheckoutForm() {
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Shipping Information</h2>
 
-            <div className="bg-[#121213] p-6 rounded-lg space-y-4">
+            <div className="bg-grey-50 border border-grey-50 p-6 rounded-lg space-y-4">
               <div>
                 <Label htmlFor="email">Email *</Label>
                 <Input id="email" type="email" {...register("email")} />
@@ -481,7 +481,7 @@ function CheckoutForm() {
             <div>
               <h2 className="text-2xl font-semibold mb-4">Billing Information</h2>
 
-              <div className="bg-[#121213] p-6 rounded-lg space-y-4">
+              <div className="bg-grey-50 border border-grey-50 p-6 rounded-lg space-y-4">
                 <label className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -588,7 +588,7 @@ function CheckoutForm() {
 
           {/* Order Summary */}
           <div>
-            <div className="bg-[#121213] rounded-lg p-6 border border-[#1A1A1B] sticky top-24">
+            <div className="bg-grey-50 rounded-lg p-6 border border-grey-50 sticky top-24">
               <h2 className="text-2xl font-serif font-bold mb-6">Order Summary</h2>
               
               {cartLoading ? (
@@ -604,7 +604,7 @@ function CheckoutForm() {
                 <>
                   <div className="space-y-4 mb-6">
                     {cartItems.map((item) => (
-                      <div key={item.id} className="flex gap-4 pb-4 border-b border-[#1A1A1B]">
+                      <div key={item.id} className="flex gap-4 pb-4 border-b border-grey-50">
                         {item.images && item.images.length > 0 && (
                           <div className="relative w-20 h-20 flex-shrink-0">
                             <Image
@@ -624,7 +624,7 @@ function CheckoutForm() {
                       </div>
                     ))}
                   </div>
-                  <div className="border-t border-[#1A1A1B] pt-4 mb-6">
+                  <div className="border-t border-grey-50 pt-4 mb-6">
                     <div className="flex justify-between items-center text-lg font-bold">
                       <span>Total</span>
                       <span>{formatPrice(cartTotal)}</span>
@@ -639,7 +639,7 @@ function CheckoutForm() {
                   Payment Method *
                 </Label>
                 <div className="space-y-3">
-                  <label className="flex items-center space-x-3 p-4 border border-[#1A1A1B] rounded-lg cursor-pointer hover:border-primary transition-colors">
+                  <label className="flex items-center space-x-3 p-4 border border-grey-50 rounded-lg cursor-pointer hover:border-primary transition-colors">
                     <input
                       type="radio"
                       value="STRIPE"
@@ -651,7 +651,7 @@ function CheckoutForm() {
                       <p className="text-sm text-[#BDBDBD]">Secure payment processing</p>
                     </div>
                   </label>
-                  <label className="flex items-center space-x-3 p-4 border border-[#1A1A1B] rounded-lg cursor-pointer hover:border-primary transition-colors">
+                  <label className="flex items-center space-x-3 p-4 border border-grey-50 rounded-lg cursor-pointer hover:border-primary transition-colors">
                     <input
                       type="radio"
                       value="COD"
