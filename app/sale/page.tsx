@@ -485,7 +485,7 @@ export default async function SalePage({
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-4xl font-serif font-bold mb-2">Sale</h1>
-          <p className="text-lg text-[#BDBDBD]">
+          <p className="text-lg text-black">
             Exclusive discounts on premium fashion and home essentials
           </p>
         </div>
@@ -498,7 +498,7 @@ export default async function SalePage({
           className={`px-4 py-2 rounded transition-colors ${
             categoryFilter === "all"
               ? "bg-primary text-primary-foreground"
-              : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
+              : "bg-[#121213] text-black hover:text-[#F7F7F7] border border-[#1A1A1B]"
           }`}
         >
           All ({allCount})
@@ -508,7 +508,7 @@ export default async function SalePage({
           className={`px-4 py-2 rounded transition-colors ${
             categoryFilter === "men"
               ? "bg-primary text-primary-foreground"
-              : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
+              : "bg-[#121213] text-black hover:text-[#F7F7F7] border border-[#1A1A1B]"
           }`}
         >
           Men ({menCount})
@@ -518,7 +518,7 @@ export default async function SalePage({
           className={`px-4 py-2 rounded transition-colors ${
             categoryFilter === "women"
               ? "bg-primary text-primary-foreground"
-              : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
+              : "bg-[#121213] text-black hover:text-[#F7F7F7] border border-[#1A1A1B]"
           }`}
         >
           Women ({womenCount})
@@ -528,7 +528,7 @@ export default async function SalePage({
           className={`px-4 py-2 rounded transition-colors ${
             categoryFilter === "home-essentials"
               ? "bg-primary text-primary-foreground"
-              : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
+              : "bg-[#121213] text-black hover:text-[#F7F7F7] border border-[#1A1A1B]"
           }`}
         >
           Home Essentials ({homeCount})
@@ -537,7 +537,7 @@ export default async function SalePage({
 
       {products.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-xl text-[#BDBDBD] mb-4">
+          <p className="text-xl text-black mb-4">
             No products on sale found in this category.
           </p>
           <Link
@@ -549,7 +549,7 @@ export default async function SalePage({
         </div>
       ) : (
         <>
-          <div className="mb-4 text-sm text-[#BDBDBD]">
+          <div className="mb-4 text-sm text-black">
             Showing {products.length} of {total} products on sale
           </div>
 
@@ -569,18 +569,18 @@ export default async function SalePage({
               {page > 1 && (
                 <Link
                   href={`/sale?page=${page - 1}${categoryFilter !== "all" ? `&category=${categoryFilter}` : ""}${sortBy ? `&sort=${sortBy}` : ""}`}
-                  className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+                  className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
                 >
                   Previous
                 </Link>
               )}
-              <span className="px-4 py-2 text-[#BDBDBD]">
+              <span className="px-4 py-2 text-black">
                 Page {page} of {totalPages}
               </span>
               {page < totalPages && (
                 <Link
                   href={`/sale?page=${page + 1}${categoryFilter !== "all" ? `&category=${categoryFilter}` : ""}${sortBy ? `&sort=${sortBy}` : ""}`}
-                  className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+                  className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
                 >
                   Next
                 </Link>

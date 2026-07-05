@@ -338,7 +338,7 @@ export default async function ProductsPage({
           <h1 className="text-3xl md:text-4xl font-serif font-bold mb-2">
             {isFeatured ? "Featured Products" : "All Products"}
           </h1>
-          <p className="text-base md:text-lg text-[#BDBDBD]">
+          <p className="text-base md:text-lg text-black">
             {isFeatured
               ? "Handpicked selections from our premium collection"
               : "Browse our complete collection"}
@@ -348,7 +348,7 @@ export default async function ProductsPage({
 
       {products.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-xl text-[#BDBDBD] mb-4">
+          <p className="text-xl text-black mb-4">
             {isFeatured
               ? "No featured products available at the moment."
               : "No products found."}
@@ -364,7 +364,7 @@ export default async function ProductsPage({
         </div>
       ) : (
         <>
-          <div className="mb-4 text-sm text-[#BDBDBD]">
+          <div className="mb-4 text-sm text-black">
             Showing {products.length} of {total} products
           </div>
 
@@ -384,18 +384,18 @@ export default async function ProductsPage({
               {page > 1 && (
                 <a
                   href={`?page=${page - 1}${sortBy ? `&sort=${sortBy}` : ""}${isFeatured ? "&featured=true" : ""}`}
-                  className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+                  className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
                 >
                   Previous
                 </a>
               )}
-              <span className="px-4 py-2 text-[#BDBDBD]">
+              <span className="px-4 py-2 text-black">
                 Page {page} of {totalPages}
               </span>
               {page < totalPages && (
                 <a
                   href={`?page=${page + 1}${sortBy ? `&sort=${sortBy}` : ""}${isFeatured ? "&featured=true" : ""}`}
-                  className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+                  className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
                 >
                   Next
                 </a>

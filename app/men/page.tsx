@@ -175,7 +175,7 @@ export default async function MenPage({
             className={`px-4 py-2 rounded ${
               !searchParams.subcategory
                 ? "bg-primary text-primary-foreground"
-                : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
+                : "bg-[#121213] text-black hover:text-[#F7F7F7] border border-[#1A1A1B]"
             }`}
           >
             All ({allProductsCount})
@@ -187,7 +187,7 @@ export default async function MenPage({
               className={`px-4 py-2 rounded ${
                 searchParams.subcategory === subcat.slug
                   ? "bg-primary text-primary-foreground"
-                  : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
+                  : "bg-[#121213] text-black hover:text-[#F7F7F7] border border-[#1A1A1B]"
               }`}
             >
               {subcat.name} ({subcat.product_count || 0})
@@ -197,7 +197,7 @@ export default async function MenPage({
       )}
 
       {products.length === 0 ? (
-        <p className="text-center text-[#BDBDBD] py-16">No products found.</p>
+        <p className="text-center text-black py-16">No products found.</p>
       ) : (
         <>
           <ProductGrid
@@ -217,18 +217,18 @@ export default async function MenPage({
               {page > 1 && (
                 <a
                   href={`?page=${page - 1}${searchParams.subcategory ? `&subcategory=${searchParams.subcategory}` : ""}`}
-                  className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+                  className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
                 >
                   Previous
                 </a>
               )}
-              <span className="px-4 py-2 text-[#BDBDBD]">
+              <span className="px-4 py-2 text-black">
                 Page {page} of {totalPages}
               </span>
               {page < totalPages && (
                 <a
                   href={`?page=${page + 1}${searchParams.subcategory ? `&subcategory=${searchParams.subcategory}` : ""}`}
-                  className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+                  className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
                 >
                   Next
                 </a>
