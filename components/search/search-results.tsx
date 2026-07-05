@@ -65,7 +65,7 @@ export function SearchResults({ products, query, pagination }: SearchResultsProp
           {pagination.page > 1 && (
             <Link
               href={`/search?q=${encodeURIComponent(query)}&page=${pagination.page - 1}`}
-              className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+              className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
             >
               Previous
             </Link>
@@ -76,7 +76,7 @@ export function SearchResults({ products, query, pagination }: SearchResultsProp
           {pagination.page < pagination.totalPages && (
             <Link
               href={`/search?q=${encodeURIComponent(query)}&page=${pagination.page + 1}`}
-              className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+              className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
             >
               Next
             </Link>

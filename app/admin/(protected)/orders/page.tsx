@@ -242,7 +242,7 @@ export default async function OrdersPage({
           {page > 1 && (
             <Link
               href={`?page=${page - 1}${status ? `&status=${status}` : ""}`}
-              className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+              className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
             >
               Previous
             </Link>
@@ -253,7 +253,7 @@ export default async function OrdersPage({
           {page < totalPages && (
             <Link
               href={`?page=${page + 1}${status ? `&status=${status}` : ""}`}
-              className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+              className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
             >
               Next
             </Link>

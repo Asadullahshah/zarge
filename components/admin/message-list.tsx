@@ -132,7 +132,7 @@ export function MessageList({
           {currentPage > 1 && (
             <Link
               href={`?status=${currentStatus}&page=${currentPage - 1}`}
-              className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+              className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
             >
               Previous
             </Link>
@@ -143,7 +143,7 @@ export function MessageList({
           {currentPage < totalPages && (
             <Link
               href={`?status=${currentStatus}&page=${currentPage + 1}`}
-              className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+              className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
             >
               Next
             </Link>

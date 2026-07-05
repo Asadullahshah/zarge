@@ -216,7 +216,7 @@ export default async function HomeEssentialsPage({
               {page > 1 && (
                 <a
                   href={`?page=${page - 1}${searchParams.subcategory ? `&subcategory=${searchParams.subcategory}` : ""}`}
-                  className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+                  className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
                 >
                   Previous
                 </a>
@@ -227,7 +227,7 @@ export default async function HomeEssentialsPage({
               {page < totalPages && (
                 <a
                   href={`?page=${page + 1}${searchParams.subcategory ? `&subcategory=${searchParams.subcategory}` : ""}`}
-                  className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
+                  className="px-4 py-2 rounded border border-[#1A1A1B] text-black"
                 >
                   Next
                 </a>
