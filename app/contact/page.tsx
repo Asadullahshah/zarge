@@ -80,7 +80,7 @@ export default function ContactPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-8 rounded-lg space-y-6 border border-black/10">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-8 rounded-lg space-y-6 border border-black/10 bg-gray-50 ">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="name">Name *</Label>
