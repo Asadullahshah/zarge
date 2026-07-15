@@ -59,7 +59,7 @@ export default async function CategoriesPage() {
             <div className="flex-1">
               <h3 className="font-semibold mb-1">Category Structure</h3>
               <p className="text-sm text-[#BDBDBD] mb-2">
-                Products are organized by main categories (Men, Women, Home Essentials) and their subcategories. 
+                Products are organized by drop collections (Unspoken Resilience, Still Becoming).
                 Click on any category to manage products and FAQs.
               </p>
               <p className="text-sm text-[#BDBDBD]">

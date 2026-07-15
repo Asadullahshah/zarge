@@ -11,6 +11,8 @@ import { ErrorBoundaryWrapper } from "@/components/error-boundary-wrapper"
 import { NetworkStatus } from "@/components/network-status"
 import { OrganizationSchema } from "@/components/seo/organization-schema"
 import { ScrollToHash } from "@/components/ScrollToHash"
+import { SmoothScroll } from "@/components/providers/smooth-scroll"
+import NextTopLoader from "nextjs-toploader"
 import { headers } from "next/headers"
 
 const inter = Inter({ 
@@ -124,7 +126,15 @@ export default async function RootLayout({
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${montserrat.variable}`}>
       <body className={`${inter.className} bg-white`}>
 
-        
+        <NextTopLoader
+          color="#B8960C"
+          height={3}
+          showSpinner={false}
+          shadow="0 0 10px #B8960C,0 0 5px #B8960C"
+          zIndex={1600}
+        />
+
+
         {!isHomePage && (
           <div className="fixed inset-0 z-0">
             <Image
@@ -147,7 +157,9 @@ export default async function RootLayout({
                 <NetworkStatus />
                 {!isAdmin && <Header />}
                 <ScrollToHash />
-                <main className={`flex flex-1 flex-col ${isHomePage ? "" : "bg-white"}`}>{children}</main>
+                <SmoothScroll enabled={!isAdmin}>
+                  <main className={`flex flex-1 flex-col ${isHomePage ? "" : "bg-white"}`}>{children}</main>
+                </SmoothScroll>
                 {!isAdmin && <Footer />}
                 <MiniCart />
               </CartProvider>

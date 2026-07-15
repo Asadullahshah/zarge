@@ -114,6 +114,7 @@ async function getSimilarProducts(
           p.sale_price,
           p.short_desc,
           p.available_colors,
+          p.color_swatches,
           p.stock,
           p.created_at,
           COALESCE(
@@ -163,6 +164,7 @@ async function getSimilarProducts(
             p.sale_price,
             p.short_desc,
             p.available_colors,
+            p.color_swatches,
             p.stock,
             p.created_at,
             COALESCE(
@@ -205,6 +207,7 @@ async function getSimilarProducts(
           p.sale_price,
           p.short_desc,
           p.available_colors,
+          p.color_swatches,
           p.stock,
           p.created_at,
           COALESCE(
@@ -407,12 +410,14 @@ export default async function ProductPage({
     // Continue without review stats if there's an error
   }
 
-  // Get size chart image from subcategory (category with parent_id)
+  // Get size chart image from any of the product's categories (subcategory takes priority)
   let sizeChartImage: string | null = null
   if (product.categories && product.categories.length > 0) {
-    const subcategory = product.categories.find((cat: any) => cat.parent_id && cat.size_chart_image)
-    if (subcategory) {
-      sizeChartImage = subcategory.size_chart_image
+    const withChart =
+      product.categories.find((cat: any) => cat.parent_id && cat.size_chart_image) ||
+      product.categories.find((cat: any) => cat.size_chart_image)
+    if (withChart) {
+      sizeChartImage = withChart.size_chart_image
     }
   }
 

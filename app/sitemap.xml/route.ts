@@ -9,62 +9,22 @@ export async function GET() {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://www.noirefit.com'
     const now = new Date().toISOString()
     
-    // Get last modified dates for each category sitemap with simplified error handling
-    let menLastMod = now
-    let womenLastMod = now
-    let homeLastMod = now
+    // Get last modified dates for each sitemap with simplified error handling
+    let collectionsLastMod = now
     let blogLastMod = now
 
     try {
-      // Simplified queries - get max updated_at with simpler logic
-      const menResult = await sql`
-        SELECT MAX(p.updated_at) as last_modified
-        FROM products p
-        INNER JOIN product_categories pc ON p.id = pc.product_id
-        INNER JOIN categories c ON pc.category_id = c.id
-        WHERE p.status = 'PUBLISHED' 
-          AND (c.slug = 'men' OR c.parent_id = (SELECT id FROM categories WHERE slug = 'men' LIMIT 1))
+      const collectionsResult = await sql`
+        SELECT MAX(updated_at) as last_modified
+        FROM products
+        WHERE status = 'PUBLISHED'
         LIMIT 1
       `
-      if (menResult && menResult[0]?.last_modified) {
-        menLastMod = new Date(menResult[0].last_modified).toISOString()
+      if (collectionsResult && collectionsResult[0]?.last_modified) {
+        collectionsLastMod = new Date(collectionsResult[0].last_modified).toISOString()
       }
     } catch (err) {
-      console.error('Error fetching men sitemap date:', err)
-    }
-
-    try {
-      const womenResult = await sql`
-        SELECT MAX(p.updated_at) as last_modified
-        FROM products p
-        INNER JOIN product_categories pc ON p.id = pc.product_id
-        INNER JOIN categories c ON pc.category_id = c.id
-        WHERE p.status = 'PUBLISHED' 
-          AND (c.slug = 'women' OR c.parent_id = (SELECT id FROM categories WHERE slug = 'women' LIMIT 1))
-        LIMIT 1
-      `
-      if (womenResult && womenResult[0]?.last_modified) {
-        womenLastMod = new Date(womenResult[0].last_modified).toISOString()
-      }
-    } catch (err) {
-      console.error('Error fetching women sitemap date:', err)
-    }
-
-    try {
-      const homeResult = await sql`
-        SELECT MAX(p.updated_at) as last_modified
-        FROM products p
-        INNER JOIN product_categories pc ON p.id = pc.product_id
-        INNER JOIN categories c ON pc.category_id = c.id
-        WHERE p.status = 'PUBLISHED' 
-          AND (c.slug = 'home-essentials' OR c.parent_id = (SELECT id FROM categories WHERE slug = 'home-essentials' LIMIT 1))
-        LIMIT 1
-      `
-      if (homeResult && homeResult[0]?.last_modified) {
-        homeLastMod = new Date(homeResult[0].last_modified).toISOString()
-      }
-    } catch (err) {
-      console.error('Error fetching home essentials sitemap date:', err)
+      console.error('Error fetching collections sitemap date:', err)
     }
 
     try {
@@ -89,24 +49,12 @@ export async function GET() {
     <lastmod>${now}</lastmod>
   </sitemap>
   
-  <!-- Men's Collection Sitemap: All men's products and subcategories -->
+  <!-- Collections Sitemap: Drop collection pages and all products -->
   <sitemap>
-    <loc>${baseUrl}/sitemap-men.xml</loc>
-    <lastmod>${menLastMod}</lastmod>
+    <loc>${baseUrl}/sitemap-collections.xml</loc>
+    <lastmod>${collectionsLastMod}</lastmod>
   </sitemap>
-  
-  <!-- Women's Collection Sitemap: All women's products and subcategories -->
-  <sitemap>
-    <loc>${baseUrl}/sitemap-women.xml</loc>
-    <lastmod>${womenLastMod}</lastmod>
-  </sitemap>
-  
-  <!-- Home Essentials Sitemap: All home essentials products and subcategories -->
-  <sitemap>
-    <loc>${baseUrl}/sitemap-home-essentials.xml</loc>
-    <lastmod>${homeLastMod}</lastmod>
-  </sitemap>
-  
+
   <!-- Blog Sitemap: All published blog posts -->
   <sitemap>
     <loc>${baseUrl}/sitemap-blog.xml</loc>

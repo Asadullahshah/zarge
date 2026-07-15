@@ -6,9 +6,20 @@ import { Upload, X, GripVertical } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
+type UploaderImage = {
+  id?: string
+  url: string
+  alt?: string
+  order: number
+  isPrimary?: boolean
+  color?: string
+  isHomeMobile?: boolean
+  isHomeDesktop?: boolean
+}
+
 interface ImageUploaderProps {
-  images: Array<{ id?: string; url: string; alt?: string; order: number; isPrimary?: boolean; color?: string }>
-  onImagesChange: (images: Array<{ url: string; alt?: string; order: number; isPrimary?: boolean; color?: string }>) => void
+  images: UploaderImage[]
+  onImagesChange: (images: UploaderImage[]) => void
   availableColors?: string[]
 }
 
@@ -79,6 +90,23 @@ export function ImageUploader({ images, onImagesChange, availableColors = [] }: 
     onImagesChange(newImages)
   }
 
+  // Only one image can be the home (mobile) / home (desktop) image — toggle on click
+  const setHomeMobile = (index: number) => {
+    const newImages = images.map((img, i) => ({
+      ...img,
+      isHomeMobile: i === index ? !img.isHomeMobile : false,
+    }))
+    onImagesChange(newImages)
+  }
+
+  const setHomeDesktop = (index: number) => {
+    const newImages = images.map((img, i) => ({
+      ...img,
+      isHomeDesktop: i === index ? !img.isHomeDesktop : false,
+    }))
+    onImagesChange(newImages)
+  }
+
   const updateAlt = (index: number, alt: string) => {
     const newImages = [...images]
     newImages[index].alt = alt
@@ -138,11 +166,23 @@ export function ImageUploader({ images, onImagesChange, availableColors = [] }: 
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"
                 />
-                {image.isPrimary && (
-                  <div className="absolute top-2 left-2 bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-semibold">
-                    Primary
-                  </div>
-                )}
+                <div className="absolute top-2 left-2 flex flex-col gap-1 items-start">
+                  {image.isPrimary && (
+                    <div className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-semibold">
+                      Primary
+                    </div>
+                  )}
+                  {image.isHomeDesktop && (
+                    <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-semibold">
+                      Home · Desktop
+                    </div>
+                  )}
+                  {image.isHomeMobile && (
+                    <div className="bg-emerald-600 text-white px-2 py-1 rounded text-xs font-semibold">
+                      Home · Mobile
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={() => removeImage(index)}
                   className="absolute top-2 right-2 bg-destructive text-destructive-foreground p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
@@ -201,6 +241,26 @@ export function ImageUploader({ images, onImagesChange, availableColors = [] }: 
                     Set as Primary
                   </Button>
                 )}
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={image.isHomeDesktop ? "default" : "outline"}
+                    size="sm"
+                    className="flex-1 text-xs px-1"
+                    onClick={() => setHomeDesktop(index)}
+                  >
+                    {image.isHomeDesktop ? "✓ Home (Desktop)" : "Set Home (Desktop)"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={image.isHomeMobile ? "default" : "outline"}
+                    size="sm"
+                    className="flex-1 text-xs px-1"
+                    onClick={() => setHomeMobile(index)}
+                  >
+                    {image.isHomeMobile ? "✓ Home (Mobile)" : "Set Home (Mobile)"}
+                  </Button>
+                </div>
               </div>
             </div>
           ))}

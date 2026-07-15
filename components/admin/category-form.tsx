@@ -12,11 +12,14 @@ import { SizeChartUploader } from "./size-chart-uploader"
 
 const categorySchema = z.object({
   name: z.string().min(1, "Name is required"),
-  slug: z.string().optional(),
-  description: z.string().optional(),
-  image: z.string().optional(),
-  sizeChartImage: z.string().optional(),
-  parentId: z.string().optional(),
+  // These come from the DB as null for many categories; accept null as well as undefined
+  slug: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
+  image: z.string().nullable().optional(),
+  imageDesktop: z.string().nullable().optional(),
+  imageMobile: z.string().nullable().optional(),
+  sizeChartImage: z.string().nullable().optional(),
+  parentId: z.string().nullable().optional(),
 })
 
 type CategoryFormData = z.infer<typeof categorySchema>
@@ -33,6 +36,12 @@ export function CategoryForm({ category, parentCategories }: CategoryFormProps) 
   const [sizeChartImageUrl, setSizeChartImageUrl] = useState<string | null>(
     category?.size_chart_image || null
   )
+  const [imageDesktopUrl, setImageDesktopUrl] = useState<string | null>(
+    category?.image_desktop || category?.image || null
+  )
+  const [imageMobileUrl, setImageMobileUrl] = useState<string | null>(
+    category?.image_mobile || null
+  )
 
   const {
     register,
@@ -48,6 +57,8 @@ export function CategoryForm({ category, parentCategories }: CategoryFormProps) 
           slug: category.slug,
           description: category.description,
           image: category.image,
+          imageDesktop: category.image_desktop,
+          imageMobile: category.image_mobile,
           sizeChartImage: category.size_chart_image,
           parentId: category.parent_id,
         }
@@ -63,6 +74,16 @@ export function CategoryForm({ category, parentCategories }: CategoryFormProps) 
     setValue("sizeChartImage", url || "")
   }
 
+  const handleImageDesktopChange = (url: string | null) => {
+    setImageDesktopUrl(url)
+    setValue("imageDesktop", url || "")
+  }
+
+  const handleImageMobileChange = (url: string | null) => {
+    setImageMobileUrl(url)
+    setValue("imageMobile", url || "")
+  }
+
   const onSubmit = async (data: CategoryFormData) => {
     setLoading(true)
     setError("")
@@ -71,9 +92,12 @@ export function CategoryForm({ category, parentCategories }: CategoryFormProps) 
       const url = category ? `/api/admin/categories/${category.id}` : "/api/admin/categories"
       const method = category ? "PUT" : "POST"
 
-      // Include the size chart image URL from state
+      // Include the image URLs from state; keep legacy `image` = desktop for backward compat
       const formData = {
         ...data,
+        imageDesktop: imageDesktopUrl || null,
+        imageMobile: imageMobileUrl || null,
+        image: imageDesktopUrl || imageMobileUrl || null,
         sizeChartImage: sizeChartImageUrl || data.sizeChartImage || null,
       }
 
@@ -97,8 +121,13 @@ export function CategoryForm({ category, parentCategories }: CategoryFormProps) 
     }
   }
 
+  const onInvalid = (formErrors: typeof errors) => {
+    const fields = Object.keys(formErrors).join(", ")
+    setError(`Please fix the highlighted fields before saving: ${fields}`)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl space-y-6">
+    <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="max-w-2xl space-y-6">
       {error && (
         <div className="bg-destructive/10 text-destructive p-4 rounded-md">
           {error}
@@ -127,8 +156,31 @@ export function CategoryForm({ category, parentCategories }: CategoryFormProps) 
         </div>
 
         <div>
-          <Label htmlFor="image">Image URL</Label>
-          <Input id="image" {...register("image")} />
+          <Label>Home Page Card Images</Label>
+          <p className="text-sm text-[#BDBDBD] mt-1 mb-4">
+            Set the image shown on this category&apos;s home-page card for each device. Desktop is used as
+            the fallback if a mobile image isn&apos;t set.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="rounded-lg border border-[#1A1A1B] p-4">
+              <p className="text-sm font-semibold mb-3">🖥️ Desktop Image</p>
+              <SizeChartUploader
+                value={imageDesktopUrl}
+                onChange={handleImageDesktopChange}
+                label="desktop image"
+                uploadType="category"
+              />
+            </div>
+            <div className="rounded-lg border border-[#1A1A1B] p-4">
+              <p className="text-sm font-semibold mb-3">📱 Mobile Image</p>
+              <SizeChartUploader
+                value={imageMobileUrl}
+                onChange={handleImageMobileChange}
+                label="mobile image"
+                uploadType="category"
+              />
+            </div>
+          </div>
         </div>
 
         <div>
@@ -149,19 +201,18 @@ export function CategoryForm({ category, parentCategories }: CategoryFormProps) 
           </select>
         </div>
 
-        {/* Size Chart Image - Only for subcategories */}
-        {isSubcategory && (
-          <div>
-            <Label>Size Chart Image</Label>
-            <p className="text-sm text-[#BDBDBD] mt-1 mb-4">
-              Upload a size chart image that will be displayed on all products in this subcategory.
-            </p>
-            <SizeChartUploader
-              value={sizeChartImageUrl}
-              onChange={handleSizeChartChange}
-            />
-          </div>
-        )}
+        {/* Size Chart Image — available for every category */}
+        <div>
+          <Label>Size Chart Image</Label>
+          <p className="text-sm text-[#BDBDBD] mt-1 mb-4">
+            Upload a size chart image shown on all products in this category. It appears as a
+            &quot;Size Chart&quot; button under Select Size on the product page.
+          </p>
+          <SizeChartUploader
+            value={sizeChartImageUrl}
+            onChange={handleSizeChartChange}
+          />
+        </div>
       </div>
 
       <div className="flex gap-4">

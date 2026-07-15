@@ -10,9 +10,8 @@ export async function GET() {
 
     const staticPages = [
       { url: baseUrl, priority: '1.0', changefreq: 'daily' },
-      { url: `${baseUrl}/men`, priority: '0.9', changefreq: 'daily' },
-      { url: `${baseUrl}/women`, priority: '0.9', changefreq: 'daily' },
-      { url: `${baseUrl}/home-essentials`, priority: '0.9', changefreq: 'daily' },
+      { url: `${baseUrl}/collections/unspoken-resilience`, priority: '0.9', changefreq: 'daily' },
+      { url: `${baseUrl}/collections/still-becoming`, priority: '0.9', changefreq: 'daily' },
       { url: `${baseUrl}/sale`, priority: '0.9', changefreq: 'daily' },
       { url: `${baseUrl}/products`, priority: '0.8', changefreq: 'daily' },
       { url: `${baseUrl}/blog`, priority: '0.8', changefreq: 'daily' },

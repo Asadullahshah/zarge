@@ -111,6 +111,19 @@ export async function POST(request: NextRequest) {
       updatedCount++
     }
 
+    // Record the applied sale so it can be listed and removed later
+    const productIdsLiteral = `{${productIds.join(",")}}`
+    await sql`
+      INSERT INTO sales (percentage, target, category_id, product_ids, product_count)
+      VALUES (
+        ${percentage},
+        ${target},
+        ${target === "INVENTORY" ? null : categoryId},
+        ${productIdsLiteral}::uuid[],
+        ${updatedCount}
+      )
+    `
+
     return NextResponse.json({
       success: true,
       updatedCount,

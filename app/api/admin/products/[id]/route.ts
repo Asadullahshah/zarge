@@ -76,6 +76,7 @@ export async function PUT(
       careInstructions,
       availableSizes,
       availableColors,
+      colorSwatches, // { colorName: "#hex" } map for swatch rendering
       variantStock, // Stock matrix for size/color combinations
       measurements,
       countryOfOrigin,
@@ -199,6 +200,14 @@ export async function PUT(
       ? `{${parsedAvailableColors.map(c => `"${String(c).replace(/"/g, '\\"')}"`).join(',')}}`
       : null
 
+    const tagsArray = tags && tags.length > 0
+      ? `{${tags.map((t: string) => `"${String(t).replace(/"/g, '\\"')}"`).join(',')}}`
+      : null
+
+    const seoKeywordsArray = seoKeywords && seoKeywords.length > 0
+      ? `{${seoKeywords.map((k: string) => `"${String(k).replace(/"/g, '\\"')}"`).join(',')}}`
+      : null
+
     // Check if product exists
     const existing = await sql`
       SELECT id FROM products WHERE id = ${params.id}
@@ -251,10 +260,10 @@ export async function PUT(
           sale_price = ${parsedSalePrice},
           stock = ${parsedStock},
           weight = ${parsedWeight},
-          tags = ${tags && tags.length > 0 ? JSON.stringify(tags) : null}::TEXT[],
+          tags = ${tagsArray}::TEXT[],
           seo_title = ${seoTitle || null},
           seo_desc = ${seoDesc || null},
-          seo_keywords = ${seoKeywords && seoKeywords.length > 0 ? JSON.stringify(seoKeywords) : null}::TEXT[],
+          seo_keywords = ${seoKeywordsArray}::TEXT[],
           canonical_url = ${canonicalUrl || null},
           faq_data = ${faqData ? JSON.stringify(faqData) : null},
           piece_count = ${pieceCount || null},
@@ -263,6 +272,7 @@ export async function PUT(
           care_instructions = ${careInstructions || null},
           available_sizes = ${availableSizesArray}::TEXT[],
           available_colors = ${availableColorsArray}::TEXT[],
+          color_swatches = ${JSON.stringify(colorSwatches || {})}::JSONB,
           measurements = ${measurements ? JSON.stringify(measurements) : null},
           country_of_origin = ${countryOfOrigin || 'Pakistan'},
           featured = ${featured !== undefined ? featured : false},
@@ -291,10 +301,12 @@ export async function PUT(
             const img = images[i]
             await sql`
               INSERT INTO product_images (
-                product_id, url, alt, "order", width, height, is_primary, color
+                product_id, url, alt, "order", width, height, is_primary, color,
+                is_home_mobile, is_home_desktop
               ) VALUES (
-                ${params.id}, ${img.url}, ${img.alt || null}, ${i}, 
-                ${img.width || null}, ${img.height || null}, ${img.isPrimary || false}, ${img.color || null}
+                ${params.id}, ${img.url}, ${img.alt || null}, ${i},
+                ${img.width || null}, ${img.height || null}, ${img.isPrimary || false}, ${img.color || null},
+                ${img.isHomeMobile || false}, ${img.isHomeDesktop || false}
               )
             `
           }

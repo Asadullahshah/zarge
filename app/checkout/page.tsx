@@ -13,9 +13,9 @@ import Image from "next/image"
 import Link from "next/link"
 
 const checkoutSchema = z.object({
-  email: z.string().trim().email("Invalid email address"),
+  email: z.string().trim().optional(),
   phone: z.string().trim().optional(),
-  paymentMethod: z.enum(["STRIPE", "COD"], {
+  paymentMethod: z.enum(["STRIPE", "COD", "BANK"], {
     required_error: "Please select a payment method",
   }),
   shippingAddress: z.object({
@@ -38,6 +38,25 @@ const checkoutSchema = z.object({
   }).optional(),
   useShippingForBilling: z.boolean().optional(),
 }).superRefine((data, ctx) => {
+  // Require at least one contact method (email OR phone)
+  const hasEmail = !!data.email?.trim()
+  const hasPhone = !!data.phone?.trim()
+  if (!hasEmail && !hasPhone) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Enter an email or phone number so we can send order updates",
+      path: ["email"],
+    })
+  }
+  // If an email was provided, it must be valid
+  if (hasEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email!.trim())) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Invalid email address",
+      path: ["email"],
+    })
+  }
+
   // Only validate billing address if NOT using shipping for billing
   if (data.useShippingForBilling !== true) {
     if (!data.billingAddress) {
@@ -123,6 +142,12 @@ function CheckoutForm() {
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [cartTotal, setCartTotal] = useState(0)
   const [cartLoading, setCartLoading] = useState(true)
+  const [payMethods, setPayMethods] = useState<{ stripe: boolean; cod: boolean; bank: boolean; bankDetails: string }>({
+    stripe: true,
+    cod: true,
+    bank: false,
+    bankDetails: "",
+  })
 
   const {
     register,
@@ -147,6 +172,18 @@ function CheckoutForm() {
 
   const useShippingForBilling = watch("useShippingForBilling")
   const shippingAddress = watch("shippingAddress")
+
+  // Load enabled payment methods and default to the first enabled one
+  useEffect(() => {
+    fetch("/api/settings/payment-methods")
+      .then((r) => r.json())
+      .then((pm) => {
+        setPayMethods(pm)
+        const first = pm.stripe ? "STRIPE" : pm.cod ? "COD" : pm.bank ? "BANK" : "STRIPE"
+        setValue("paymentMethod", first as "STRIPE" | "COD" | "BANK")
+      })
+      .catch(() => {})
+  }, [setValue])
 
   // Sync billing address with shipping address when checkbox is checked
   // This runs whenever useShippingForBilling changes or shippingAddress changes
@@ -220,7 +257,7 @@ function CheckoutForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: data.email.trim(),
+          email: data.email?.trim() || "",
           phone: data.phone?.trim() || "",
           paymentMethod: data.paymentMethod,
           shippingAddress: {
@@ -375,17 +412,31 @@ function CheckoutForm() {
             <h2 className="text-2xl font-semibold">Shipping Information</h2>
 
             <div className="bg-grey-50 border border-grey-50 p-6 rounded-lg space-y-4">
+              <p className="text-sm text-gray-500">
+                Provide an <strong>email</strong> or <strong>phone number</strong> — at least one is
+                required so we can send you order updates.
+              </p>
               <div>
-                <Label htmlFor="email">Email *</Label>
-                <Input id="email" type="email" {...register("email")} />
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="you@example.com" {...register("email")} />
+                {watch("email")?.trim() && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    📧 We&apos;ll send your order confirmation and updates to this email.
+                  </p>
+                )}
                 {errors.email && (
                   <p className="text-destructive text-sm mt-1">{errors.email.message}</p>
                 )}
               </div>
 
               <div>
-                <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" type="tel" {...register("phone")} />
+                <Label htmlFor="phone">Phone (WhatsApp)</Label>
+                <Input id="phone" type="tel" placeholder="+92 3XX XXXXXXX" {...register("phone")} />
+                {watch("phone")?.trim() && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    💬 We&apos;ll send your order confirmation and updates as a WhatsApp message.
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -639,31 +690,54 @@ function CheckoutForm() {
                   Payment Method *
                 </Label>
                 <div className="space-y-3">
-                  <label className="flex items-center space-x-3 p-4 border border-grey-50 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                    <input
-                      type="radio"
-                      value="STRIPE"
-                      {...register("paymentMethod")}
-                      className="w-4 h-4 text-primary"
-                    />
-                    <div className="flex-1">
-                      <span className="font-medium">Credit/Debit Card (Stripe)</span>
-                      <p className="text-sm text-[#BDBDBD]">Secure payment processing</p>
-                    </div>
-                  </label>
-                  <label className="flex items-center space-x-3 p-4 border border-grey-50 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                    <input
-                      type="radio"
-                      value="COD"
-                      {...register("paymentMethod")}
-                      className="w-4 h-4 text-primary"
-                    />
-                    <div className="flex-1">
-                      <span className="font-medium">Cash on Delivery (COD)</span>
-                      <p className="text-sm text-[#BDBDBD]">Pay when you receive your order</p>
-                    </div>
-                  </label>
+                  {payMethods.stripe && (
+                    <label className="flex items-center space-x-3 p-4 border border-grey-50 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                      <input
+                        type="radio"
+                        value="STRIPE"
+                        {...register("paymentMethod")}
+                        className="w-4 h-4 text-primary"
+                      />
+                      <div className="flex-1">
+                        <span className="font-medium">Credit/Debit Card (Stripe)</span>
+                        <p className="text-sm text-[#BDBDBD]">Secure payment processing</p>
+                      </div>
+                    </label>
+                  )}
+                  {payMethods.cod && (
+                    <label className="flex items-center space-x-3 p-4 border border-grey-50 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                      <input
+                        type="radio"
+                        value="COD"
+                        {...register("paymentMethod")}
+                        className="w-4 h-4 text-primary"
+                      />
+                      <div className="flex-1">
+                        <span className="font-medium">Cash on Delivery (COD)</span>
+                        <p className="text-sm text-[#BDBDBD]">Pay when you receive your order</p>
+                      </div>
+                    </label>
+                  )}
+                  {payMethods.bank && (
+                    <label className="flex items-center space-x-3 p-4 border border-grey-50 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                      <input
+                        type="radio"
+                        value="BANK"
+                        {...register("paymentMethod")}
+                        className="w-4 h-4 text-primary"
+                      />
+                      <div className="flex-1">
+                        <span className="font-medium">Bank Transfer / Deposit</span>
+                        <p className="text-sm text-[#BDBDBD]">Transfer to our account and we&apos;ll confirm your order</p>
+                      </div>
+                    </label>
+                  )}
                 </div>
+                {watch("paymentMethod") === "BANK" && payMethods.bankDetails && (
+                  <div className="mt-3 rounded-lg border border-primary/30 bg-primary/10 p-4 text-sm whitespace-pre-line">
+                    {payMethods.bankDetails}
+                  </div>
+                )}
                 {errors.paymentMethod && (
                   <p className="text-destructive text-sm mt-2">{errors.paymentMethod.message}</p>
                 )}
@@ -671,8 +745,10 @@ function CheckoutForm() {
 
               <div className="space-y-2 mb-6">
                 <p className="text-[#BDBDBD] text-sm">
-                  {watch("paymentMethod") === "COD" 
+                  {watch("paymentMethod") === "COD"
                     ? "You will pay cash when your order is delivered."
+                    : watch("paymentMethod") === "BANK"
+                    ? "Transfer the total to our bank account; we'll confirm your order once received."
                     : "Payment will be processed securely through Stripe."}
                 </p>
                 <p className="text-[#BDBDBD] text-xs italic">
@@ -686,13 +762,13 @@ function CheckoutForm() {
                 disabled={loading || (cartItems.length === 0 && !cartLoading)}
                 onClick={handleButtonClick}
               >
-                {loading 
-                  ? "Processing..." 
-                  : cartItems.length === 0 && !cartLoading 
-                  ? "Cart is Empty" 
-                  : watch("paymentMethod") === "COD"
-                  ? "Place Order (COD)"
-                  : "Proceed to Payment"}
+                {loading
+                  ? "Processing..."
+                  : cartItems.length === 0 && !cartLoading
+                  ? "Cart is Empty"
+                  : watch("paymentMethod") === "STRIPE"
+                  ? "Proceed to Payment"
+                  : "Place Order"}
               </Button>
             </div>
           </div>

@@ -6,11 +6,20 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { HeroBackgroundVideo } from "@/components/home/hero-background-video"
-import { useCart } from "@/context/cart-context"
+import { useCart, notifyCartUpdated } from "@/context/cart-context"
 
 const TAGLINE = "Wearable narratives stitched through embroidery"
 
-const slides = [
+export type HeroSlide = {
+  id?: string
+  image: string
+  imageMobile?: string
+  name: string
+  description: string
+  slug?: string
+}
+
+const DEFAULT_SLIDES: HeroSlide[] = [
   {
     image: "/img/bloom.png",
     name: "Blooming",
@@ -31,21 +40,23 @@ const slides = [
     name: "The Beloved Silence",
     description: "Inspired by Byakuya Kuchiki — a man defined not by what he shows, but by what he carries within. Bound by honor, shaped by loss, guided by a code that demands silence over expression.",
   },
-  
+
 ]
 
 function SlideNumbers({
   current,
   onSelect,
+  total,
 }: {
   current: number
   onSelect: (i: number) => void
+  total: number
 }) {
   return (
     <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 z-10 border border-grey bg-white/30 px-3 py-4 shadow-lg"
         style={{ borderRadius: "16px" }}
     >
-      {slides.map((_, index) => (
+      {Array.from({ length: total }).map((_, index) => (
         <button
           key={index}
           onClick={(e) => { e.stopPropagation(); onSelect(index) }}
@@ -93,12 +104,22 @@ function NavArrows({
   )
 }
 
-export function HeroSectionV2() {
+export function HeroSectionV2({ slides: slidesProp }: { slides?: HeroSlide[] } = {}) {
   const { openCart } = useCart()
+  const slides = slidesProp && slidesProp.length > 0 ? slidesProp : DEFAULT_SLIDES
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(true)
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1280px)")
+    const update = () => setIsDesktop(mq.matches)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
 
   useEffect(() => {
     if (modalOpen) return
@@ -123,6 +144,41 @@ export function HeroSectionV2() {
   }
 
   const imageClass = `object-cover object-center xl:object-contain transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`
+
+  const activeSlide = slides[currentSlide] ?? slides[0]
+  const activeImage = isDesktop ? activeSlide.image : (activeSlide.imageMobile || activeSlide.image)
+  const shopHref = activeSlide.slug ? `/product/${activeSlide.slug}` : "/products"
+
+  async function handleAddToCart() {
+    // Without a real product id (e.g. fallback slides), send the user to shop
+    if (!activeSlide.id) {
+      window.location.href = shopHref
+      return
+    }
+    try {
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          productId: activeSlide.id,
+          quantity: 1,
+          variantId: null,
+          size: null,
+          color: null,
+        }),
+      })
+      if (res.ok) {
+        notifyCartUpdated()
+        openCart()
+      } else {
+        // Product likely needs size/color — let the user pick on the detail page
+        window.location.href = shopHref
+      }
+    } catch {
+      window.location.href = shopHref
+    }
+  }
 
   return (
     <>
@@ -163,6 +219,15 @@ export function HeroSectionV2() {
       {/* ── HERO SECTION ── */}
       <section data-theme="light" className="relative overflow-hidden h-screen">
 
+        {/* Click-outside backdrop to close the desktop info panel */}
+        {panelOpen && (
+          <div
+            className="absolute inset-0 z-[5] hidden xl:block"
+            onClick={() => setPanelOpen(false)}
+            aria-hidden
+          />
+        )}
+
         {/* ── LEFT INFO PANEL — slides in on image click, desktop only ── */}
         <div className={`hidden xl:flex flex-col justify-center px-16 z-10 bg-white/95 backdrop-blur-sm
           absolute left-0 top-0 h-full w-[420px] transition-transform duration-500 ease-in-out
@@ -178,17 +243,17 @@ export function HeroSectionV2() {
 
           <p className="font-sans text-xs tracking-widest uppercase text-black/40 mb-3">New Arrival</p>
           <h1 className="font-serif text-5xl font-light leading-tight text-black mb-4">
-          {slides[currentSlide].name}
+          {activeSlide.name}
           </h1>
           <p className="font-sans text-sm text-black/60 leading-relaxed max-w-xs mb-8">
-          {slides[currentSlide].description}
+          {activeSlide.description}
           </p>
           <div className="flex gap-3">
-            <Link href="/products"
+            <Link href={shopHref}
               className="font-sans inline-flex items-center justify-center bg-black text-white px-4 py-5 text-xs tracking-widest uppercase hover:bg-black/80 transition-all duration-300">
-              Shop Now
+              Learn More
             </Link>
-            <button onClick={openCart} className="font-sans inline-flex items-center justify-center border border-black text-black px-5 py-3 text-xs tracking-widest uppercase hover:bg-black hover:text-white transition-all duration-300">
+            <button onClick={handleAddToCart} className="font-sans inline-flex items-center justify-center border border-black text-black px-5 py-3 text-xs tracking-widest uppercase hover:bg-black hover:text-white transition-all duration-300">
               Add to Cart
             </button>
           </div>
@@ -206,8 +271,8 @@ export function HeroSectionV2() {
           }}
         >
           <Image
-            src={slides[currentSlide].image}
-            alt="Product image"
+            src={activeImage}
+            alt={activeSlide.name || "Product image"}
             fill
             sizes="(max-width: 768px) 100vw, 100vw"
             className={imageClass}
@@ -219,7 +284,7 @@ export function HeroSectionV2() {
         </div>
 
         {/* Slide numbers */}
-        <SlideNumbers current={currentSlide} onSelect={setCurrentSlide} />
+        <SlideNumbers current={currentSlide} onSelect={setCurrentSlide} total={slides.length} />
 
         {/* Nav arrows */}
         <NavArrows
@@ -254,24 +319,24 @@ export function HeroSectionV2() {
               </p>
 
               <h2 className="font-serif text-3xl font-light text-white leading-snug">
-              {slides[currentSlide].name}
+              {activeSlide.name}
               </h2>
 
               <p className="font-sans text-sm text-white/60 leading-relaxed max-w-xs">
-              {slides[currentSlide].description}
+              {activeSlide.description}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mt-2">
                 <Link
-                  href="/products"
+                  href={shopHref}
                   className="font-sans inline-flex items-center justify-center bg-white text-black px-8 py-3 text-xs tracking-widest uppercase hover:bg-white/80 transition-all duration-300"
                   onClick={() => setModalOpen(false)}
                 >
-                  Shop Now
+                  Learn More
                 </Link>
                 <button
                   className="font-sans inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-8 py-3 text-xs tracking-widest uppercase hover:bg-[#B8960C] hover:text-white transition-all duration-300"
-                  onClick={() => { setModalOpen(false); openCart() }}
+                  onClick={() => { setModalOpen(false); handleAddToCart() }}
                 >
                   Add to Cart
                 </button>

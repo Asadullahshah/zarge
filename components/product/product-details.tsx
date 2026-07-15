@@ -4,48 +4,12 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { formatPrice } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Package, Ruler, Palette, Info, MapPin, Scissors, Plus, Minus, Heart } from "lucide-react"
+import { Package, Ruler, Palette, Info, MapPin, Scissors, Plus, Minus, Heart, X } from "lucide-react"
 import { safeFetch, formatErrorMessage } from "@/lib/error-handler"
-import { useCart } from "@/context/cart-context"
+import { useCart, notifyCartUpdated } from "@/context/cart-context"
 import { createPortal } from "react-dom"
 import Image from "next/image";
-
-// Color name to hex mapping
-function getColorHex(colorName: string): string {
-  const colorMap: Record<string, string> = {
-    'white': '#FFFFFF',
-    'black': '#000000',
-    'navy blue': '#001f3f',
-    'navy': '#001f3f',
-    'beige': '#F5F5DC',
-    'cream': '#FFFDD0',
-    'brown': '#8B4513',
-    'grey': '#808080',
-    'gray': '#808080',
-    'maroon': '#800000',
-    'burgundy': '#800020',
-    'olive': '#808000',
-    'khaki': '#C3B091',
-    'pastel pink': '#FFD1DC',
-    'pastel blue': '#AEC6CF',
-    'pastel green': '#B5EAD7',
-    'pastel yellow': '#FFF9C4',
-    'peach': '#FFCBA4',
-    'sky blue': '#87CEEB',
-    'turquoise': '#40E0D0',
-    'purple': '#800080',
-    'red': '#FF0000',
-    'green': '#008000',
-    'yellow': '#FFFF00',
-    'orange': '#FFA500',
-    'pink': '#FFC0CB',
-    'multi color': '#FFD700',
-    'printed': '#FFD700',
-  }
-  
-  const normalized = colorName.trim().toLowerCase()
-  return colorMap[normalized] || '#808080' // Default to grey if not found
-}
+import { getColorHex } from "@/lib/color-utils"
 
 interface ProductDetailsProps {
   product: {
@@ -64,6 +28,7 @@ interface ProductDetailsProps {
     care_instructions?: string
     available_sizes?: string[]
     available_colors?: string[]
+    color_swatches?: Record<string, string>
     measurements?: Record<string, string>
     country_of_origin?: string
     weight?: number
@@ -297,9 +262,10 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
       if (data.success) {
         // Update stock in state
         setCurrentStock(prev => Math.max(0, prev - 1))
-        
+
         // Show success feedback
         setAdded(true)
+        notifyCartUpdated()
         openCart()
         setLoading(false)
         
@@ -366,18 +332,28 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
             Size Chart White Card    // */}
 
       {isSizeChartOpen && sizeChartImage && createPortal (
-        <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80"        
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
           onClick={() => setIsSizeChartOpen(false)}
           >
             <div
-            onClick= {(e) => e.stopPropagation()}
-            className="bg-white rounded-lg p-6 max-w-2xl max-h-[90vh] overflow-auto relative"          
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-lg p-6 max-w-2xl max-h-[90vh] overflow-auto relative"
             >
-              <div className="relative w-[70vh] h-[70vh]">
+              {/* Close button */}
+              <button
+                type="button"
+                onClick={() => setIsSizeChartOpen(false)}
+                aria-label="Close size chart"
+                className="absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-black transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              <h3 className="mb-4 pr-10 text-lg font-semibold">Size Chart</h3>
+              <div className="relative w-full aspect-square max-w-[70vh] mx-auto">
               <Image
-                src={sizeChartImage} 
-                alt="Size Chart" 
+                src={sizeChartImage}
+                alt="Size Chart"
                 fill
                 className="object-contain"
               />
@@ -458,10 +434,10 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
               onClick={() => {
                 setIsSizeChartOpen(true)
               }}
-              className="text-sm text-gray-500 hover:text-primary flex items-center gap-1 mt-2 transition-colors"
+              className="mt-3 inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-primary hover:text-primary transition-colors"
             >
               <Ruler className="w-4 h-4" />
-              SIZE CHART
+              Size Chart
             </button>
           )}
         </div>
@@ -476,7 +452,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
           </label>
           <div className="flex flex-wrap gap-2">
             {product.available_colors.map((color) => {
-              const colorHex = getColorHex(color)
+              const colorHex = getColorHex(color, product.color_swatches)
               const isAvailable = isColorAvailable(color)
               const isSelected = selectedColor === color
               

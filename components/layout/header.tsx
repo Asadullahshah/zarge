@@ -7,8 +7,12 @@ import { Button } from "@/components/ui/button"
 import { CartButton } from "./cart-button"
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { CategoryDropdown } from "./category-dropdown"
 import { usePathname } from "next/navigation"
+
+const COLLECTIONS = [
+  { name: "Unspoken Resilience", slug: "unspoken-resilience" },
+  { name: "Still Becoming", slug: "still-becoming" },
+]
 
 export function Header() {
   const pathname = usePathname()
@@ -17,7 +21,6 @@ export function Header() {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [collectionsOpen, setCollectionsOpen] = useState(false)
-  const [subcategories, setSubcategories] = useState<any[]>([])
   const [visible, setVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [mounted, setMounted] = useState(false)
@@ -25,21 +28,6 @@ export function Header() {
 
   useEffect(() => {
     setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    async function fetchSubcategories() {
-      try {
-        const res = await fetch("/api/categories/men/subcategories")
-        if (res.ok) {
-          const data = await res.json()
-          setSubcategories(data.subcategories || [])
-        }
-      } catch (err) {
-        console.error("Failed to fetch subcategories", err)
-      }
-    }
-    fetchSubcategories()
   }, [])
 
   // Scroll — show/hide navbar
@@ -133,7 +121,27 @@ export function Header() {
 
             {/* NAV LINKS — desktop */}
             <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
-              <CategoryDropdown label="Collections" slug="men" isDark={isDark} />
+              <div className="group relative">
+                <button
+                  className={`flex items-center gap-1 ${textColor} ${hoverColor} ${dropShadow} transition-colors duration-300`}
+                >
+                  Drops
+                  <ChevronDown className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+                </button>
+                <div className="invisible absolute left-1/2 top-full -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+                  <div className="flex min-w-[220px] flex-col bg-white py-2 shadow-lg">
+                    {COLLECTIONS.map((c) => (
+                      <Link
+                        key={c.slug}
+                        href={`/collections/${c.slug}`}
+                        className="px-5 py-3 text-sm uppercase tracking-widest text-black/80 transition-colors hover:bg-black/5 hover:text-black"
+                      >
+                        {c.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
               <Link
                 href="/#our-story"
                 className={`${textColor} ${hoverColor} ${dropShadow} transition-colors duration-300`}
@@ -199,7 +207,7 @@ export function Header() {
                   style={{ color: "#1a1a1a" }}
                   onClick={() => setCollectionsOpen(!collectionsOpen)}
                 >
-                  Collections
+                  Drops
                   <ChevronDown
                     className={`w-5 h-5 transition-transform duration-200 ${collectionsOpen ? "rotate-180" : ""}`}
                   />
@@ -207,23 +215,15 @@ export function Header() {
 
                 {collectionsOpen && (
                   <div className="flex flex-col gap-3 pl-4 border-l-2" style={{ borderColor: "#d4d4d4" }}>
-                    <Link
-                      href="/category/men"
-                      className="text-lg uppercase tracking-widest font-medium"
-                      style={{ color: "#1a1a1a" }}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      All Collections
-                    </Link>
-                    {subcategories.map((subcat) => (
+                    {COLLECTIONS.map((c) => (
                       <Link
-                        key={subcat.id}
-                        href={`/category/${subcat.slug}`}
+                        key={c.slug}
+                        href={`/collections/${c.slug}`}
                         className="text-base uppercase tracking-widest font-light"
                         style={{ color: "#555555" }}
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        {subcat.name}
+                        {c.name}
                       </Link>
                     ))}
                   </div>

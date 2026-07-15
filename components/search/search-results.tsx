@@ -24,22 +24,16 @@ export function SearchResults({ products, query, pagination }: SearchResultsProp
         </p>
         <div className="flex gap-4 justify-center">
           <Link
-            href="/men"
+            href="/collections/unspoken-resilience"
             className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
           >
-            Men&apos;s Collection
+            Unspoken Resilience
           </Link>
           <Link
-            href="/women"
+            href="/collections/still-becoming"
             className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
           >
-            Women&apos;s Collection
-          </Link>
-          <Link
-            href="/home-essentials"
-            className="px-4 py-2 bg-[#121213] rounded border border-[#1A1A1B] hover:border-primary transition-colors"
-          >
-            Home Essentials
+            Still Becoming
           </Link>
         </div>
       </div>

@@ -16,9 +16,15 @@ export function ScrollToHash() {
 
     // Small delay to let the page render first
     const timer = setTimeout(() => {
-      const element = document.querySelector(hash)
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" })
+      if (typeof document === "undefined") return
+      try {
+        // Guard against invalid CSS selectors (e.g. "#123") which throw
+        const element = document.querySelector(hash)
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" })
+        }
+      } catch {
+        /* invalid hash selector — ignore */
       }
     }, 1000)
 

@@ -16,6 +16,7 @@ interface Product {
   salePrice?: number
   images?: Array<{ url: string; isPrimary?: boolean }>
   available_colors?: string[]
+  color_swatches?: Record<string, string>
 }
 
 interface ProductToolbarProps {
@@ -139,9 +140,11 @@ export function ProductToolbar({ products = [] }: ProductToolbarProps) {
             image={product.images?.find(img => img.isPrimary)?.url ?? product.images?.[0]?.url ?? ""}
             name={product.name}
             fit="Relaxed Fit"
-            category="Men"
-            price={product.salePrice ?? product.price}
+            category="Zargé"
+            price={product.price}
+            salePrice={product.salePrice}
             colors={product.available_colors ?? []}
+            colorSwatches={product.color_swatches}
             slug={product.slug}
           />
         ))}

@@ -4,15 +4,20 @@ import { LogOut } from "lucide-react"
 
 export async function AdminHeader() {
   return (
-    <header className="bg-[#121213] border-b border-[#1A1A1B] px-8 py-4 flex justify-between items-center">
-      <h1 className="text-xl font-serif font-bold">Zarge Admin</h1>
+    <header className="sticky top-0 z-30 h-16 bg-white/90 backdrop-blur border-b border-[#e9eaee] px-6 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <span className="font-serif text-lg font-bold text-gray-900">Zargé</span>
+        <span className="border-l border-gray-200 pl-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
+          Admin
+        </span>
+      </div>
       <form
         action={async () => {
           "use server"
           await signOut({ redirectTo: "/admin/login" })
         }}
       >
-        <Button type="submit" variant="ghost" size="sm">
+        <Button type="submit" variant="outline" size="sm">
           <LogOut className="w-4 h-4 mr-2" />
           Sign Out
         </Button>
@@ -20,4 +25,3 @@ export async function AdminHeader() {
     </header>
   )
 }
-

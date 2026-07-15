@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     await requireAuth()
 
     const body = await request.json()
-    const { name, slug, description, image, sizeChartImage, parentId } = body
+    const { name, slug, description, image, imageDesktop, imageMobile, sizeChartImage, parentId } = body
 
     const categorySlug = slug || slugify(name)
 
@@ -45,9 +45,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Keep legacy `image` populated (defaults to the desktop image) for backward compatibility
+    const legacyImage = image || imageDesktop || imageMobile || null
+
     const result = await sql`
-      INSERT INTO categories (name, slug, description, image, size_chart_image, parent_id)
-      VALUES (${name}, ${categorySlug}, ${description || null}, ${image || null}, ${sizeChartImage || null}, ${parentId || null})
+      INSERT INTO categories (name, slug, description, image, image_desktop, image_mobile, size_chart_image, parent_id)
+      VALUES (${name}, ${categorySlug}, ${description || null}, ${legacyImage}, ${imageDesktop || null}, ${imageMobile || null}, ${sizeChartImage || null}, ${parentId || null})
       RETURNING *
     `
 
