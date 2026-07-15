@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button"
 interface SizeChartUploaderProps {
   value?: string | null
   onChange: (url: string | null) => void
+  label?: string
+  uploadType?: string
 }
 
-export function SizeChartUploader({ value, onChange }: SizeChartUploaderProps) {
+export function SizeChartUploader({ value, onChange, label = "size chart image", uploadType = "size-chart" }: SizeChartUploaderProps) {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
 
@@ -25,7 +27,7 @@ export function SizeChartUploader({ value, onChange }: SizeChartUploaderProps) {
       const formData = new FormData()
       formData.append("file", file)
 
-      const response = await fetch("/api/upload?type=size-chart", {
+      const response = await fetch(`/api/upload?type=${uploadType}`, {
         method: "POST",
         body: formData,
       })
@@ -42,7 +44,7 @@ export function SizeChartUploader({ value, onChange }: SizeChartUploaderProps) {
     } finally {
       setUploading(false)
     }
-  }, [onChange])
+  }, [onChange, uploadType])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -103,7 +105,7 @@ export function SizeChartUploader({ value, onChange }: SizeChartUploaderProps) {
           <div className="space-y-2">
             <Upload className="w-12 h-12 mx-auto text-[#BDBDBD]" />
             <p className="text-[#F7F7F7] font-semibold">
-              Drag & drop a size chart image here
+              Drag & drop a {label} here
             </p>
             <p className="text-sm text-[#BDBDBD]">
               or click to select a file
@@ -127,7 +129,7 @@ export function SizeChartUploader({ value, onChange }: SizeChartUploaderProps) {
         <div className="relative border border-[#1A1A1B] rounded-lg p-4 bg-[#0B0B0C]">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <p className="text-sm font-semibold mb-2">Current Size Chart:</p>
+              <p className="text-sm font-semibold mb-2 capitalize">Current {label}:</p>
               <img
                 src={value}
                 alt="Size Chart Preview"

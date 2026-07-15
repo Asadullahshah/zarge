@@ -10,20 +10,27 @@ export function CartButton() {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
+    let active = true
     const fetchCartCount = async () => {
       try {
         const response = await fetch("/api/cart")
         const data = await response.json()
-        setCount(data.items?.length || 0)
+        if (active) setCount(data.items?.length || 0)
       } catch (error) {
         console.error("Error fetching cart count:", error)
       }
     }
 
+    // Fetch once, then only refresh on cart changes or when the tab regains focus —
+    // no more polling the DB every 5s.
     fetchCartCount()
-    // Refresh cart count every 5 seconds
-    const interval = setInterval(fetchCartCount, 5000)
-    return () => clearInterval(interval)
+    window.addEventListener("cart:updated", fetchCartCount)
+    window.addEventListener("focus", fetchCartCount)
+    return () => {
+      active = false
+      window.removeEventListener("cart:updated", fetchCartCount)
+      window.removeEventListener("focus", fetchCartCount)
+    }
   }, [])
 
   return (

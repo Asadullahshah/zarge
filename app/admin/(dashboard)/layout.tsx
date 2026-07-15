@@ -14,7 +14,9 @@ export default async function DashboardLayout({
       <AdminHeader />
       <div className="flex">
         <AdminSidebar />
-        <main className="flex-1 p-8">{children}</main>
+        <main className="flex-1 p-6 md:p-8">
+          <div className="mx-auto w-full max-w-[1400px]">{children}</div>
+        </main>
       </div>
     </div>
   )

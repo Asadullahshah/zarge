@@ -1,18 +1,10 @@
 import { sql } from "@/lib/db"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
 import { Metadata } from "next"
 import Image from "next/image"
-import { format } from "date-fns"
-import dynamicImport from "next/dynamic"
+import { RotateCcw, Truck } from "lucide-react"
 import { HeroSectionV2 } from "@/components/home/HeroSectionV2"
 import { OurStory } from "@/components/OurStory"
-
-const ScrollableProducts = dynamicImport(
-  () => import("@/components/product/scrollable-products").then((mod) => ({ default: mod.ScrollableProducts })),
-  { ssr: false }
-)
 
 // Force dynamic rendering to show latest products
 export const dynamic = 'force-dynamic'
@@ -58,74 +50,54 @@ export const metadata: Metadata = {
   },
 }
 
+const CATEGORY_FALLBACK_IMAGE = "/img/silentbloom.png"
+
 export default async function HomePage() {
-  // Get featured products (or fallback to recent products if none are featured)
-  let featuredProducts = await sql`
-    SELECT 
-      p.*,
+  // ── Products for the hero carousel (with device-specific "home" images) ──
+  const heroProductsRaw = await sql`
+    SELECT
+      p.id, p.name, p.slug, p.short_desc, p.description,
       json_agg(
-        DISTINCT jsonb_build_object(
+        jsonb_build_object(
           'url', pi.url,
-          'alt', pi.alt,
           'isPrimary', pi.is_primary,
+          'isHomeMobile', pi.is_home_mobile,
+          'isHomeDesktop', pi.is_home_desktop,
           'order', pi."order"
-        )
+        ) ORDER BY pi."order"
       ) FILTER (WHERE pi.id IS NOT NULL) as images
     FROM products p
     LEFT JOIN product_images pi ON p.id = pi.product_id
-    WHERE COALESCE(p.featured, false) IS TRUE AND p.status = 'PUBLISHED'
+    WHERE p.status = 'PUBLISHED'
     GROUP BY p.id
     ORDER BY p.created_at DESC
-    LIMIT 12
   `
 
-  // If no featured products, show recent products as fallback
-  if (featuredProducts.length === 0) {
-    featuredProducts = await sql`
-      SELECT 
-        p.*,
-        json_agg(
-          DISTINCT jsonb_build_object(
-            'url', pi.url,
-            'alt', pi.alt,
-            'isPrimary', pi.is_primary,
-            'order', pi."order"
-          )
-        ) FILTER (WHERE pi.id IS NOT NULL) as images
-      FROM products p
-      LEFT JOIN product_images pi ON p.id = pi.product_id
-      WHERE p.status = 'PUBLISHED'
-      GROUP BY p.id
-      ORDER BY p.created_at DESC
-      LIMIT 12
-    `
-  }
+  const heroSlides = heroProductsRaw
+    .map((p: any) => {
+      const imgs: any[] = p.images || []
+      const desktop = imgs.find((i) => i.isHomeDesktop) || imgs.find((i) => i.isPrimary) || imgs[0]
+      const mobile = imgs.find((i) => i.isHomeMobile) || imgs.find((i) => i.isPrimary) || imgs[0]
+      const desktopUrl = desktop?.url || mobile?.url
+      const mobileUrl = mobile?.url || desktop?.url
+      if (!desktopUrl) return null
+      return {
+        id: p.id,
+        image: desktopUrl,
+        imageMobile: mobileUrl,
+        name: p.name,
+        description: p.short_desc || p.description || "",
+        slug: p.slug,
+      }
+    })
+    .filter((s): s is NonNullable<typeof s> => s !== null)
 
-  // Get category counts (including products from subcategories)
-  const categoryStats = await sql`
-    SELECT 
-      parent.name,
-      parent.slug,
-      COUNT(DISTINCT p.id) as product_count
-    FROM categories parent
-    LEFT JOIN categories child ON child.parent_id = parent.id
-    LEFT JOIN product_categories pc ON (pc.category_id = parent.id OR pc.category_id = child.id)
-    LEFT JOIN products p ON pc.product_id = p.id AND p.status = 'PUBLISHED'
-    WHERE parent.parent_id IS NULL
-    GROUP BY parent.id, parent.name, parent.slug
-    ORDER BY parent.name
-  `
-
-  // Get latest blog posts
-  const latestPosts = await sql`
-    SELECT 
-      bp.*,
-      u.name as author_name
-    FROM blog_posts bp
-    LEFT JOIN users u ON bp.author_id = u.id
-    WHERE bp.status = 'PUBLISHED'
-    ORDER BY bp.published_at DESC
-    LIMIT 3
+  // ── Top-level categories for the collections section ──
+  const homeCategories = await sql`
+    SELECT id, name, slug, description, image, image_desktop, image_mobile
+    FROM categories
+    WHERE parent_id IS NULL
+    ORDER BY name
   `
 
   return (
@@ -147,78 +119,57 @@ export default async function HomePage() {
       <div className="relative z-10">
 
       {/* Hero Section */}
-      <HeroSectionV2 />
+      <HeroSectionV2 slides={heroSlides} />
 
       
       {/* Collections Section */}
         <section data-theme="dark" className="py-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 min-h-[600px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 min-h-[620px] md:min-h-[820px]">
 
-          {/* Collection 1 - Unspoken Resilience */}
-          <div className="relative group overflow-hidden min-h-[500px] md:min-h-[600px]">
-            {/* Background Image */}
-            <Image
-              src="/img/sword.png"
-              alt="Unspoken Resilience"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-            />
-            {/* Dark overlay */}
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+          {homeCategories.map((category: any) => {
+            const desktopSrc = category.image_desktop || category.image || CATEGORY_FALLBACK_IMAGE
+            const mobileSrc = category.image_mobile || category.image_desktop || category.image || CATEGORY_FALLBACK_IMAGE
+            return (
+            <div key={category.id} className="relative group overflow-hidden min-h-[620px] md:min-h-[820px]">
+              {/* Background Image — device-specific */}
+              <Image
+                src={desktopSrc}
+                alt={category.name}
+                fill
+                sizes="50vw"
+                className="hidden md:block object-cover object-center transition-transform duration-700 group-hover:scale-105"
+              />
+              <Image
+                src={mobileSrc}
+                alt={category.name}
+                fill
+                sizes="100vw"
+                className="md:hidden object-cover object-center transition-transform duration-700 group-hover:scale-105"
+              />
+              {/* Dark overlay */}
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
 
-            {/* Content */}
-            <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-8 md:p-12">
-              <p className="font-sans text-xs uppercase tracking-[0.3em] text-gray-400 mb-3">Collection</p>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
-                Unspoken Resilience
-              </h2>
-              <p className="font-sans text-sm text-gray-300 mb-8 max-w-sm leading-7 font-light">
-                Some things are carried quietly. This collection is for those who
-                endure without needing to announce it — strength stitched into
-                every thread.
-              </p>
-              <Link
-                href="/collections/unspoken-resilience"
-                className="font-sans inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase bg-black/60 hover:bg-[#B8960C] hover:text-white transition-all duration-300"
-              >
-                View Collection
-              </Link>
+              {/* Content */}
+              <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-8 md:p-12">
+                <p className="font-sans text-xs uppercase tracking-[0.3em] text-gray-400 mb-3">Collection</p>
+                <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
+                  {category.name}
+                </h2>
+                {category.description && (
+                  <p className="font-sans text-sm text-gray-300 mb-8 max-w-sm leading-7 font-light">
+                    {category.description}
+                  </p>
+                )}
+                <Link
+                  href={`/collections/${category.slug}`}
+                  className="font-sans inline-flex items-center justify-center border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase bg-black/60 hover:bg-[#B8960C] hover:text-white transition-all duration-300"
+                >
+                  View Collection
+                </Link>
+              </div>
             </div>
-          </div>
-
-          {/* Collection 2 - Still Becoming */}
-          <div className="relative group overflow-hidden min-h-[500px] md:min-h-[600px]">
-            {/* Background Image */}
-            <Image
-              src="/img/silentbloom.png"
-              alt="Still Becoming"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-            />
-            {/* Dark overlay */}
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
-
-            {/* Content */}
-            <div className="absolute inset-0 flex flex-col justify-end items-center text-center p-8 md:p-12">
-              <p className="text-xs uppercase tracking-widest text-gray-300 mb-2">Collection</p>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
-                Still Becoming
-              </h2>
-              <p className="text-sm md:text-base text-gray-300 mb-6 max-w-sm leading-relaxed">
-                Growth is not a moment — it&apos;s a process. Pieces designed for those
-                still finding their shape, still rising, still unfolding into who
-                they are meant to be.
-              </p>
-              <Link
-                href="/collections/still-becoming"
-                className="inline-flex items-center justify-center w-fit border border-[#B8960C] text-[#B8960C] px-6 py-3 text-sm tracking-widest uppercase bg-black/60 hover:bg-[#B8960C] hover:text-white transition-all duration-300"
-              >
-                View Collection
-              </Link>
-            </div>
-          </div>
+            )
+          })}
         </div>
       </section>
 
@@ -226,6 +177,30 @@ export default async function HomePage() {
       {/* <div data-theme="dark"> */}
       <OurStory />
       {/* </div> */}
+
+      {/* Policies */}
+      <section data-theme="light" className="border-t border-black/10 py-16 md:py-20">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-12 px-6 sm:grid-cols-2">
+          <Link
+            href="/exchange-policy"
+            className="group flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1"
+          >
+            <RotateCcw className="mb-4 h-10 w-10 text-[#1a1a1a] group-hover:text-[#B8960C] transition-colors" strokeWidth={2.25} />
+            <span className="font-sans text-sm font-bold uppercase tracking-[0.25em] text-[#1a1a1a] group-hover:text-[#B8960C] transition-colors">
+              Return &amp; Exchange Policy
+            </span>
+          </Link>
+          <Link
+            href="/shipping-policy"
+            className="group flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-1"
+          >
+            <Truck className="mb-4 h-10 w-10 text-[#1a1a1a] group-hover:text-[#B8960C] transition-colors" strokeWidth={2.25} />
+            <span className="font-sans text-sm font-bold uppercase tracking-[0.25em] text-[#1a1a1a] group-hover:text-[#B8960C] transition-colors">
+              Shipping Policy
+            </span>
+          </Link>
+        </div>
+      </section>
 
       </div>
     </div>

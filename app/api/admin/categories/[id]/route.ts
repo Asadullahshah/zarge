@@ -11,7 +11,7 @@ export async function PUT(
     await requireAuth()
 
     const body = await request.json()
-    const { name, slug, description, image, sizeChartImage, parentId } = body
+    const { name, slug, description, image, imageDesktop, imageMobile, sizeChartImage, parentId } = body
 
     const categorySlug = slug || slugify(name)
 
@@ -26,12 +26,17 @@ export async function PUT(
       )
     }
 
+    // Keep legacy `image` populated (defaults to the desktop image) for backward compatibility
+    const legacyImage = image || imageDesktop || imageMobile || null
+
     await sql`
       UPDATE categories SET
         name = ${name},
         slug = ${categorySlug},
         description = ${description || null},
-        image = ${image || null},
+        image = ${legacyImage},
+        image_desktop = ${imageDesktop || null},
+        image_mobile = ${imageMobile || null},
         size_chart_image = ${sizeChartImage || null},
         parent_id = ${parentId || null},
         updated_at = NOW()

@@ -45,16 +45,14 @@ export default async function SalePage({
   const categoryFilter = searchParams.category || "all"
   const sortBy = searchParams.sort || "featured"
 
-  // Get main category IDs
-  const [menCategory, womenCategory, homeCategory] = await Promise.all([
-    sql`SELECT id FROM categories WHERE slug = 'men'`,
-    sql`SELECT id FROM categories WHERE slug = 'women'`,
-    sql`SELECT id FROM categories WHERE slug = 'home-essentials'`,
+  // Get drop category IDs
+  const [unspokenCategory, stillCategory] = await Promise.all([
+    sql`SELECT id FROM categories WHERE slug = 'unspoken-resilience'`,
+    sql`SELECT id FROM categories WHERE slug = 'still-becoming'`,
   ])
 
-  const menId = menCategory[0]?.id
-  const womenId = womenCategory[0]?.id
-  const homeId = homeCategory[0]?.id
+  const unspokenId = unspokenCategory[0]?.id
+  const stillId = stillCategory[0]?.id
 
   // Get product counts for each category
   const getCategoryCount = async (categoryId: string | undefined) => {
@@ -73,10 +71,9 @@ export default async function SalePage({
     return parseInt(result[0]?.total || "0")
   }
 
-  const [menCount, womenCount, homeCount, allCount] = await Promise.all([
-    getCategoryCount(menId),
-    getCategoryCount(womenId),
-    getCategoryCount(homeId),
+  const [unspokenCount, stillCount, allCount] = await Promise.all([
+    getCategoryCount(unspokenId),
+    getCategoryCount(stillId),
     sql`
       SELECT COUNT(DISTINCT p.id) as total
       FROM products p
@@ -92,12 +89,10 @@ export default async function SalePage({
 
   // Determine which category ID to filter by
   let categoryId: string | undefined
-  if (categoryFilter === "men" && menId) {
-    categoryId = menId
-  } else if (categoryFilter === "women" && womenId) {
-    categoryId = womenId
-  } else if (categoryFilter === "home-essentials" && homeId) {
-    categoryId = homeId
+  if (categoryFilter === "unspoken-resilience" && unspokenId) {
+    categoryId = unspokenId
+  } else if (categoryFilter === "still-becoming" && stillId) {
+    categoryId = stillId
   }
 
   // Build queries based on category filter and sort
@@ -504,34 +499,24 @@ export default async function SalePage({
           All ({allCount})
         </Link>
         <Link
-          href="/sale?category=men"
+          href="/sale?category=unspoken-resilience"
           className={`px-4 py-2 rounded transition-colors ${
-            categoryFilter === "men"
+            categoryFilter === "unspoken-resilience"
               ? "bg-primary text-primary-foreground"
               : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
           }`}
         >
-          Men ({menCount})
+          Unspoken Resilience ({unspokenCount})
         </Link>
         <Link
-          href="/sale?category=women"
+          href="/sale?category=still-becoming"
           className={`px-4 py-2 rounded transition-colors ${
-            categoryFilter === "women"
+            categoryFilter === "still-becoming"
               ? "bg-primary text-primary-foreground"
               : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
           }`}
         >
-          Women ({womenCount})
-        </Link>
-        <Link
-          href="/sale?category=home-essentials"
-          className={`px-4 py-2 rounded transition-colors ${
-            categoryFilter === "home-essentials"
-              ? "bg-primary text-primary-foreground"
-              : "bg-[#121213] text-[#BDBDBD] hover:text-[#F7F7F7] border border-[#1A1A1B]"
-          }`}
-        >
-          Home Essentials ({homeCount})
+          Still Becoming ({stillCount})
         </Link>
       </div>
 

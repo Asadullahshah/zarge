@@ -13,6 +13,7 @@ interface ProductGridProps {
     images?: Array<{ url: string; isPrimary?: boolean; color?: string }>
     shortDesc?: string
     available_colors?: string[]
+    color_swatches?: Record<string, string>
     stock?: number
   }>
   columns?: number
@@ -27,9 +28,11 @@ export function ProductGrid({ products, columns = 4 }: ProductGridProps) {
           image={product.images?.find(img => img.isPrimary)?.url ?? product.images?.[0]?.url ?? ""}
           name={product.name}
           fit="Relaxed Fit"
-          category="Men"
-          price={product.salePrice ?? product.price}
+          category="Zargé"
+          price={product.price}
+          salePrice={product.salePrice}
           colors={product.available_colors ?? []}
+          colorSwatches={product.color_swatches}
           slug={product.slug}
         />
       ))}

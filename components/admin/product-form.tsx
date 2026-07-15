@@ -53,13 +53,15 @@ interface ProductFormProps {
 
 export function ProductForm({ product, categories }: ProductFormProps) {
   const router = useRouter()
-  const [images, setImages] = useState<Array<{ url: string; alt?: string; order: number; isPrimary?: boolean; color?: string }>>(
+  const [images, setImages] = useState<Array<{ url: string; alt?: string; order: number; isPrimary?: boolean; color?: string; isHomeMobile?: boolean; isHomeDesktop?: boolean }>>(
     product?.images?.map((img: any) => ({
       url: img.url,
       alt: img.alt,
       order: img.order,
       isPrimary: img.isPrimary || img.is_primary,
       color: img.color,
+      isHomeMobile: img.isHomeMobile ?? img.is_home_mobile ?? false,
+      isHomeDesktop: img.isHomeDesktop ?? img.is_home_desktop ?? false,
     })) || []
   )
   const [selectedCategories, setSelectedCategories] = useState<string[]>(

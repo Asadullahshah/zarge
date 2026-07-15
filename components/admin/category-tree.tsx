@@ -43,10 +43,10 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
       {categories.map((category) => (
         <div
           key={category.id}
-          className="bg-[#121213] rounded-lg border border-[#1A1A1B] overflow-hidden shadow-lg"
+          className="bg-white rounded-xl border border-[#e9eaee] overflow-hidden shadow-sm"
         >
           {/* Parent Category Header */}
-          <div className="p-6 bg-gradient-to-r from-[#1A1A1B] to-[#121213] border-b border-[#1A1A1B]">
+          <div className="p-6 bg-gray-50 border-b border-[#e9eaee]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4 flex-1">
                 <button
@@ -109,17 +109,17 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
 
           {/* Subcategories */}
           {category.children && category.children.length > 0 && expanded[category.id] && (
-            <div className="bg-[#0B0B0C]">
-              <div className="px-6 py-3 border-b border-[#1A1A1B] bg-[#121213]/50">
+            <div className="bg-white">
+              <div className="px-6 py-3 border-b border-[#e9eaee] bg-gray-50">
                 <span className="text-sm font-semibold text-[#BDBDBD] uppercase tracking-wide">
                   Subcategories ({category.children.length})
                 </span>
               </div>
-              <div className="divide-y divide-[#1A1A1B]">
+              <div className="divide-y divide-[#e9eaee]">
                 {category.children.map((child, index) => (
                   <div
                     key={child.id}
-                    className="p-5 hover:bg-[#121213] transition-colors group"
+                    className="p-5 hover:bg-gray-50 transition-colors group"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4 flex-1">
@@ -190,7 +190,7 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
 
           {/* Quick Actions for Parent Category */}
           {(!category.children || category.children.length === 0) && (
-            <div className="px-6 py-4 bg-[#0B0B0C] border-t border-[#1A1A1B]">
+            <div className="px-6 py-4 bg-gray-50 border-t border-[#e9eaee]">
               <div className="flex gap-2">
                 <Link href={`/admin/categories/${category.slug}/products/new`}>
                   <Button size="sm">

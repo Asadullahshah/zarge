@@ -51,6 +51,20 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      // The homepage links to /collections/<slug>; serve them via the generic category route
+      {
+        source: '/collections/:slug',
+        destination: '/category/:slug',
+        permanent: false,
+      },
+      // Retired taxonomy — send legacy category paths home
+      { source: '/men', destination: '/', permanent: true },
+      { source: '/women', destination: '/', permanent: true },
+      { source: '/home-essentials', destination: '/', permanent: true },
+    ]
+  },
 }
 
 module.exports = nextConfig

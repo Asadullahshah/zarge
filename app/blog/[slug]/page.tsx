@@ -367,22 +367,16 @@ export default async function BlogPostPage({
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
-                  href="/men"
+                  href="/collections/unspoken-resilience"
                   className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors"
                 >
-                  Shop Men&apos;s Collection
+                  Shop Unspoken Resilience
                 </Link>
                 <Link
-                  href="/women"
+                  href="/collections/still-becoming"
                   className="px-6 py-3 bg-[#121213] border border-[#1A1A1B] rounded-lg font-semibold hover:border-primary hover:text-primary transition-colors"
                 >
-                  Shop Women&apos;s Collection
-                </Link>
-                <Link
-                  href="/home-essentials"
-                  className="px-6 py-3 bg-[#121213] border border-[#1A1A1B] rounded-lg font-semibold hover:border-primary hover:text-primary transition-colors"
-                >
-                  Shop Home Essentials
+                  Shop Still Becoming
                 </Link>
               </div>
             </div>

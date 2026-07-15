@@ -6,6 +6,7 @@ import Image from "next/image"
 import { formatPrice } from "@/lib/utils"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { getColorHex } from "@/lib/color-utils"
 
 interface ProductCardProps {
   product: {
@@ -18,45 +19,9 @@ interface ProductCardProps {
     shortDesc?: string
     available_colors?: string[]
     available_sizes?: string[]
+    color_swatches?: Record<string, string>
     stock?: number
   }
-}
-
-// Color name to hex mapping
-function getColorHex(colorName: string): string {
-  const colorMap: Record<string, string> = {
-    'white': '#FFFFFF',
-    'black': '#000000',
-    'navy blue': '#001f3f',
-    'navy': '#001f3f',
-    'beige': '#F5F5DC',
-    'cream': '#FFFDD0',
-    'brown': '#8B4513',
-    'grey': '#808080',
-    'gray': '#808080',
-    'maroon': '#800000',
-    'burgundy': '#800020',
-    'olive': '#808000',
-    'khaki': '#C3B091',
-    'pastel pink': '#FFD1DC',
-    'pastel blue': '#AEC6CF',
-    'pastel green': '#B5EAD7',
-    'pastel yellow': '#FFF9C4',
-    'peach': '#FFCBA4',
-    'sky blue': '#87CEEB',
-    'turquoise': '#40E0D0',
-    'purple': '#800080',
-    'red': '#FF0000',
-    'green': '#008000',
-    'yellow': '#FFFF00',
-    'orange': '#FFA500',
-    'pink': '#FFC0CB',
-    'multi color': '#FFD700',
-    'printed': '#FFD700',
-  }
-  
-  const normalized = colorName.trim().toLowerCase()
-  return colorMap[normalized] || '#808080' // Default to grey if not found
 }
 
 export function ProductCard({ product }: ProductCardProps) {
@@ -180,7 +145,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <div className="mb-3">
               <div className="flex flex-wrap gap-1.5 items-center">
                 {allAvailableColors.slice(0, 5).map((color) => {
-                  const colorHex = getColorHex(color)
+                  const colorHex = getColorHex(color, product.color_swatches)
                   return (
                     <div
                       key={color}

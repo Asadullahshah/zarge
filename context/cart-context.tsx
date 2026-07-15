@@ -33,3 +33,10 @@ export function useCart(): CartContextValue {
   }
   return context
 }
+
+/** Notify listeners (cart button, mini-cart) that the cart changed — avoids polling. */
+export function notifyCartUpdated() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("cart:updated"))
+  }
+}

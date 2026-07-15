@@ -6,8 +6,12 @@ import { sendOrderConfirmationEmail } from "@/lib/email"
 import { formatDateTimeInKarachi } from "@/lib/date-utils"
 import { generateOrderNumber } from "@/lib/utils"
 
-const stripe = process.env.STRIPE_SECRET_KEY
-  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+// Only treat Stripe as configured when a real key is present (not the placeholder "sk_test_...")
+const stripeSecret = process.env.STRIPE_SECRET_KEY
+const stripeConfigured =
+  !!stripeSecret && stripeSecret.startsWith("sk_") && !stripeSecret.includes("...")
+const stripe = stripeConfigured
+  ? new Stripe(stripeSecret!, {
       apiVersion: "2025-02-24.acacia" as any,
     })
   : null
@@ -22,16 +26,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email, phone, paymentMethod = "STRIPE", shippingAddress, billingAddress } = body
 
-    if (!email || !shippingAddress) {
+    if ((!email && !phone) || !shippingAddress) {
       return NextResponse.json(
-        { error: "Email and shipping address are required" },
+        { error: "An email or phone number, and a shipping address, are required" },
         { status: 400 }
       )
     }
 
-    if (!paymentMethod || !["STRIPE", "COD"].includes(paymentMethod)) {
+    if (!paymentMethod || !["STRIPE", "COD", "BANK"].includes(paymentMethod)) {
       return NextResponse.json(
-        { error: "Invalid payment method. Must be STRIPE or COD" },
+        { error: "Invalid payment method. Must be STRIPE, COD or BANK" },
         { status: 400 }
       )
     }
@@ -131,8 +135,8 @@ export async function POST(request: NextRequest) {
     const shipping = 0 // Free shipping
     const total = subtotal + tax + shipping
 
-    // Handle COD orders - create order immediately
-    if (paymentMethod === "COD") {
+    // Handle COD / Bank Transfer orders - create order immediately (no online payment)
+    if (paymentMethod === "COD" || paymentMethod === "BANK") {
       const orderNumber = generateOrderNumber()
       const order = await sql`
         INSERT INTO orders (
@@ -160,34 +164,36 @@ export async function POST(request: NextRequest) {
       await sql`DELETE FROM cart_items WHERE cart_id = ${cartData.id}`
       await sql`DELETE FROM carts WHERE id = ${cartData.id}`
 
-      // Send order confirmation email for COD
-      await sendOrderConfirmationEmail({
-        orderNumber: orderNumber,
-        email: email,
-        customerName: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
-        orderItems: orderItemsData.map((itemData) => {
-          const product = items.find((i: any) => i.product_id === itemData.product_id)
-          return {
-            name: product?.product_name || 'Product',
-            quantity: itemData.quantity,
-            price: itemData.price,
-            size: itemData.size || undefined,
-            color: itemData.color || undefined,
-            imageUrl: product?.product_image_url || undefined,
-          }
-        }),
-        subtotal: subtotal,
-        tax: tax,
-        total: total,
-        currency: 'PKR',
-        shippingAddress: shippingAddress,
-        paymentMethod: 'COD',
-        orderDate: formatDateTimeInKarachi(new Date()),
-      })
+      // Send order confirmation email (only when an email was provided)
+      if (email) {
+        await sendOrderConfirmationEmail({
+          orderNumber: orderNumber,
+          email: email,
+          customerName: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+          orderItems: orderItemsData.map((itemData) => {
+            const product = items.find((i: any) => i.product_id === itemData.product_id)
+            return {
+              name: product?.product_name || 'Product',
+              quantity: itemData.quantity,
+              price: itemData.price,
+              size: itemData.size || undefined,
+              color: itemData.color || undefined,
+              imageUrl: product?.product_image_url || undefined,
+            }
+          }),
+          subtotal: subtotal,
+          tax: tax,
+          total: total,
+          currency: 'PKR',
+          shippingAddress: shippingAddress,
+          paymentMethod: paymentMethod,
+          orderDate: formatDateTimeInKarachi(new Date()),
+        })
+      }
 
       return NextResponse.json({
         orderNumber,
-        paymentMethod: "COD",
+        paymentMethod,
       })
     }
 
@@ -195,8 +201,11 @@ export async function POST(request: NextRequest) {
     // Order will be created in webhook AFTER successful payment
     if (!stripe) {
       return NextResponse.json(
-        { error: "Stripe is not configured" },
-        { status: 500 }
+        {
+          error:
+            "Card payment isn't available right now. Please choose Cash on Delivery or Bank Transfer.",
+        },
+        { status: 400 }
       )
     }
 

@@ -2,6 +2,7 @@ import { requireAuth } from "@/lib/auth-helpers"
 import { sql } from "@/lib/db"
 import { SettingsForm } from "@/components/admin/settings-form"
 import { PasswordUpdateForm } from "@/components/admin/password-update-form"
+import { PaymentMethodsForm } from "@/components/admin/payment-methods-form"
 
 export default async function SettingsPage() {
   await requireAuth()
@@ -22,6 +23,11 @@ export default async function SettingsPage() {
       {/* Password Update Section */}
       <div className="max-w-2xl">
         <PasswordUpdateForm />
+      </div>
+
+      {/* Payment Methods Section */}
+      <div className="max-w-4xl">
+        <PaymentMethodsForm initialSettings={settingsMap} />
       </div>
 
       {/* Site Settings Section */}

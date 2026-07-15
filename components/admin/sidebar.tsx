@@ -12,6 +12,7 @@ import {
   BookOpen,
   Star,
   Percent,
+  FileText,
 } from "lucide-react"
 
 const navItems = [
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/messages", label: "Messages", icon: MessageSquare },
   { href: "/admin/blog", label: "Blog", icon: BookOpen },
+  { href: "/admin/policies", label: "Policies", icon: FileText },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ]
 
@@ -29,24 +31,30 @@ export function AdminSidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-64 bg-[#121213] border-r border-[#1A1A1B] min-h-[calc(100vh-73px)] p-4">
-      <nav className="space-y-2">
+    <aside className="w-64 shrink-0 bg-white border-r border-[#e9eaee] min-h-[calc(100vh-64px)] px-3 py-5">
+      <p className="px-3 pb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
+        Menu
+      </p>
+      <nav className="space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
-          
+          const isActive =
+            item.href === "/admin"
+              ? pathname === "/admin"
+              : pathname === item.href || pathname.startsWith(item.href + "/")
+
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-4 py-3 rounded-md transition-colors",
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
                 isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-[#BDBDBD] hover:bg-[#1A1A1B] hover:text-[#F7F7F7]"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
               )}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-[18px] h-[18px] shrink-0" />
               <span>{item.label}</span>
             </Link>
           )
@@ -55,4 +63,3 @@ export function AdminSidebar() {
     </aside>
   )
 }
-

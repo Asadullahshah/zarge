@@ -79,6 +79,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Format as PostgreSQL array literals: {"value1","value2"}
+    const seoKeywordsArray = seoKeywords && seoKeywords.length > 0
+      ? `{${seoKeywords.map((k: string) => `"${String(k).replace(/"/g, '\\"')}"`).join(',')}}`
+      : null
+
+    const relatedPostsArray = relatedPostIds && relatedPostIds.length > 0
+      ? `{${relatedPostIds.map((id: string) => `"${String(id).replace(/"/g, '\\"')}"`).join(',')}}`
+      : null
+
     const result = await sql`
       INSERT INTO blog_posts (
         title, slug, excerpt, content, featured_image, status,
@@ -89,10 +98,10 @@ export async function POST(request: NextRequest) {
         ${featuredImage || null}, ${status || "DRAFT"},
         ${isHubPost || false}, ${hubTopic || null},
         ${seoTitle || null}, ${seoDesc || null},
-        ${seoKeywords && seoKeywords.length > 0 ? JSON.stringify(seoKeywords) : null}::TEXT[],
+        ${seoKeywordsArray}::TEXT[],
         ${canonicalUrl || null}, ${session.user.id},
         ${publishedAt || null},
-        ${relatedPostIds && relatedPostIds.length > 0 ? JSON.stringify(relatedPostIds) : null}::UUID[]
+        ${relatedPostsArray}::UUID[]
       ) RETURNING *
     `
 

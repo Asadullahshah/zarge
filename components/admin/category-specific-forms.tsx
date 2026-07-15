@@ -12,6 +12,7 @@ import { ImageUploader } from "./image-uploader"
 import { getCategoryFormType, PAKISTANI_SIZES, PAKISTANI_FABRICS, PAKISTANI_COLORS, CARE_INSTRUCTIONS } from "@/lib/category-forms"
 import { slugify } from "@/lib/utils"
 import { CreatableSelect } from "@/components/ui/creatable-select"
+import { getColorHex, isHexColor } from "@/lib/color-utils"
 
 // Base schema that all forms extend
 const baseProductSchema = z.object({
@@ -45,13 +46,15 @@ export function CategorySpecificForm({
   formType 
 }: CategorySpecificFormProps) {
   const router = useRouter()
-  const [images, setImages] = useState<Array<{ url: string; alt?: string; order: number; isPrimary?: boolean; color?: string }>>(
+  const [images, setImages] = useState<Array<{ url: string; alt?: string; order: number; isPrimary?: boolean; color?: string; isHomeMobile?: boolean; isHomeDesktop?: boolean }>>(
     product?.images?.map((img: any) => ({
       url: img.url,
       alt: img.alt,
       order: img.order,
       isPrimary: img.isPrimary || img.is_primary,
       color: img.color,
+      isHomeMobile: img.isHomeMobile ?? img.is_home_mobile ?? false,
+      isHomeDesktop: img.isHomeDesktop ?? img.is_home_desktop ?? false,
     })) || []
   )
   const [loading, setLoading] = useState(false)
@@ -144,6 +147,42 @@ export function CategorySpecificForm({
   )
   const [customSize, setCustomSize] = useState("")
   const [customColor, setCustomColor] = useState("")
+  const [customColorHex, setCustomColorHex] = useState("#8B5E3C")
+  // Map of color value -> hex, so swatches render the picked color everywhere
+  const [colorSwatches, setColorSwatches] = useState<Record<string, string>>(
+    product?.color_swatches || {}
+  )
+
+  // Add a custom color from the picker and/or the text field.
+  // Accepts a typed hex (e.g. "#a52a2a"), a name + picked swatch, or the picker alone.
+  const addCustomColor = () => {
+    const typed = customColor.trim()
+    let value: string
+    let hex: string
+    if (typed && isHexColor(typed)) {
+      value = typed
+      hex = typed
+    } else if (typed) {
+      value = typed
+      hex = customColorHex
+    } else {
+      value = customColorHex
+      hex = customColorHex
+    }
+    if (!selectedColors.includes(value)) {
+      setSelectedColors((prev) => [...prev, value])
+    }
+    setColorSwatches((prev) => ({ ...prev, [value]: hex }))
+    setCustomColor("")
+  }
+
+  // Care instructions as multiple tags (stored joined in the care_instructions text column)
+  const [selectedCareInstructions, setSelectedCareInstructions] = useState<string[]>(
+    product?.care_instructions
+      ? String(product.care_instructions).split(",").map((c: string) => c.trim()).filter(Boolean)
+      : []
+  )
+  const [customCareInstruction, setCustomCareInstruction] = useState("")
   
   // Stock matrix: { "size-color": stock }
   const [variantStock, setVariantStock] = useState<Record<string, number>>(() => {
@@ -218,6 +257,8 @@ export function CategorySpecificForm({
         pieceCount: data.pieceCount || null,
         availableSizes: selectedSizes,
         availableColors: selectedColors,
+        colorSwatches, // { colorValue: "#hex" } for swatch rendering
+        careInstructions: selectedCareInstructions.join(", ") || null,
         variantStock, // Send variant stock matrix
         measurements: data.measurements ? Object.fromEntries(
           Object.entries(data.measurements).map(([key, value]) => [
@@ -403,14 +444,76 @@ export function CategorySpecificForm({
         </div>
 
         <div>
-          <Label htmlFor="careInstructions">Care Instructions</Label>
-          <CreatableSelect
-            options={CARE_INSTRUCTIONS}
-            value={watch("careInstructions")}
-            onChange={(value) => setValue("careInstructions", value)}
-            placeholder="Select or type new care instruction..."
-            allowCustom={true}
-          />
+          <Label>Care Instructions</Label>
+          <p className="text-xs text-[#8a8a8a] mb-2">Select all that apply, or add your own.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1">
+            {CARE_INSTRUCTIONS.map((instruction) => (
+              <label key={instruction} className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedCareInstructions.includes(instruction)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedCareInstructions([...selectedCareInstructions, instruction])
+                    } else {
+                      setSelectedCareInstructions(selectedCareInstructions.filter((c) => c !== instruction))
+                    }
+                  }}
+                  className="rounded border-input"
+                />
+                <span className="text-sm">{instruction}</span>
+              </label>
+            ))}
+          </div>
+          <div className="flex gap-2 mt-3">
+            <Input
+              type="text"
+              placeholder="Add custom care instruction..."
+              value={customCareInstruction}
+              onChange={(e) => setCustomCareInstruction(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && customCareInstruction.trim()) {
+                  e.preventDefault()
+                  if (!selectedCareInstructions.includes(customCareInstruction.trim())) {
+                    setSelectedCareInstructions([...selectedCareInstructions, customCareInstruction.trim()])
+                  }
+                  setCustomCareInstruction("")
+                }
+              }}
+              className="flex-1"
+            />
+            <Button
+              type="button"
+              onClick={() => {
+                if (customCareInstruction.trim() && !selectedCareInstructions.includes(customCareInstruction.trim())) {
+                  setSelectedCareInstructions([...selectedCareInstructions, customCareInstruction.trim()])
+                  setCustomCareInstruction("")
+                }
+              }}
+              size="sm"
+            >
+              Add
+            </Button>
+          </div>
+          {selectedCareInstructions.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {selectedCareInstructions.map((instruction) => (
+                <span
+                  key={instruction}
+                  className="inline-flex items-center gap-1 px-2 py-1 bg-primary/20 text-primary rounded text-sm"
+                >
+                  {instruction}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCareInstructions(selectedCareInstructions.filter((c) => c !== instruction))}
+                    className="hover:text-primary/80"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -511,31 +614,34 @@ export function CategorySpecificForm({
               </label>
             ))}
           </div>
-          <div className="flex gap-2 mt-3">
+          <div className="flex items-center gap-2 mt-3">
+            {/* Color picker — pick a swatch; the hex is used if no name is typed */}
+            <input
+              type="color"
+              aria-label="Pick a custom color"
+              value={customColorHex}
+              onChange={(e) => setCustomColorHex(e.target.value)}
+              className="h-10 w-12 shrink-0 cursor-pointer rounded-md border border-input bg-transparent p-1"
+            />
+            <span className="shrink-0 font-mono text-xs uppercase text-[#555] tabular-nums w-[70px]">
+              {customColorHex}
+            </span>
             <Input
               type="text"
-              placeholder="Add custom color..."
+              placeholder="Color name or #hex — blank uses the picker"
               value={customColor}
               onChange={(e) => setCustomColor(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && customColor.trim()) {
+                if (e.key === 'Enter') {
                   e.preventDefault()
-                  if (!selectedColors.includes(customColor.trim())) {
-                    setSelectedColors([...selectedColors, customColor.trim()])
-                  }
-                  setCustomColor("")
+                  addCustomColor()
                 }
               }}
               className="flex-1"
             />
             <Button
               type="button"
-              onClick={() => {
-                if (customColor.trim() && !selectedColors.includes(customColor.trim())) {
-                  setSelectedColors([...selectedColors, customColor.trim()])
-                  setCustomColor("")
-                }
-              }}
+              onClick={addCustomColor}
               size="sm"
             >
               Add Color
@@ -546,8 +652,12 @@ export function CategorySpecificForm({
               {selectedColors.filter(c => !PAKISTANI_COLORS.includes(c)).map((color) => (
                 <span
                   key={color}
-                  className="inline-flex items-center gap-1 px-2 py-1 bg-primary/20 text-primary rounded text-sm"
+                  className="inline-flex items-center gap-1.5 px-2 py-1 bg-primary/20 text-primary rounded text-sm"
                 >
+                  <span
+                    className="inline-block h-3.5 w-3.5 rounded-full border border-black/20 shrink-0"
+                    style={{ backgroundColor: getColorHex(color, colorSwatches) }}
+                  />
                   {color}
                   <button
                     type="button"

@@ -5,7 +5,7 @@ import { createPortal } from "react-dom"
 import Image from "next/image"
 import Link from "next/link"
 import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react"
-import { useCart } from "@/context/cart-context"
+import { useCart, notifyCartUpdated } from "@/context/cart-context"
 import { Button } from "@/components/ui/button"
 
 interface CartItemImage {
@@ -80,6 +80,7 @@ export function MiniCart() {
 
       if (response.ok) {
         await fetchCart()
+        notifyCartUpdated()
       }
     } catch (error) {
       console.error("Error updating quantity:", error)
@@ -95,6 +96,7 @@ export function MiniCart() {
 
       if (response.ok) {
         await fetchCart()
+        notifyCartUpdated()
       }
     } catch (error) {
       console.error("Error removing item:", error)
@@ -155,7 +157,7 @@ export function MiniCart() {
               </Button>
             </div>
           ) : (
-            <ul className="flex-1 space-y-4 overflow-y-auto px-6 py-4">
+            <ul data-lenis-prevent className="flex-1 space-y-4 overflow-y-auto px-6 py-4">
               {items.map((item) => (
                 <li
                   key={item.id}

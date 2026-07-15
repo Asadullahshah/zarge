@@ -8,20 +8,22 @@
 
 @layer base {
   :root {
+    /* Modern charcoal (#1a1a1a-ish) instead of pure black for a softer, premium feel */
+    --charcoal: 240 6% 12%;
     --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --foreground: 240 6% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 240 6% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover-foreground: 240 6% 12%;
     --primary: 43 54% 58%;
     --primary-foreground: 240 10% 4%;
     --secondary: 0 0% 78%;
     --secondary-foreground: 240 10% 4%;
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 30%;
+    --muted-foreground: 0 0% 34%;
     --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 0%;
+    --accent-foreground: 240 6% 12%;
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 85%;
@@ -36,10 +38,29 @@
     @apply border-border;
   }
   body {
-    @apply text-black font-sans;
+    @apply font-sans;
+    color: hsl(var(--charcoal));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Lenis smooth-scroll (premium inertia). When Lenis is active it manages scroll,
+     so disable native smooth behavior and let nested [data-lenis-prevent] scroll normally. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
   }
   h1, h2, h3, h4, h5, h6, p, span, li, a {
     color: inherit;
@@ -441,9 +462,9 @@
   color: #000000 !important;
 }
 
-/* Active nav item keeps the gold primary color */
-.admin-layout [class*="bg-primary"],
-.admin-layout [class*="active"] {
+/* Active nav item keeps the gold primary color.
+   Use ~= (exact token) so translucent variants like bg-primary/10 keep their opacity. */
+.admin-layout [class~="bg-primary"] {
   background-color: hsl(43, 54%, 58%) !important;
   color: #111111 !important;
 }
@@ -520,11 +541,119 @@
 .admin-layout [class*="bg-neutral-900"],
 .admin-layout [class*="bg-neutral-800"],
 .admin-layout [class*="bg-\[#0B0B0C\]"],
-.admin-layout [class*="bg-\[#121213\]"] {
+.admin-layout [class*="bg-\[#121213\]"],
+.admin-layout [class*="bg-\[#1A1A1B\]"],
+.admin-layout [class*="bg-\[#1a1a1b\]"] {
   background-color: #ffffff !important;
+}
+
+/* Panel-tint variant so nested dark boxes stay visually distinct on the light theme */
+.admin-layout [class*="bg-\[#1A1A1B\]"],
+.admin-layout [class*="bg-\[#1a1a1b\]"] {
+  background-color: #f9fafb !important;
 }
 
 /* Dark text overrides inside admin */
 .admin-layout [class*="text-white"] {
   color: #111111 !important;
 }
+
+/* ============================================
+   ADMIN — PROFESSIONAL POLISH (redesign layer)
+   Appended last so it wins over the base overrides.
+   ============================================ */
+.admin-layout {
+  background-color: #f6f7f9 !important;
+  color: #1f2937 !important;
+  font-feature-settings: "cv02", "cv03", "cv04";
+}
+.admin-layout main,
+.admin-layout [role="main"] {
+  background-color: #f6f7f9 !important;
+}
+
+/* Content panels become real cards (exclude the shell chrome) */
+.admin-layout [class*="bg-\[#121213\]"]:not(aside):not(nav):not(header),
+.admin-layout [class*="bg-\[#0B0B0C\]"]:not(aside):not(nav):not(header) {
+  background-color: #ffffff !important;
+  border: 1px solid #e9eaee !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.05) !important;
+}
+
+/* Subtle inner tiles / rows */
+.admin-layout [class*="bg-\[#1A1A1B\]"],
+.admin-layout [class*="bg-\[#1a1a1b\]"] {
+  background-color: #f3f4f6 !important;
+  border-color: #e9eaee !important;
+}
+
+/* Typography */
+.admin-layout h1,
+.admin-layout h2,
+.admin-layout h3 {
+  color: #0f172a !important;
+  letter-spacing: -0.01em;
+}
+.admin-layout [class*="text-\[#BDBDBD\]"],
+.admin-layout [class*="text-\[#8a8a8a\]"],
+.admin-layout [class*="text-\[#555\]"] {
+  color: #6b7280 !important;
+}
+
+/* Tables */
+.admin-layout table {
+  border: 1px solid #e9eaee !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.admin-layout thead,
+.admin-layout thead tr {
+  background-color: #f9fafb !important;
+}
+.admin-layout th {
+  color: #6b7280 !important;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 16px !important;
+}
+.admin-layout td {
+  padding: 14px 16px !important;
+}
+.admin-layout tbody tr {
+  transition: background-color 0.15s ease;
+}
+.admin-layout tbody tr:hover {
+  background-color: #f9fafb !important;
+}
+
+/* Inputs — refined focus ring in brand gold */
+.admin-layout input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+.admin-layout textarea,
+.admin-layout select {
+  border-radius: 8px !important;
+}
+.admin-layout input:focus,
+.admin-layout textarea:focus,
+.admin-layout select:focus {
+  border-color: #b8960c !important;
+  box-shadow: 0 0 0 3px rgba(184, 150, 12, 0.15) !important;
+  outline: none !important;
+}
+
+/* Buttons */
+.admin-layout button {
+  border-radius: 8px !important;
+}
+/* ============================================
+   MODERN CHARCOAL — replace pure black on the storefront
+   Unlayered so it wins over Tailwind's .text-black / .bg-black;
+   admin (.admin-layout) uses !important rules and is unaffected.
+   ============================================ */
+.text-black { color: hsl(var(--charcoal)); }
+.bg-black { background-color: hsl(var(--charcoal)); }
+.border-black { border-color: hsl(var(--charcoal)); }
+.hover\:bg-black:hover { background-color: hsl(var(--charcoal)); }
+.hover\:text-black:hover { color: hsl(var(--charcoal)); }

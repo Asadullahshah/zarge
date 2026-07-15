@@ -1,10 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Percent, AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
+import { Percent, AlertCircle, CheckCircle2, Loader2, Trash2, Tag } from "lucide-react"
+
+interface AppliedSale {
+  id: string
+  percentage: number
+  target: string
+  category_id: string | null
+  category_name: string | null
+  product_count: number
+  created_at: string
+}
 
 interface SalesManagerProps {
   mainCategories: Array<{ id: string; name: string; slug: string }>
@@ -20,12 +30,54 @@ interface SalesManagerProps {
 type SaleTarget = "INVENTORY" | "MAIN_CATEGORY" | "SUBCATEGORY"
 
 export function SalesManager({ mainCategories, subCategories }: SalesManagerProps) {
+  const [activeTab, setActiveTab] = useState<"apply" | "applied">("apply")
   const [salePercentage, setSalePercentage] = useState("")
   const [saleTarget, setSaleTarget] = useState<SaleTarget>("INVENTORY")
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [appliedSales, setAppliedSales] = useState<AppliedSale[]>([])
+  const [salesLoading, setSalesLoading] = useState(false)
+  const [removingId, setRemovingId] = useState<string | null>(null)
+
+  const fetchSales = useCallback(async () => {
+    setSalesLoading(true)
+    try {
+      const res = await fetch("/api/admin/sales", { credentials: "include" })
+      const data = await res.json()
+      if (res.ok) setAppliedSales(data.sales || [])
+    } catch {
+      /* ignore */
+    } finally {
+      setSalesLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchSales()
+  }, [fetchSales])
+
+  const handleRemoveSale = async (id: string) => {
+    setRemovingId(id)
+    try {
+      const res = await fetch(`/api/admin/sales/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+      if (res.ok) {
+        await fetchSales()
+      }
+    } finally {
+      setRemovingId(null)
+    }
+  }
+
+  const saleLabel = (sale: AppliedSale) => {
+    if (sale.target === "MANUAL") return "Manual / legacy sale"
+    if (sale.target === "INVENTORY") return "Entire Inventory"
+    return sale.category_name || "Category"
+  }
 
   // Group subcategories by parent for display
   const subCategoriesByParent = subCategories.reduce((acc, subcat) => {
@@ -82,7 +134,10 @@ export function SalesManager({ mainCategories, subCategories }: SalesManagerProp
       setSuccess(
         `✅ Sale applied successfully! ${data.updatedCount || 0} products updated with ${percentage}% off.`
       )
-      
+
+      // Refresh the applied-sales list
+      fetchSales()
+
       // Reset form after 3 seconds
       setTimeout(() => {
         setSalePercentage("")
@@ -113,7 +168,34 @@ export function SalesManager({ mainCategories, subCategories }: SalesManagerProp
 
   return (
     <div className="space-y-6">
-      {/* Sale Form */}
+      {/* Tabs */}
+      <div className="flex gap-1 border-b border-[#1A1A1B]">
+        <button
+          type="button"
+          onClick={() => setActiveTab("apply")}
+          className={`px-5 py-3 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+            activeTab === "apply"
+              ? "border-primary text-primary"
+              : "border-transparent text-[#BDBDBD] hover:text-[#F7F7F7]"
+          }`}
+        >
+          Apply Sale
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("applied")}
+          className={`px-5 py-3 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+            activeTab === "applied"
+              ? "border-primary text-primary"
+              : "border-transparent text-[#BDBDBD] hover:text-[#F7F7F7]"
+          }`}
+        >
+          Applied Sales ({appliedSales.length})
+        </button>
+      </div>
+
+      {activeTab === "apply" && (
+      /* Sale Form */
       <div className="bg-[#121213] p-6 rounded-lg border border-[#1A1A1B]">
         <h2 className="text-2xl font-serif font-bold mb-6">Apply Sale</h2>
 
@@ -325,6 +407,60 @@ export function SalesManager({ mainCategories, subCategories }: SalesManagerProp
           </div>
         </div>
       </div>
+      )}
+
+      {activeTab === "applied" && (
+        <div className="bg-[#121213] p-6 rounded-lg border border-[#1A1A1B]">
+          <h2 className="text-2xl font-serif font-bold mb-6">Applied Sales</h2>
+          {salesLoading ? (
+            <div className="flex items-center gap-2 text-[#BDBDBD]">
+              <Loader2 className="w-4 h-4 animate-spin" /> Loading…
+            </div>
+          ) : appliedSales.length === 0 ? (
+            <p className="text-[#BDBDBD]">No sales have been applied yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {appliedSales.map((sale) => (
+                <div
+                  key={sale.id}
+                  className="flex items-center justify-between gap-4 p-4 rounded-lg border border-[#1A1A1B]"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary">
+                      <Tag className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="font-semibold">
+                        {sale.percentage != null ? `${Number(sale.percentage)}% off — ` : ""}
+                        {saleLabel(sale)}
+                      </div>
+                      <div className="text-sm text-[#BDBDBD]">
+                        {sale.product_count} product{sale.product_count === 1 ? "" : "s"}
+                        {sale.created_at ? ` · ${new Date(sale.created_at).toLocaleDateString()}` : ""}
+                      </div>
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleRemoveSale(sale.id)}
+                    disabled={removingId === sale.id}
+                  >
+                    {removingId === sale.id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Remove
+                      </>
+                    )}
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
