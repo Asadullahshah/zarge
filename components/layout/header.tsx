@@ -110,7 +110,7 @@ export function Header() {
             {/* LOGO */}
             <Link href="/" className="shrink-0 transition-opacity hover:opacity-90">
               <Image
-                src="/img/Zarge-removebg-preview.png"
+                src="/img/Zarge.png"
                 alt="Zargé Logo"
                 width={168}
                 height={48}
