@@ -3,6 +3,7 @@ import { sql } from "@/lib/db"
 import { cookies } from "next/headers"
 import Stripe from "stripe"
 import { sendOrderConfirmationEmail } from "@/lib/email"
+import { sendOrderConfirmationWhatsApp } from "@/lib/whatsapp"
 import { formatDateTimeInKarachi } from "@/lib/date-utils"
 import { generateOrderNumber } from "@/lib/utils"
 
@@ -189,6 +190,20 @@ export async function POST(request: NextRequest) {
           paymentMethod: paymentMethod,
           orderDate: formatDateTimeInKarachi(new Date()),
         })
+      }
+
+      // Send order confirmation WhatsApp message (only when a phone number was provided)
+      if (phone) {
+        await sendOrderConfirmationWhatsApp(
+          orderData,
+          orderItemsData.map((itemData) => {
+            const product = items.find((i: any) => i.product_id === itemData.product_id)
+            return {
+              name: product?.product_name || "Product",
+              quantity: itemData.quantity,
+            }
+          })
+        )
       }
 
       return NextResponse.json({
