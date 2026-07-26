@@ -423,7 +423,7 @@ export function CategorySpecificForm({
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="fabricType">Fabric Type</Label>
+            <Label htmlFor="fabricType">Fabric</Label>
             <CreatableSelect
               options={fabrics}
               value={watch("fabricType")}
@@ -434,7 +434,7 @@ export function CategorySpecificForm({
           </div>
 
           <div>
-            <Label htmlFor="fabricMaterial">Fabric Material Composition</Label>
+            <Label htmlFor="fabricMaterial">Material</Label>
             <Input
               id="fabricMaterial"
               {...register("fabricMaterial")}
