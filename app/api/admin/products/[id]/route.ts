@@ -325,12 +325,20 @@ export async function PUT(
       const productPrice = parsedPrice || parseFloat(productData?.price || '0')
       const productSku = sku || productData?.sku || `PROD-${params.id.substring(0, 8)}`
       
-      // Delete existing variants for this product (we'll recreate them)
-      await sql`DELETE FROM variants WHERE product_id = ${params.id}`
-      
+      // Fetch existing variants so we can update stock in place instead of deleting and
+      // recreating them - deleting a variant that a past order_items row references
+      // violates the order_items_variant_id_fkey constraint.
+      const existingVariants = await sql`SELECT id, options FROM variants WHERE product_id = ${params.id}`
+      const existingByKey = new Map<string, { id: string }>()
+      for (const v of existingVariants) {
+        const opts: any = v.options || {}
+        const key = `${opts.size || ''}-${opts.color || ''}`
+        existingByKey.set(key, { id: v.id })
+      }
+
       // Generate all combinations
       const combinations: Array<{ size: string | null; color: string | null }> = []
-      
+
       if (parsedSizes.length > 0 && parsedColors.length > 0) {
         // Size + Color combinations
         for (const size of parsedSizes) {
@@ -350,22 +358,37 @@ export async function PUT(
         }
       }
 
+      const seenKeys = new Set<string>()
+
       // Create/update variants with stock
       for (const combo of combinations) {
         const key = `${combo.size || ''}-${combo.color || ''}`
         const stockValue = variantStock[key] || 0
-        
-        // Only create variant if stock is set
+        seenKeys.add(key)
+
+        const existing = existingByKey.get(key)
+
+        if (existing) {
+          // Combination already has a variant row - just update its stock/price
+          await sql`
+            UPDATE variants
+            SET stock = ${stockValue}, price = ${productPrice}, updated_at = NOW()
+            WHERE id = ${existing.id}
+          `
+          continue
+        }
+
+        // Only create a new variant if stock is set
         if (stockValue > 0) {
           const options: any = {}
           if (combo.size) options.size = combo.size
           if (combo.color) options.color = combo.color
-          
+
           // Generate SKU
           let variantSku = productSku
           if (combo.size) variantSku += `-${combo.size.toUpperCase()}`
           if (combo.color) variantSku += `-${combo.color.toUpperCase().replace(/\s+/g, '-')}`
-          
+
           // Ensure unique SKU
           let finalSku = variantSku
           let counter = 1
@@ -375,10 +398,10 @@ export async function PUT(
             finalSku = `${variantSku}-${counter}`
             counter++
           }
-          
+
           // Create variant name
           const variantName = [combo.size, combo.color].filter(Boolean).join(" - ") || undefined
-          
+
           await sql`
             INSERT INTO variants (product_id, sku, name, options, price, stock)
             VALUES (
@@ -390,6 +413,22 @@ export async function PUT(
               ${stockValue}
             )
           `
+        }
+      }
+
+      // Clean up variants for size/color combinations that are no longer offered.
+      // If a variant was already ordered, deleting it would hit the same FK constraint,
+      // so fall back to zeroing its stock instead of removing the row.
+      for (const [key, existing] of existingByKey) {
+        if (seenKeys.has(key)) continue
+        try {
+          await sql`DELETE FROM variants WHERE id = ${existing.id}`
+        } catch (error: any) {
+          if (error?.code === '23503') {
+            await sql`UPDATE variants SET stock = 0, updated_at = NOW() WHERE id = ${existing.id}`
+          } else {
+            throw error
+          }
         }
       }
     }

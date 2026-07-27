@@ -289,6 +289,9 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
     }
   }
 
+  // Fall back to the default size chart image so the button always has something to show
+  const displaySizeChartImage = sizeChartImage || "/img/Size.jpeg"
+
   // If sale_price exists and is greater than 0, show sale price as main price
   const hasSale = product.sale_price != null && product.sale_price > 0
   const displayPrice = hasSale ? (product.sale_price ?? product.price) : product.price
@@ -331,7 +334,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
       {/*   Black Overley 
             Size Chart White Card    // */}
 
-      {isSizeChartOpen && sizeChartImage && createPortal (
+      {isSizeChartOpen && createPortal (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
           onClick={() => setIsSizeChartOpen(false)}
@@ -352,9 +355,10 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
               <h3 className="mb-4 pr-10 text-lg font-semibold">Size Chart</h3>
               <div className="relative w-full aspect-square max-w-[70vh] mx-auto">
               <Image
-                src={sizeChartImage}
+                src={displaySizeChartImage}
                 alt="Size Chart"
-                fill
+                width={1000}
+                height={1000}
                 className="object-contain"
               />
               </div>
@@ -381,6 +385,13 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
       {/* Size Selection */}
       {product.available_sizes && product.available_sizes.length > 0 && (
         <div>
+          <button
+            type="button"
+            onClick={() => setIsSizeChartOpen(true)}
+            className="mb-3 inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-primary hover:text-primary transition-colors"
+          >
+            Size Chart
+          </button>
           <label className="text-sm font-semibold mb-3 flex items-center gap-2">
             <Ruler className="w-4 h-4" />
             Select Size <span className="text-red-500">*</span>
@@ -427,18 +438,6 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
             <p className="text-sm text-amber-600 mt-2">
               Please select a color as well
             </p>
-          )}
-          {sizeChartImage && (
-            <button
-              type="button"
-              onClick={() => {
-                setIsSizeChartOpen(true)
-              }}
-              className="mt-3 inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-primary hover:text-primary transition-colors"
-            >
-              <Ruler className="w-4 h-4" />
-              Size Chart
-            </button>
           )}
         </div>
       )}
