@@ -3,6 +3,7 @@ import { Inter, Playfair_Display, Montserrat } from "next/font/google"
 import "./globals.css"
 import Image from "next/image"
 import { Header } from "@/components/layout/header"
+import { sql } from "@/lib/db"
 import { Footer } from "@/components/layout/footerV2"
 import { AuthProvider } from "@/components/providers/session-provider"
 import { CartProvider } from "@/context/cart-context"
@@ -122,6 +123,14 @@ export default async function RootLayout({
   const isCartPage = pathname.startsWith("/cart")
   const isHomePage = pathname === "/"
 
+  let bannerEnabled = false
+  let bannerMessage = ""
+  if (!isAdmin) {
+    const rows = await sql`SELECT enabled, message FROM site_settings WHERE key = 'promo_banner'`
+    bannerEnabled = rows[0]?.enabled ?? false
+    bannerMessage = rows[0]?.message ?? ""
+  }
+
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${montserrat.variable}`}>
       <body className={`${inter.className} bg-white`}>
@@ -155,7 +164,7 @@ export default async function RootLayout({
             <AuthProvider>
               <CartProvider>
                 <NetworkStatus />
-                {!isAdmin && <Header />}
+                {!isAdmin && <Header bannerEnabled={bannerEnabled} bannerMessage={bannerMessage} />}
                 <ScrollToHash />
                 <SmoothScroll enabled={!isAdmin}>
                   <main className={`flex flex-1 flex-col ${isHomePage ? "" : "bg-white"}`}>{children}</main>

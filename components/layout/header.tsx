@@ -8,13 +8,20 @@ import { CartButton } from "./cart-button"
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { usePathname } from "next/navigation"
+import { PromoBanner } from "./promo-banner"
 
 const COLLECTIONS = [
   { name: "Unspoken Resilience", slug: "unspoken-resilience" },
   { name: "Still Becoming", slug: "still-becoming" },
 ]
 
-export function Header() {
+export function Header({
+  bannerEnabled = false,
+  bannerMessage = "",
+}: {
+  bannerEnabled?: boolean
+  bannerMessage?: string
+}) {
   const pathname = usePathname()
   const isHomePage = pathname === "/"
   const isCategoryPage = pathname.startsWith("/category/")
@@ -101,9 +108,11 @@ export function Header() {
 
   return (
     <>
-      <header className={`sticky top-0 z-[60] transition-transform duration-300 ${headerBg} ${
+      <div className={`sticky top-0 z-[60] transition-transform duration-300 ${
         visible ? "translate-y-0" : "-translate-y-full"
       }`}>
+        {bannerEnabled && <PromoBanner message={bannerMessage} />}
+        <header className={headerBg}>
         <div className="w-full px-4">
           <div className="relative flex h-16 items-center justify-between">
 
@@ -173,7 +182,8 @@ export function Header() {
 
           </div>
         </div>
-      </header>
+        </header>
+      </div>
 
       {/* MOBILE MENU */}
       {mounted && mobileMenuOpen && createPortal(
