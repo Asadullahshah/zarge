@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS orders (
   phone TEXT,
   status TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED')),
   payment_status TEXT DEFAULT 'PENDING' CHECK (payment_status IN ('PENDING', 'PAID', 'FAILED', 'REFUNDED')),
-  payment_method TEXT DEFAULT 'STRIPE' CHECK (payment_method IN ('STRIPE', 'COD')),
+  payment_method TEXT DEFAULT 'STRIPE' CHECK (payment_method IN ('STRIPE', 'COD', 'BANK')),
   payment_intent_id TEXT,
   subtotal DECIMAL(10, 2) NOT NULL,
   tax DECIMAL(10, 2) NOT NULL,
