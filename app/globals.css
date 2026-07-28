@@ -600,6 +600,9 @@
 .admin-layout [class*="text-\[#555\]"] {
   color: #6b7280 !important;
 }
+.admin-layout [class*="text-\[#F7F7F7\]"] {
+  color: #111827 !important;
+}
 
 /* Tables */
 .admin-layout table {
