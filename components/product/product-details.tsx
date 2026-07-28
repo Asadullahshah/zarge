@@ -211,7 +211,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
 
     // Check if both size and color options are available
     const hasSizes = product.available_sizes && product.available_sizes.length > 0
-    const hasColors = product.available_colors && product.available_colors.length > 1
+    const hasColors = product.available_colors && product.available_colors.length > 0
 
     // If color is selected but size is not, show message to select size
     if (selectedColor && hasSizes && !selectedSize) {
@@ -434,7 +434,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
               Selected: <span className="text-primary font-semibold">{selectedSize}</span>
             </p>
           )}
-          {selectedSize && product.available_colors && product.available_colors.length > 1 && !selectedColor && (
+          {selectedSize && product.available_colors && product.available_colors.length > 0 && !selectedColor && (
             <p className="text-sm text-amber-600 mt-2">
               Please select a color as well
             </p>
@@ -447,7 +447,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
         <div>
           <label className="text-sm font-semibold mb-3 flex items-center gap-2">
             <Palette className="w-4 h-4" />
-            Select Color {product.available_colors.length > 1 && <span className="text-red-500">*</span>}
+            Select Color {product.available_colors.length > 0 && <span className="text-red-500">*</span>}
           </label>
           <div className="flex flex-wrap gap-2">
             {product.available_colors.map((color) => {
@@ -545,7 +545,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
             loading || 
             added || 
             (product.available_sizes && product.available_sizes.length > 0 && !selectedSize) ||
-            (product.available_colors && product.available_colors.length > 1 && !selectedColor)
+            (product.available_colors && product.available_colors.length > 0 && !selectedColor)
           }
           size="lg"
           variant="outline"
@@ -567,7 +567,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
 
             // Check if both size and color options are available
             const hasSizes = product.available_sizes && product.available_sizes.length > 0
-            const hasColors = product.available_colors && product.available_colors.length > 1
+            const hasColors = product.available_colors && product.available_colors.length > 0
 
             // If color is selected but size is not, show message to select size
             if (selectedColor && hasSizes && !selectedSize) {
@@ -632,7 +632,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
           disabled={
             loading || 
             (product.available_sizes && product.available_sizes.length > 0 && !selectedSize) ||
-            (product.available_colors && product.available_colors.length > 1 && !selectedColor)
+            (product.available_colors && product.available_colors.length > 0 && !selectedColor)
           }
           size="lg"
           className="flex-1 bg-primary hover:bg-primary/85 text-primary-foreground transition-colors"
