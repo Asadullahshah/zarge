@@ -58,7 +58,7 @@ export function OurStory() {
             modalOpen ? "h-[100%]" : "h-0"
           } overflow-hidden`}
         >
-          <div className="p-8 h-full overflow-y-auto">
+          <div className="p-8 h-full overflow-y-auto" data-lenis-prevent>
             {/* Close button */}
             <button
               onClick={() => setModalOpen(false)}
