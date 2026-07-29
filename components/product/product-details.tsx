@@ -642,7 +642,7 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
         <Button
           variant="outline"
           size="lg"
-          className="border-gray-300 hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
+          className="hidden border-gray-300 hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors"
         >
           <Heart className="w-5 h-5" />
         </Button>
