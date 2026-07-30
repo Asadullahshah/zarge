@@ -11,8 +11,8 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Zarge",
-  description: "Discover premium luxury fashion and home essentials at Zarge. Shop elegant formal wear, semi-formal apparel for men and women, plus exclusive home textiles including premium bedsheets, quilts, blankets, and pillow covers. Pakistani craftsmanship meets modern luxury.",
+  title: "Wearable narratives stitched through embroidery | Zarge",
+  description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
   keywords: [
     "premium clothing",
     "luxury fashion",
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
     "luxury home decor"
   ],
   openGraph: {
-    title: "Premium Luxury Fashion & Home Essentials | Zarge",
-    description: "Discover premium luxury fashion and home essentials at Zarge. Shop elegant formal wear, semi-formal apparel for men and women, plus exclusive home textiles.",
+    title: "Wearable narratives stitched through embroidery | Zarge",
+    description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
     type: "website",
     images: [
       {
@@ -45,8 +45,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Premium Luxury Fashion & Home Essentials | Zarge",
-    description: "Discover premium luxury fashion and home essentials at Zarge. Shop elegant formal wear, semi-formal apparel for men and women.",
+    title: "Wearable narratives stitched through embroidery | Zarge",
+    description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
   },
 }
 

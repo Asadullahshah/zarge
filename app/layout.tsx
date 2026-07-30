@@ -38,10 +38,10 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com'),
   title: {
-    default: "Zarge - Premium Luxury Fashion & Home Essentials",
+    default: "Wearable narratives stitched through embroidery | Zarge",
     template: "%s | Zarge"
   },
-  description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles from Zarge. Premium clothing for men and women, plus exclusive home essentials including bedsheets, quilts, blankets, and more.",
+  description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
   keywords: [
     "premium clothing",
     "luxury fashion",
@@ -72,13 +72,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com',
     siteName: "Zarge",
-    title: "Zarge - Premium Luxury Fashion & Home Essentials",
-    description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles.",
+    title: "Wearable narratives stitched through embroidery | Zarge",
+    description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Zarge - Premium Luxury Fashion & Home Essentials",
-    description: "Shop premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles.",
+    title: "Wearable narratives stitched through embroidery | Zarge",
+    description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
   },
   robots: {
     index: true,
