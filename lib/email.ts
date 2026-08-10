@@ -96,7 +96,7 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
     const resend = await import("resend")
     const resendClient = new resend.Resend(process.env.RESEND_API_KEY)
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.noirefit.com'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.zargeofficial.com'
 
     const ensureAbsoluteUrl = (url: string | undefined): string | undefined => {
       if (!url) return undefined
@@ -237,7 +237,7 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
 
                       <p style="margin: 30px 0 20px 0; font-size: 14px; line-height: 1.6; color: #575757;">We&apos;ll send you another email when your order ships.</p>
 
-                      <p style="margin: 20px 0; font-size: 14px; line-height: 1.6; color: #575757;">If you have any questions, please contact us at <a href="mailto:info@noirefit.com" style="color: #B8960C; text-decoration: none; font-weight: 500;">info@noirefit.com</a></p>
+                      <p style="margin: 20px 0; font-size: 14px; line-height: 1.6; color: #575757;">If you have any questions, please contact us at <a href="mailto:info@zargeofficial.com" style="color: #B8960C; text-decoration: none; font-weight: 500;">info@zargeofficial.com</a></p>
                     </td>
                   </tr>
 
@@ -249,7 +249,7 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
                         <strong style="color: #1D1D20; font-weight: 600;">Zargé</strong>
                       </p>
                       <p style="margin: 16px 0 0 0;">
-                        <a href="https://www.noirefit.com" style="color: #B8960C; text-decoration: none; font-size: 14px; font-weight: 500;">www.noirefit.com</a>
+                        <a href="https://www.zargeofficial.com" style="color: #B8960C; text-decoration: none; font-size: 14px; font-weight: 500;">www.zargeofficial.com</a>
                       </p>
                     </td>
                   </tr>
@@ -261,7 +261,7 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
       </html>
     `
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargé.com>"
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargeofficial.com>"
 
     console.log("📧 Attempting to send email via Resend:", {
       from: fromEmail,
@@ -360,7 +360,7 @@ async function sendShippingEmailWithResend(data: ShippingConfirmationEmailData):
     const resend = await import("resend")
     const resendClient = new resend.Resend(process.env.RESEND_API_KEY)
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.noirefit.com'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.zargeofficial.com'
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -424,7 +424,7 @@ async function sendShippingEmailWithResend(data: ShippingConfirmationEmailData):
 
                       <p style="margin: 30px 0 20px 0; font-size: 14px; line-height: 1.6; color: #575757;">You can use your tracking number to track your package&apos;s delivery status.</p>
 
-                      <p style="margin: 20px 0; font-size: 14px; line-height: 1.6; color: #575757;">If you have any questions, please contact us at <a href="mailto:info@noirefit.com" style="color: #B8960C; text-decoration: none; font-weight: 500;">info@noirefit.com</a></p>
+                      <p style="margin: 20px 0; font-size: 14px; line-height: 1.6; color: #575757;">If you have any questions, please contact us at <a href="mailto:info@zargeofficial.com" style="color: #B8960C; text-decoration: none; font-weight: 500;">info@zargeofficial.com</a></p>
                     </td>
                   </tr>
 
@@ -436,7 +436,7 @@ async function sendShippingEmailWithResend(data: ShippingConfirmationEmailData):
                         <strong style="color: #1D1D20; font-weight: 600;">Zargé</strong>
                       </p>
                       <p style="margin: 16px 0 0 0;">
-                        <a href="https://www.noirefit.com" style="color: #B8960C; text-decoration: none; font-size: 14px; font-weight: 500;">www.noirefit.com</a>
+                        <a href="https://www.zargeofficial.com" style="color: #B8960C; text-decoration: none; font-size: 14px; font-weight: 500;">www.zargeofficial.com</a>
                       </p>
                     </td>
                   </tr>
@@ -448,7 +448,7 @@ async function sendShippingEmailWithResend(data: ShippingConfirmationEmailData):
       </html>
     `
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargé.com>"
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargeofficial.com>"
 
     console.log("📧 Attempting to send shipping email via Resend:", {
       from: fromEmail,

@@ -8,7 +8,7 @@ export const revalidate = 0
 const COLLECTIONS = ['unspoken-resilience', 'still-becoming']
 
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://www.noirefit.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://www.zargeofficial.com'
 
   try {
     // All published products (drops currently have no subcategories)

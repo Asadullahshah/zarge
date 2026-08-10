@@ -231,8 +231,8 @@ export async function POST(request: NextRequest) {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `https://www.noirefit.com/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `https://www.noirefit.com/checkout?canceled=true`,
+      success_url: `https://www.zargeofficial.com/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://www.zargeofficial.com/checkout?canceled=true`,
       customer_email: email,
       metadata: {
         orderNumber: orderNumber,
