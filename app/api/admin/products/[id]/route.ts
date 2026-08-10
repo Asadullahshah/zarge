@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { sql } from "@/lib/db"
+import { sql, transaction } from "@/lib/db"
 import { requireAuth } from "@/lib/auth-helpers"
 import { slugify } from "@/lib/utils"
 
@@ -454,7 +454,13 @@ export async function DELETE(
   try {
     await requireAuth()
 
-    await sql`DELETE FROM products WHERE id = ${params.id}`
+    // cart_items and order_items reference products without ON DELETE CASCADE,
+    // so they're cleared first inside a transaction to avoid partial deletes.
+    await transaction(async (client) => {
+      await client.query('DELETE FROM cart_items WHERE product_id = $1', [params.id])
+      await client.query('DELETE FROM order_items WHERE product_id = $1', [params.id])
+      await client.query('DELETE FROM products WHERE id = $1', [params.id])
+    })
 
     return NextResponse.json({ success: true })
   } catch (error: any) {
