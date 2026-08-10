@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter, Playfair_Display, Montserrat } from "next/font/google"
+// @ts-ignore
 import "./globals.css"
 import Image from "next/image"
 import { Header } from "@/components/layout/header"
@@ -103,8 +104,8 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "public/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "public/favicon/favicon.ico", sizes: "any" },
+      { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon/favicon.ico", sizes: "any" },
     ],
     apple: [
       { url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
