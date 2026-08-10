@@ -24,6 +24,7 @@ export function Footer() {
               <p className="text-[10px] tracking-[0.4em] uppercase text-[#666] font-medium mb-4">
                 Need Support?
               </p>
+              {/* TODO: replace with Zargé's real WhatsApp business number — no real number found in the codebase, do not invent one */}
               <a
                 href="https://wa.me/yourphonenumber"
                 target="_blank"

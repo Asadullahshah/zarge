@@ -18,11 +18,11 @@ export function ProductSchema({ product }: ProductSchemaProps) {
     sku: product.sku,
     brand: {
       "@type": "Brand",
-      name: "Zarge",
+      name: "Zargé",
     },
     offers: {
       "@type": "Offer",
-      url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/product/${product.slug}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://www.zargeofficial.com"}/product/${product.slug}`,
       priceCurrency: "PKR",
       price: price.toString(),
       availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
@@ -65,7 +65,7 @@ export function BreadcrumbSchema({ items }: BreadcrumbSchemaProps) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${item.url}`,
+      item: `${process.env.NEXT_PUBLIC_APP_URL || "https://www.zargeofficial.com"}${item.url}`,
     })),
   }
 

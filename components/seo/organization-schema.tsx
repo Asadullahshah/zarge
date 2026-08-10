@@ -4,16 +4,18 @@ export function OrganizationSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Zarge",
+    "name": "Zargé",
     "url": baseUrl,
-    "logo": `${baseUrl}/img/ICON WHT LOGO TRANSPARANT.png`,
+    "logo": `${baseUrl}${encodeURI("/img/ICON WHT LOGO TRANSPARANT.png")}`,
     "description": "Premium luxury fashion and home essentials. Discover elegant formal wear, semi-formal apparel, and curated home textiles.",
+    "email": "customerservice@zargeofficial.com",
     "sameAs": [
-      // Add social media links if available
+      "https://instagram.com/zargeofficial"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "Customer Service",
+      "email": "customerservice@zargeofficial.com",
       "url": `${baseUrl}/contact`
     },
     "areaServed": {
@@ -22,7 +24,7 @@ export function OrganizationSchema() {
     },
     "brand": {
       "@type": "Brand",
-      "name": "Zarge"
+      "name": "Zargé"
     }
   }
 

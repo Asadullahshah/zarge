@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export const metadata: Metadata = {
-  title: "Wearable narratives stitched through embroidery | Zarge",
+  title: "Wearable narratives stitched through embroidery | Zargé",
   description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
   keywords: [
     "premium clothing",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     "luxury home decor"
   ],
   openGraph: {
-    title: "Wearable narratives stitched through embroidery | Zarge",
+    title: "Wearable narratives stitched through embroidery | Zargé",
     description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
     type: "website",
     images: [
@@ -39,13 +39,13 @@ export const metadata: Metadata = {
         url: "/img/ICON WHT LOGO TRANSPARANT.png",
         width: 1200,
         height: 630,
-        alt: "Zarge - Premium Luxury Fashion & Home Essentials",
+        alt: "Zargé - Premium Luxury Fashion & Home Essentials",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wearable narratives stitched through embroidery | Zarge",
+    title: "Wearable narratives stitched through embroidery | Zargé",
     description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
   },
 }
@@ -173,7 +173,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Our Story- Zarge */}
+      {/* Our Story- Zargé */}
       {/* <div data-theme="dark"> */}
       <OurStory />
       {/* </div> */}

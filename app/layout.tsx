@@ -38,8 +38,8 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com'),
   title: {
-    default: "Wearable narratives stitched through embroidery | Zarge",
-    template: "%s | Zarge"
+    default: "Wearable narratives stitched through embroidery | Zargé",
+    template: "%s | Zargé"
   },
   description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
   keywords: [
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
     "premium fashion store",
     "home essentials store"
   ],
-  authors: [{ name: "Zarge" }],
-  creator: "Zarge",
-  publisher: "Zarge",
+  authors: [{ name: "Zargé" }],
+  creator: "Zargé",
+  publisher: "Zargé",
   formatDetection: {
     email: false,
     address: false,
@@ -71,14 +71,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com',
-    siteName: "Zarge",
-    title: "Wearable narratives stitched through embroidery | Zarge",
+    siteName: "Zargé",
+    title: "Wearable narratives stitched through embroidery | Zargé",
     description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
+    images: [
+      {
+        url: "/img/ICON WHT LOGO TRANSPARANT.png",
+        width: 1200,
+        height: 630,
+        alt: "Zargé - Embroidered essentials",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wearable narratives stitched through embroidery | Zarge",
+    title: "Wearable narratives stitched through embroidery | Zargé",
     description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
+    images: ["/img/ICON WHT LOGO TRANSPARANT.png"],
   },
   robots: {
     index: true,

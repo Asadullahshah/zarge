@@ -20,6 +20,7 @@ export async function GET() {
       { url: `${baseUrl}/privacy-policy`, priority: '0.3', changefreq: 'yearly' },
       { url: `${baseUrl}/terms`, priority: '0.3', changefreq: 'yearly' },
       { url: `${baseUrl}/exchange-policy`, priority: '0.3', changefreq: 'yearly' },
+      { url: `${baseUrl}/shipping-policy`, priority: '0.3', changefreq: 'yearly' },
     ]
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
