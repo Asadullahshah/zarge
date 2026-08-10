@@ -261,7 +261,7 @@ export async function generateMetadata({
   const price = parseFloat(product.sale_price || product.price)
   const primaryImage = product.images?.find((img: any) => img.is_primary) || product.images?.[0]
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com'
   const productUrl = `${baseUrl}/product/${product.slug}`
   const description = product.seo_desc || product.short_desc || product.description || `Shop ${product.name} at Zarge. Premium quality ${product.gender?.toLowerCase() || ''} clothing and fashion.`
 

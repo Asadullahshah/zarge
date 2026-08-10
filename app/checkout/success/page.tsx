@@ -92,7 +92,7 @@ export default async function CheckoutSuccessPage({
         <div className="max-w-2xl mx-auto text-center">
           <CheckCircle className="w-16 h-16 mx-auto mb-6 text-primary animate-pulse" />
           <h1 className="text-4xl font-serif font-bold mb-4">Processing Your Order</h1>
-          <p className="text-lg text-[#BDBDBD] mb-2">
+          <p className="text-lg text-gray-600 mb-2">
             Thank you for your purchase!
           </p>
           <p className="text-[#BDBDBD] mb-8">
@@ -119,11 +119,11 @@ export default async function CheckoutSuccessPage({
       <div className="max-w-2xl mx-auto text-center">
         <CheckCircle className="w-16 h-16 mx-auto mb-6 text-primary" />
         <h1 className="text-4xl font-serif font-bold mb-4">Order Confirmed!</h1>
-        <p className="text-lg text-[#BDBDBD] mb-2">
+        <p className="text-lg text-gray-600 mb-2">
           Thank you for your purchase.
         </p>
-        <p className="text-[#BDBDBD] mb-8">
-          Your order number is <span className="font-semibold text-[#F7F7F7]">{order.order_number}</span>
+        <p className="text-gray-600 mb-8">
+          Your order number is <span className="font-semibold text-gray-900">{order.order_number}</span>
         </p>
         <p className="text-sm text-[#BDBDBD] mb-4">
           We&apos;ve sent a confirmation email to {order.email} with your order details.
