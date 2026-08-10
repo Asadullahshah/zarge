@@ -36,7 +36,7 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com'),
   title: {
     default: "Wearable narratives stitched through embroidery | Zarge",
     template: "%s | Zarge"
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com',
     siteName: "Zarge",
     title: "Wearable narratives stitched through embroidery | Zarge",
     description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
@@ -108,7 +108,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com',
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com',
   },
 }
 

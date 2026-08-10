@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   try {
     await requireAuth()
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://www.noirefit.com'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://www.zargeofficial.com'
 
     // Count all items that will be in the sitemap
     const [productCount, categoryCount, blogCount] = await Promise.all([

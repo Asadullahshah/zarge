@@ -1,5 +1,5 @@
 export function OrganizationSchema() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com'
   
   const schema = {
     "@context": "https://schema.org",

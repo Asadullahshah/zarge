@@ -304,7 +304,7 @@ export default async function BlogPostPage({
               <ShareButtons 
                 title={post.title}
                 excerpt={post.excerpt || undefined}
-                url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.noirefit.com'}/blog/${post.slug}`}
+                url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com'}/blog/${post.slug}`}
               />
             </div>
           </div>
