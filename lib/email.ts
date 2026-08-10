@@ -261,7 +261,7 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
       </html>
     `
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargé.com>"
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargeofficial.com>"
 
     console.log("📧 Attempting to send email via Resend:", {
       from: fromEmail,
@@ -448,7 +448,7 @@ async function sendShippingEmailWithResend(data: ShippingConfirmationEmailData):
       </html>
     `
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargé.com>"
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargeofficial.com>"
 
     console.log("📧 Attempting to send shipping email via Resend:", {
       from: fromEmail,
