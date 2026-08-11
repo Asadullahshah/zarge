@@ -43,6 +43,9 @@ export const metadata: Metadata = {
     template: "%s | Zargé"
   },
   description: "Zargé is embroidered essentials, not fast fashion. Oversized silhouettes in premium French Cotton Terry, where every stitch carries a story worn, not told.",
+  verification: {
+    google: "ICVw-HpAd12AmMTObkYGGwC8YnQ_YMCHCZLN0myCGyk",
+  },
   keywords: [
     "premium clothing",
     "luxury fashion",
