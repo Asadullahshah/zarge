@@ -1,7 +1,7 @@
 export function OrganizationSchema() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zargeofficial.com'
   
-  const schema = {
+  const organizationschema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Zargé",
@@ -28,11 +28,25 @@ export function OrganizationSchema() {
     }
   }
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Zargé",
+    "alternateName": "Zarge",
+    "url": baseUrl
+  }
+
   return (
+    <>
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationschema) }}
     />
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+    />
+    </>
   )
 }
 
