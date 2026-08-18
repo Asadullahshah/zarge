@@ -25,6 +25,7 @@ export function Header({
   const pathname = usePathname()
   const isHomePage = pathname === "/"
   const isCategoryPage = pathname.startsWith("/category/")
+  const isCheckoutPage = pathname.startsWith("/checkout")
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [collectionsOpen, setCollectionsOpen] = useState(false)
@@ -167,9 +168,11 @@ export function Header({
 
             {/* RIGHT SIDE ACTIONS */}
             <div className="flex items-center gap-2 relative z-[61]">
-              <div className={`transition-colors duration-300 ${cartClass}`}>
-                <CartButton />
-              </div>
+              {!isCheckoutPage && (
+                <div className={`transition-colors duration-300 ${cartClass}`}>
+                  <CartButton />
+                </div>
+              )}
               <Button
                 variant="ghost"
                 size="icon"
