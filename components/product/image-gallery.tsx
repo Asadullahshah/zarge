@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface ImageGalleryProps {
   images: Array<{
@@ -19,6 +20,7 @@ interface ImageGalleryProps {
 
 export function ImageGallery({ images, productName, selectedColor }: ImageGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [direction,setDirection] = useState(1)
 
   // Find the index of the first image matching the selected color
   const findColorImageIndex = useCallback((color: string | null) => {
@@ -38,10 +40,12 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
 
   const nextImage = useCallback(() => {
     setSelectedIndex((prev) => (prev + 1) % images.length)
+    setDirection(1)
   }, [images.length])
 
   const prevImage = useCallback(() => {
     setSelectedIndex((prev) => (prev - 1 + images.length) % images.length)
+    setDirection(-1)
   }, [images.length])
 
   // When color changes, find and select the matching image
@@ -111,38 +115,51 @@ export function ImageGallery({ images, productName, selectedColor }: ImageGaller
       )}
 
       {/* Main Image - Right Side */}
-      <div className="relative aspect-square flex-1 rounded-lg overflow-hidden bg-[#f0f0ed] border border-gray-200 group">
-        <Image
-          src={currentImage.url}
-          alt={currentImage.alt || productName}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover"
-          priority={selectedIndex === 0}
-        />
-        {images.length > 1 && (
-          <>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-black shadow-sm transition-opacity z-10 opacity-0 group-hover:opacity-100"
-              onClick={prevImage}
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-black shadow-sm transition-opacity z-10 opacity-0 group-hover:opacity-100"
-              onClick={nextImage}
-              aria-label="Next image"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </Button>
-          </>
-        )}
-      </div>
+    <div className="relative aspect-square flex-1 rounded-lg overflow-hidden bg-[#f0f0ed] border border-gray-200 group">
+      <AnimatePresence mode="wait" custom={direction} initial={false}>
+      <motion.div
+          key={selectedIndex}
+          custom={direction}
+          initial={{ x: direction * 30 + "%", opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: -direction * 30 + "%", opacity: 0 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={currentImage.url}
+            alt={currentImage.alt || productName}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
+            priority={selectedIndex === 0}
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {images.length > 1 && (
+        <>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-black shadow-sm transition-opacity z-10 opacity-0 group-hover:opacity-100"
+            onClick={prevImage}
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-black shadow-sm transition-opacity z-10 opacity-0 group-hover:opacity-100"
+            onClick={nextImage}
+            aria-label="Next image"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </Button>
+        </>
+      )}
+    </div>
     </div>
   )
 }
