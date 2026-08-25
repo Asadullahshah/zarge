@@ -33,7 +33,7 @@ export function OurStory() {
       {/* Image container with modal inside */}
       <div data-theme="dark" className="relative w-full h-[80vh] mt-12 overflow-hidden">
         <Image
-          src="/img/OurStory.jpeg"
+          src="/img/OurStory.png"
           alt="Our Story"
           fill
           sizes="100vw"
