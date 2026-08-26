@@ -319,15 +319,35 @@ export function ProductDetails({ product, selectedColor: externalSelectedColor, 
         )}
       </div>
 
-      {/* Stock Status - Only show if in stock */}
-      {currentStock > 0 && (
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="text-green-600 font-semibold">
-            In Stock ({currentStock} available)
-          </span>
-        </div>
-      )}
+      {/* Stock Status */}
+      {(() => {
+        const hasSizes = product.available_sizes && product.available_sizes.length > 0
+        const hasColors = product.available_colors && product.available_colors.length > 0
+        const needsSize = hasSizes && !selectedSize
+        const needsColor = hasColors && !selectedColor
+        const isExactCombo = !needsSize && !needsColor
+
+        let label: string
+        if (isExactCombo) {
+          label = currentStock > 0 ? `In Stock (${currentStock} available)` : "Out of Stock"
+        } else if (selectedSize || selectedColor) {
+          // Partial selection: currentStock is summed across the remaining, unselected attribute
+          label = currentStock > 0
+            ? `${currentStock} available for ${selectedSize || selectedColor}`
+            : "Out of Stock"
+        } else {
+          label = currentStock > 0 ? `In Stock (${currentStock} available)` : "Out of Stock"
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            <div className={`w-3 h-3 rounded-full ${currentStock > 0 ? "bg-green-500" : "bg-red-500"}`}></div>
+            <span className={`font-semibold ${currentStock > 0 ? "text-green-600" : "text-red-600"}`}>
+              {label}
+            </span>
+          </div>
+        )
+      })()}
 
       {/* Size Chart Model */}
 

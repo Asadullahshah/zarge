@@ -96,23 +96,25 @@ export async function getVariantStock(
     return product[0]?.stock || 0
   }
 
-  const options: any = {}
-  if (size) options.size = size
-  if (color) options.color = color
+  const filter: any = {}
+  if (size) filter.size = size
+  if (color) filter.color = color
 
-  const variant = await sql`
+  // Use containment (@>) rather than exact equality so a partial selection
+  // (only size, or only color) still matches variants that also carry the
+  // other attribute, and sum across all matches for that partial selection.
+  const matches = await sql`
     SELECT stock FROM variants
     WHERE product_id = ${productId}
-      AND options = ${JSON.stringify(options)}::jsonb
-    LIMIT 1
+      AND options @> ${JSON.stringify(filter)}::jsonb
   `
 
-  if (variant.length > 0) {
-    return variant[0].stock || 0
+  if (matches.length === 0) {
+    // If variant doesn't exist, return 0 (needs to be created with stock)
+    return 0
   }
 
-  // If variant doesn't exist, return 0 (needs to be created with stock)
-  return 0
+  return matches.reduce((sum: number, row: any) => sum + (row.stock || 0), 0)
 }
 
 
