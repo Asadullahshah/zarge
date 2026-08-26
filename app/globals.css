@@ -45,6 +45,12 @@
   }
   html {
     scroll-behavior: smooth;
+    /* Proximity (not mandatory) so the homepage hero/carousel/collection sequence
+       snaps to the nearest section only when the user comes to rest near one —
+       scrolling on past the collection section into the rest of the page stays free.
+       Applied directly to html (the page's single scroll container) rather than a
+       nested overflow wrapper, so there's no separate/second scrollbar. */
+    scroll-snap-type: y proximity;
   }
 
   /* Lenis smooth-scroll (premium inertia). When Lenis is active it manages scroll,

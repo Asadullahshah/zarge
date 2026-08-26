@@ -121,16 +121,15 @@ export default async function HomePage() {
       {/* Hero Section */}
       <HeroSectionV2 slides={heroSlides} />
 
-      
       {/* Collections Section */}
-        <section data-theme="dark" className="py-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 min-h-[620px] md:min-h-[820px]">
+      <section data-theme="dark" className="py-0 h-[100svh] snap-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 h-full">
 
           {homeCategories.map((category: any) => {
             const desktopSrc = category.image_desktop || category.image || CATEGORY_FALLBACK_IMAGE
             const mobileSrc = category.image_mobile || category.image_desktop || category.image || CATEGORY_FALLBACK_IMAGE
             return (
-            <div key={category.id} className="relative group overflow-hidden min-h-[620px] md:min-h-[820px]">
+            <div key={category.id} className="relative group overflow-hidden h-full">
               {/* Background Image — device-specific */}
               <Image
                 src={desktopSrc}

@@ -183,7 +183,7 @@ export function HeroSectionV2({ slides: slidesProp }: { slides?: HeroSlide[] } =
   return (
     <>
       {/* ── VIDEO SECTION — DESKTOP (1280px+) ── */}
-      <section data-theme="dark" className="hidden xl:block relative min-h-[100svh] w-full overflow-hidden -mt-16">
+      <section data-theme="dark" className="hidden xl:block relative min-h-[100svh] w-full overflow-hidden -mt-16 snap-center">
         <HeroBackgroundVideo
           src="/video/zarge.mp4"
           poster="/video/zarge-poster.jpg"
@@ -200,7 +200,7 @@ export function HeroSectionV2({ slides: slidesProp }: { slides?: HeroSlide[] } =
       </section>
 
       {/* ── VIDEO SECTION — MOBILE + TABLET (up to 1279px) ── */}
-      <section data-theme="dark" className="xl:hidden relative min-h-[100svh] w-full overflow-hidden -mt-16">
+      <section data-theme="dark" className="xl:hidden relative min-h-[100svh] w-full overflow-hidden -mt-16 snap-center">
         <HeroBackgroundVideo
           src="/video/zarge-mobile.mp4"
           poster="/video/zarge-poster.jpg"
@@ -217,7 +217,7 @@ export function HeroSectionV2({ slides: slidesProp }: { slides?: HeroSlide[] } =
       </section>
 
       {/* ── HERO SECTION ── */}
-      <section data-theme="light" className="relative overflow-hidden h-screen">
+      <section data-theme="light" className="relative overflow-hidden h-[100svh] snap-center">
 
         {/* Click-outside backdrop to close the desktop info panel */}
         {panelOpen && (
