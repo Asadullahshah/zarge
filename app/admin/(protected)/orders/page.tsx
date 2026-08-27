@@ -155,7 +155,8 @@ export default async function OrdersPage({
       </div>
 
       <div className="bg-[#121213] rounded-lg overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[900px]">
           <thead className="bg-[#1A1A1B]">
             <tr>
               <th className="text-left p-4">Order Number</th>
@@ -235,6 +236,7 @@ export default async function OrdersPage({
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {totalPages > 1 && (

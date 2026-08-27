@@ -20,10 +20,10 @@ export default async function BlogPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-serif font-bold">Blog Posts</h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
+        <h1 className="text-2xl sm:text-3xl font-serif font-bold">Blog Posts</h1>
         <Link href="/admin/blog/new">
-          <Button>
+          <Button className="w-full sm:w-auto justify-center">
             <Plus className="w-4 h-4 mr-2" />
             New Post
           </Button>
@@ -31,7 +31,8 @@ export default async function BlogPage() {
       </div>
 
       <div className="bg-[#121213] rounded-lg overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[760px]">
           <thead className="bg-[#1A1A1B]">
             <tr>
               <th className="text-left p-4">Title</th>
@@ -99,6 +100,7 @@ export default async function BlogPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   )

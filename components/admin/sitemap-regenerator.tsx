@@ -95,11 +95,12 @@ export function SitemapRegenerator() {
         </div>
       )}
 
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
         <Button
           onClick={handleRegenerate}
           disabled={loading}
           size="lg"
+          className="w-full sm:w-auto justify-center"
         >
           {loading ? (
             <>
@@ -113,11 +114,12 @@ export function SitemapRegenerator() {
             </>
           )}
         </Button>
-        
+
         <Button
           variant="outline"
           size="lg"
           onClick={() => window.open('/sitemap.xml', '_blank')}
+          className="w-full sm:w-auto justify-center"
         >
           <ExternalLink className="w-4 h-4 mr-2" />
           View Sitemap

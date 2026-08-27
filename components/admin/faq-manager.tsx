@@ -79,7 +79,7 @@ export function FAQManager({ categoryId, initialFAQs }: FAQManagerProps) {
       )}
 
       <div className="bg-[#121213] p-6 rounded-lg space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xl font-semibold">Category FAQs</h2>
           <Button onClick={addFAQ} size="sm">
             <Plus className="w-4 h-4 mr-2" />

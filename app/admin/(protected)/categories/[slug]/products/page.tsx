@@ -69,17 +69,17 @@ export default async function CategoryProductsPage({
         </nav>
       )}
 
-      <div className="bg-gradient-to-r from-[#1A1A1B] to-[#121213] rounded-lg p-8 mb-8 border border-[#1A1A1B]">
-        <div className="flex justify-between items-start">
+      <div className="bg-gradient-to-r from-[#1A1A1B] to-[#121213] rounded-lg p-5 sm:p-8 mb-8 border border-[#1A1A1B]">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
             {isSubcategory && parentCategory && (
               <div className="text-sm text-primary mb-2 font-semibold">{parentCategory.name}</div>
             )}
-            <h1 className="text-4xl font-serif font-bold mb-2">{categoryData.name}</h1>
-            <p className="text-lg text-[#BDBDBD]">{categoryData.description || "Manage products in this category"}</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-2">{categoryData.name}</h1>
+            <p className="text-base sm:text-lg text-[#BDBDBD]">{categoryData.description || "Manage products in this category"}</p>
           </div>
           <Link href={`/admin/categories/${slug}/products/new`}>
-            <Button size="lg">
+            <Button size="lg" className="w-full sm:w-auto justify-center">
               <Plus className="w-5 h-5 mr-2" />
               Add New Product
             </Button>
