@@ -46,12 +46,12 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
           className="bg-white rounded-xl border border-[#e9eaee] overflow-hidden shadow-sm"
         >
           {/* Parent Category Header */}
-          <div className="p-6 bg-gray-50 border-b border-[#e9eaee]">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4 flex-1">
+          <div className="p-4 sm:p-6 bg-gray-50 border-b border-[#e9eaee]">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                 <button
                   onClick={() => toggleExpanded(category.id)}
-                  className="text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors p-1"
+                  className="shrink-0 text-[#BDBDBD] hover:text-[#F7F7F7] transition-colors p-1"
                   disabled={category.child_count === 0}
                 >
                   {category.child_count > 0 ? (
@@ -64,26 +64,26 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
                     <div className="w-5 h-5" />
                   )}
                 </button>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   {expanded[category.id] && category.child_count > 0 ? (
-                    <FolderOpen className="w-6 h-6 text-primary" />
+                    <FolderOpen className="w-6 h-6 shrink-0 text-primary" />
                   ) : (
-                    <Folder className="w-6 h-6 text-primary" />
+                    <Folder className="w-6 h-6 shrink-0 text-primary" />
                   )}
-                  <div>
-                    <h3 className="text-2xl font-serif font-bold mb-1">{category.name}</h3>
+                  <div className="min-w-0">
+                    <h3 className="text-xl sm:text-2xl font-serif font-bold mb-1">{category.name}</h3>
                     {category.description && (
                       <p className="text-sm text-[#BDBDBD]">{category.description}</p>
                     )}
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-6">
-                <div className="text-right">
+              <div className="flex items-center justify-between gap-4 sm:justify-end sm:gap-6">
+                <div className="text-left sm:text-right shrink-0">
                   <div className="text-2xl font-bold text-primary">{category.product_count || 0}</div>
                   <div className="text-xs text-[#BDBDBD]">products</div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap justify-end">
                   <Link href={`/admin/categories/${category.slug}/products`}>
                     <Button variant="outline" size="sm">
                       <Package className="w-4 h-4 mr-2" />
@@ -119,15 +119,15 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
                 {category.children.map((child, index) => (
                   <div
                     key={child.id}
-                    className="p-5 hover:bg-gray-50 transition-colors group"
+                    className="p-4 sm:p-5 hover:bg-gray-50 transition-colors group"
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4 flex-1">
-                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                        <div className="w-8 h-8 shrink-0 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
                           {index + 1}
                         </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <h4 className="text-lg font-semibold group-hover:text-primary transition-colors">
                               {child.name}
                             </h4>
@@ -149,12 +149,12 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-6">
-                        <div className="text-right">
+                      <div className="flex items-center justify-between gap-4 sm:justify-end sm:gap-6">
+                        <div className="text-left sm:text-right shrink-0">
                           <div className="text-xl font-bold text-primary">{child.product_count || 0}</div>
                           <div className="text-xs text-[#BDBDBD]">products</div>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap justify-end">
                           <Link href={`/admin/categories/${child.slug}/products`}>
                             <Button variant="ghost" size="sm" className="group-hover:bg-primary/10">
                               <Package className="w-4 h-4 mr-2" />
@@ -192,8 +192,8 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
           {(!category.children || category.children.length === 0) && (
             <div className="px-6 py-4 bg-gray-50 border-t border-[#e9eaee]">
               <div className="flex gap-2">
-                <Link href={`/admin/categories/${category.slug}/products/new`}>
-                  <Button size="sm">
+                <Link href={`/admin/categories/${category.slug}/products/new`} className="w-full sm:w-auto">
+                  <Button size="sm" className="w-full sm:w-auto justify-center">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Product to {category.name}
                   </Button>

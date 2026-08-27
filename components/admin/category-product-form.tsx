@@ -168,7 +168,7 @@ export function CategoryProductForm({ product, categoryId, categorySlug }: Categ
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="type">Type *</Label>
             <select
@@ -217,7 +217,7 @@ export function CategoryProductForm({ product, categoryId, categorySlug }: Categ
       <section className="bg-[#121213] p-6 rounded-lg space-y-4">
         <h2 className="text-xl font-semibold mb-4">Pricing & Inventory</h2>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="price">Price *</Label>
             <Input id="price" type="number" step="0.01" {...register("price")} />
@@ -230,7 +230,7 @@ export function CategoryProductForm({ product, categoryId, categorySlug }: Categ
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="stock">Stock *</Label>
             <Input id="stock" type="number" {...register("stock")} />

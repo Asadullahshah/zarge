@@ -968,7 +968,7 @@ function UnstitchedFormFields({ register, watch, errors }: any) {
       
       <div>
         <Label>Fabric Length</Label>
-        <div className="grid grid-cols-2 gap-4 mt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
           <div>
             <Label htmlFor="fabricLengthYards" className="text-sm">Length (Yards)</Label>
             <Input id="fabricLengthYards" type="number" step="0.1" {...register("measurements.fabricLengthYards")} placeholder="e.g., 2.5" />

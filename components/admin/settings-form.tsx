@@ -122,7 +122,7 @@ export function SettingsForm({ initialSettings }: SettingsFormProps) {
       <section className="bg-[#121213] p-6 rounded-lg space-y-4">
         <h2 className="text-xl font-semibold mb-4">E-commerce Settings</h2>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="shippingRate">Shipping Rate ($)</Label>
             <Input id="shippingRate" type="number" step="0.01" {...register("shippingRate")} />

@@ -36,16 +36,16 @@ export default async function CategoriesPage() {
   return (
     <div>
       <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-4">
           <div>
-            <h1 className="text-4xl font-serif font-bold mb-2">Categories & Subcategories</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-2">Categories & Subcategories</h1>
             <p className="text-[#BDBDBD]">
               Manage your product categories. Each category can have subcategories for better organization.
             </p>
           </div>
           <div className="flex gap-2">
             <Link href="/admin/categories/new">
-              <Button>
+              <Button className="w-full sm:w-auto justify-center">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Category
               </Button>
