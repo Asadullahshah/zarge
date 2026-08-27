@@ -682,24 +682,24 @@ function CheckoutForm() {
                         )}
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold truncate">{item.productName}</h3>
-                          <p className="text-sm text-[#BDBDBD]">Quantity: {item.quantity}</p>
+                          <p className="text-sm text-black">Quantity: {item.quantity}</p>
                           <p className="text-sm font-semibold mt-1">{formatPrice(item.total)}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                   <div className="border-t border-grey-50 pt-4 mb-6 space-y-2">
-                    <div className="flex justify-between items-center text-sm text-[#BDBDBD]">
+                    <div className="flex justify-between items-center text-sm text-black">
                       <span>Subtotal</span>
                       <span>{formatPrice(cartTotal)}</span>
                     </div>
                     {taxRate > 0 && (
-                      <div className="flex justify-between items-center text-sm text-[#BDBDBD]">
+                      <div className="flex justify-between items-center text-sm text-black">
                         <span>Tax</span>
                         <span>{formatPrice((cartTotal * taxRate) / 100)}</span>
                       </div>
                     )}
-                    <div className="flex justify-between items-center text-sm text-[#BDBDBD]">
+                    <div className="flex justify-between items-center text-sm text-black">
                       <span>Shipping</span>
                       <span>{shippingCost > 0 ? formatPrice(shippingCost) : "Free"}</span>
                     </div>
