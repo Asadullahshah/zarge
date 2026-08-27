@@ -242,6 +242,7 @@ export async function POST(request: NextRequest) {
               orderItems: orderItemsWithNames,
               subtotal: parseFloat(metadata.subtotal || '0'),
               tax: parseFloat(metadata.tax || '0'),
+              shipping: parseFloat(metadata.shipping || '0'),
               total: parseFloat(metadata.total || '0'),
               currency: 'PKR',
               shippingAddress: shippingAddress,

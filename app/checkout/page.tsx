@@ -142,6 +142,8 @@ function CheckoutForm() {
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [cartTotal, setCartTotal] = useState(0)
   const [cartLoading, setCartLoading] = useState(true)
+  const [shippingCost, setShippingCost] = useState(0)
+  const [taxRate, setTaxRate] = useState(0)
   const [payMethods, setPayMethods] = useState<{ stripe: boolean; cod: boolean; bank: boolean; bankDetails: string }>({
     stripe: true,
     cod: true,
@@ -184,6 +186,17 @@ function CheckoutForm() {
       })
       .catch(() => {})
   }, [setValue])
+
+  // Load the admin-configured shipping cost and tax rate
+  useEffect(() => {
+    fetch("/api/settings/checkout-rates")
+      .then((r) => r.json())
+      .then((data) => {
+        setShippingCost(data.shippingCost || 0)
+        setTaxRate(data.taxRate || 0)
+      })
+      .catch(() => {})
+  }, [])
 
   // Sync billing address with shipping address when checkbox is checked
   // This runs whenever useShippingForBilling changes or shippingAddress changes
@@ -669,16 +682,30 @@ function CheckoutForm() {
                         )}
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold truncate">{item.productName}</h3>
-                          <p className="text-sm text-[#BDBDBD]">Quantity: {item.quantity}</p>
+                          <p className="text-sm text-black">Quantity: {item.quantity}</p>
                           <p className="text-sm font-semibold mt-1">{formatPrice(item.total)}</p>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="border-t border-grey-50 pt-4 mb-6">
-                    <div className="flex justify-between items-center text-lg font-bold">
-                      <span>Total</span>
+                  <div className="border-t border-grey-50 pt-4 mb-6 space-y-2">
+                    <div className="flex justify-between items-center text-sm text-black">
+                      <span>Subtotal</span>
                       <span>{formatPrice(cartTotal)}</span>
+                    </div>
+                    {taxRate > 0 && (
+                      <div className="flex justify-between items-center text-sm text-black">
+                        <span>Tax</span>
+                        <span>{formatPrice((cartTotal * taxRate) / 100)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between items-center text-sm text-black">
+                      <span>Shipping</span>
+                      <span>{shippingCost > 0 ? formatPrice(shippingCost) : "Free"}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-lg font-bold pt-2 border-t border-grey-50">
+                      <span>Total</span>
+                      <span>{formatPrice(cartTotal + (cartTotal * taxRate) / 100 + shippingCost)}</span>
                     </div>
                   </div>
                 </>
@@ -752,7 +779,9 @@ function CheckoutForm() {
                     : "Payment will be processed securely through Stripe."}
                 </p>
                 <p className="text-[#BDBDBD] text-xs italic">
-                  Note: All prices are final. Shipping is free.
+                  {shippingCost > 0 || taxRate > 0
+                    ? "Note: Applicable shipping and tax are included in your total."
+                    : "Note: All prices are final. Shipping is free."}
                 </p>
               </div>
               <Button 
