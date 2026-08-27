@@ -269,3 +269,16 @@ CREATE INDEX IF NOT EXISTS idx_reviews_created ON reviews(created_at);
 CREATE TRIGGER update_reviews_updated_at BEFORE UPDATE ON reviews
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- Settings table (generic key-value store: site info, payment methods, policies, shipping rate, tax rate, etc.)
+CREATE TABLE IF NOT EXISTS settings (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  key TEXT UNIQUE NOT NULL,
+  value TEXT,
+  type TEXT DEFAULT 'text' CHECK (type IN ('text', 'number', 'boolean', 'json')),
+  description TEXT,
+  updated_at TIMESTAMP DEFAULT NOW(),
+  updated_by UUID REFERENCES users(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_settings_key ON settings(key);
+

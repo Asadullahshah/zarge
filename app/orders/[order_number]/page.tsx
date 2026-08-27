@@ -174,7 +174,7 @@ export default async function OrderDetailPage({
             )}
             <div className="flex justify-between">
               <span className="text-gray-500">Shipping</span>
-              <span>Free</span>
+              <span>{parseFloat(order.shipping) > 0 ? formatPrice(parseFloat(order.shipping)) : "Free"}</span>
             </div>
             <div className="flex justify-between pt-2 border-t border-gray-200 font-semibold">
               <span>Total</span>

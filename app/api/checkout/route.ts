@@ -6,6 +6,7 @@ import { sendOrderConfirmationEmail } from "@/lib/email"
 import { sendOrderConfirmationWhatsApp } from "@/lib/whatsapp"
 import { formatDateTimeInKarachi } from "@/lib/date-utils"
 import { generateOrderNumber } from "@/lib/utils"
+import { getCheckoutRates } from "@/lib/store-settings"
 
 // Only treat Stripe as configured when a real key is present (not the placeholder "sk_test_...")
 const stripeSecret = process.env.STRIPE_SECRET_KEY
@@ -131,10 +132,37 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Calculate tax and shipping
-    const tax = 0 // No tax for both COD and Stripe (prices already include tax)
-    const shipping = 0 // Free shipping
+    // Calculate tax and shipping from admin-configured settings (locked in at order time)
+    const { shippingCost, taxRate } = await getCheckoutRates()
+    const shipping = shippingCost
+    const tax = Math.round(subtotal * (taxRate / 100) * 100) / 100
     const total = subtotal + tax + shipping
+
+    // Add shipping/tax as their own Stripe line items so the actual charge matches the order total
+    if (shipping > 0) {
+      lineItems.push({
+        price_data: {
+          currency: "pkr",
+          product_data: {
+            name: "Shipping",
+          },
+          unit_amount: Math.round(shipping * 100),
+        },
+        quantity: 1,
+      })
+    }
+    if (tax > 0) {
+      lineItems.push({
+        price_data: {
+          currency: "pkr",
+          product_data: {
+            name: "Tax",
+          },
+          unit_amount: Math.round(tax * 100),
+        },
+        quantity: 1,
+      })
+    }
 
     // Handle COD / Bank Transfer orders - create order immediately (no online payment)
     if (paymentMethod === "COD" || paymentMethod === "BANK") {
@@ -184,6 +212,7 @@ export async function POST(request: NextRequest) {
           }),
           subtotal: subtotal,
           tax: tax,
+          shipping: shipping,
           total: total,
           currency: 'PKR',
           shippingAddress: shippingAddress,
