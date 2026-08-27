@@ -7,6 +7,9 @@ import Link from "next/link"
 import { BlogPostSchema } from "@/components/seo/blog-schema"
 import { ShareButtons } from "@/components/blog/share-buttons"
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getPost(slug: string) {
   const post = await sql`
     SELECT 
