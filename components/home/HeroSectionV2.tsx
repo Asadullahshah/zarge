@@ -122,10 +122,10 @@ export function HeroSectionV2({ slides: slidesProp }: { slides?: HeroSlide[] } =
   }, [])
 
   useEffect(() => {
-    if (modalOpen) return
+    if (modalOpen || panelOpen) return
     const timer = setInterval(goToNext, 3000)
     return () => clearInterval(timer)
-  }, [currentSlide, modalOpen])
+  }, [currentSlide, modalOpen, panelOpen])
 
   function goToNext() {
     setIsAnimating(true)

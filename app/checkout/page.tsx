@@ -8,9 +8,77 @@ import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { formatPrice } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
+
+const PAKISTAN_STATES = [
+  "Punjab",
+  "Sindh",
+  "Khyber Pakhtunkhwa",
+  "Balochistan",
+  "Islamabad Capital Territory",
+  "Gilgit-Baltistan",
+  "Azad Jammu & Kashmir",
+]
+
+const PAKISTAN_CITIES = [
+  "Abbottabad",
+  "Attock",
+  "Bahawalnagar",
+  "Bahawalpur",
+  "Chaman",
+  "Charsadda",
+  "Chiniot",
+  "Dera Ghazi Khan",
+  "Dera Ismail Khan",
+  "Faisalabad",
+  "Gojra",
+  "Gujranwala",
+  "Gujrat",
+  "Hafizabad",
+  "Hyderabad",
+  "Islamabad",
+  "Jacobabad",
+  "Jhang",
+  "Jhelum",
+  "Kamoke",
+  "Karachi",
+  "Kasur",
+  "Khairpur",
+  "Khanewal",
+  "Kohat",
+  "Lahore",
+  "Larkana",
+  "Mardan",
+  "Mingora",
+  "Multan",
+  "Muzaffarabad",
+  "Muzaffargarh",
+  "Nawabshah",
+  "Nowshera",
+  "Okara",
+  "Peshawar",
+  "Quetta",
+  "Rahim Yar Khan",
+  "Rawalpindi",
+  "Sadiqabad",
+  "Sahiwal",
+  "Sargodha",
+  "Sheikhupura",
+  "Sialkot",
+  "Sukkur",
+  "Swabi",
+  "Turbat",
+  "Vehari",
+]
 
 const checkoutSchema = z.object({
   email: z.string().trim().optional(),
@@ -144,6 +212,14 @@ function CheckoutForm() {
   const [cartLoading, setCartLoading] = useState(true)
   const [shippingCost, setShippingCost] = useState(0)
   const [taxRate, setTaxRate] = useState(0)
+  const [discountInput, setDiscountInput] = useState("")
+  const [appliedDiscount, setAppliedDiscount] = useState<{
+    code: string
+    type: "PERCENTAGE" | "FIXED"
+    value: number
+  } | null>(null)
+  const [discountApplying, setDiscountApplying] = useState(false)
+  const [discountError, setDiscountError] = useState("")
   const [payMethods, setPayMethods] = useState<{ stripe: boolean; cod: boolean; bank: boolean; bankDetails: string }>({
     stripe: true,
     cod: true,
@@ -174,6 +250,18 @@ function CheckoutForm() {
 
   const useShippingForBilling = watch("useShippingForBilling")
   const shippingAddress = watch("shippingAddress")
+
+  // Discount is applied AFTER the order total (subtotal + tax + shipping) is calculated, not before.
+  const orderTotal = cartTotal + (cartTotal * taxRate) / 100 + shippingCost
+  const discountAmount = appliedDiscount
+    ? Math.min(
+        appliedDiscount.type === "PERCENTAGE"
+          ? (orderTotal * appliedDiscount.value) / 100
+          : appliedDiscount.value,
+        orderTotal
+      )
+    : 0
+  const finalTotal = orderTotal - discountAmount
 
   // Load enabled payment methods and default to the first enabled one
   useEffect(() => {
@@ -273,6 +361,7 @@ function CheckoutForm() {
           email: data.email?.trim() || "",
           phone: data.phone?.trim() || "",
           paymentMethod: data.paymentMethod,
+          discountCode: appliedDiscount?.code || null,
           shippingAddress: {
             firstName: data.shippingAddress.firstName.trim(),
             lastName: data.shippingAddress.lastName.trim(),
@@ -323,6 +412,37 @@ function CheckoutForm() {
       setError(err.message || "An error occurred. Please try again.")
       setLoading(false)
     }
+  }
+
+  const handleApplyDiscount = async () => {
+    const code = discountInput.trim()
+    if (!code) return
+
+    setDiscountApplying(true)
+    setDiscountError("")
+    try {
+      const res = await fetch("/api/discount-codes/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.valid) {
+        throw new Error(data.error || "Invalid discount code")
+      }
+      setAppliedDiscount({ code: data.code, type: data.type, value: data.value })
+    } catch (err: any) {
+      setAppliedDiscount(null)
+      setDiscountError(err.message || "Failed to apply discount code")
+    } finally {
+      setDiscountApplying(false)
+    }
+  }
+
+  const handleRemoveDiscount = () => {
+    setAppliedDiscount(null)
+    setDiscountInput("")
+    setDiscountError("")
   }
 
   const handleButtonClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -495,7 +615,26 @@ function CheckoutForm() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="shippingCity">City *</Label>
-                  <Input id="shippingCity" {...register("shippingAddress.city")} />
+                  <Select
+                    value={shippingAddress?.city || ""}
+                    onValueChange={(value) =>
+                      setValue("shippingAddress.city", value, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      })
+                    }
+                  >
+                    <SelectTrigger id="shippingCity">
+                      <SelectValue placeholder="Select city" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PAKISTAN_CITIES.map((city) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {errors.shippingAddress?.city && (
                     <p className="text-destructive text-sm mt-1">
                       {errors.shippingAddress.city.message}
@@ -504,7 +643,26 @@ function CheckoutForm() {
                 </div>
                 <div>
                   <Label htmlFor="shippingState">State *</Label>
-                  <Input id="shippingState" {...register("shippingAddress.state")} />
+                  <Select
+                    value={shippingAddress?.state || ""}
+                    onValueChange={(value) =>
+                      setValue("shippingAddress.state", value, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      })
+                    }
+                  >
+                    <SelectTrigger id="shippingState">
+                      <SelectValue placeholder="Select state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PAKISTAN_STATES.map((state) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {errors.shippingAddress?.state && (
                     <p className="text-destructive text-sm mt-1">
                       {errors.shippingAddress.state.message}
@@ -546,10 +704,12 @@ function CheckoutForm() {
               <h2 className="text-2xl font-semibold mb-4">Billing Information</h2>
 
               <div className="bg-grey-50 border border-grey-50 p-6 rounded-lg space-y-4">
-                <label className="flex items-center space-x-2">
+                <label className="flex items-center space-x-2 cursor-not-allowed">
                   <input
                     type="checkbox"
                     {...register("useShippingForBilling")}
+                    checked
+                    disabled
                     className="rounded border-input"
                   />
                   <span>Use shipping address for billing</span>
@@ -600,7 +760,26 @@ function CheckoutForm() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="billingCity">City *</Label>
-                        <Input id="billingCity" {...register("billingAddress.city")} />
+                        <Select
+                          value={watch("billingAddress.city") || ""}
+                          onValueChange={(value) =>
+                            setValue("billingAddress.city", value, {
+                              shouldValidate: true,
+                              shouldDirty: true,
+                            })
+                          }
+                        >
+                          <SelectTrigger id="billingCity">
+                            <SelectValue placeholder="Select city" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {PAKISTAN_CITIES.map((city) => (
+                              <SelectItem key={city} value={city}>
+                                {city}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         {errors.billingAddress?.city && (
                           <p className="text-destructive text-sm mt-1">
                             {errors.billingAddress.city.message}
@@ -609,7 +788,26 @@ function CheckoutForm() {
                       </div>
                       <div>
                         <Label htmlFor="billingState">State *</Label>
-                        <Input id="billingState" {...register("billingAddress.state")} />
+                        <Select
+                          value={watch("billingAddress.state") || ""}
+                          onValueChange={(value) =>
+                            setValue("billingAddress.state", value, {
+                              shouldValidate: true,
+                              shouldDirty: true,
+                            })
+                          }
+                        >
+                          <SelectTrigger id="billingState">
+                            <SelectValue placeholder="Select state" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {PAKISTAN_STATES.map((state) => (
+                              <SelectItem key={state} value={state}>
+                                {state}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         {errors.billingAddress?.state && (
                           <p className="text-destructive text-sm mt-1">
                             {errors.billingAddress.state.message}
@@ -705,12 +903,63 @@ function CheckoutForm() {
                     </div>
                     <div className="flex justify-between items-center text-lg font-bold pt-2 border-t border-grey-50">
                       <span>Total</span>
-                      <span>{formatPrice(cartTotal + (cartTotal * taxRate) / 100 + shippingCost)}</span>
+                      <span>{formatPrice(orderTotal)}</span>
                     </div>
+                    {appliedDiscount && (
+                      <>
+                        <div className="flex justify-between items-center text-sm text-green-600">
+                          <span>Discount ({appliedDiscount.code})</span>
+                          <span>-{formatPrice(discountAmount)}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-lg font-bold pt-2 border-t border-grey-50">
+                          <span>Amount Payable</span>
+                          <span>{formatPrice(finalTotal)}</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Discount Code */}
+                  <div className="mb-6">
+                    <Label htmlFor="discountCodeInput">Discount Code</Label>
+                    <div className="flex gap-2 mt-1">
+                      <Input
+                        id="discountCodeInput"
+                        value={discountInput}
+                        onChange={(e) => {
+                          setDiscountInput(e.target.value.toUpperCase())
+                          setDiscountError("")
+                        }}
+                        placeholder="Enter code"
+                        disabled={!!appliedDiscount}
+                      />
+                      {appliedDiscount ? (
+                        <Button type="button" variant="outline" onClick={handleRemoveDiscount}>
+                          Remove
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={handleApplyDiscount}
+                          disabled={discountApplying || !discountInput.trim()}
+                        >
+                          {discountApplying ? "Applying…" : "Apply"}
+                        </Button>
+                      )}
+                    </div>
+                    {discountError && (
+                      <p className="text-destructive text-sm mt-1">{discountError}</p>
+                    )}
+                    {appliedDiscount && (
+                      <p className="text-green-600 text-sm mt-1">
+                        Code &quot;{appliedDiscount.code}&quot; applied
+                      </p>
+                    )}
                   </div>
                 </>
               )}
-              
+
               {/* Payment Method Selection */}
               <div className="mb-6">
                 <Label htmlFor="paymentMethod" className="text-base font-semibold mb-3 block">

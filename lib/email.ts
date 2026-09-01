@@ -21,6 +21,8 @@ interface OrderConfirmationEmailData {
   tax: number
   shipping: number
   total: number
+  discountCode?: string
+  discountAmount?: number
   currency: string
   shippingAddress: {
     firstName: string
@@ -212,6 +214,12 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
                             <td style="padding: 8px 0; color: #575757; font-size: 14px;">Shipping:</td>
                             <td style="text-align: right; padding: 8px 0; color: #575757; font-size: 14px;">${data.shipping > 0 ? `PKR ${data.shipping.toLocaleString()}` : 'Free'}</td>
                           </tr>
+                          ${data.discountAmount && data.discountAmount > 0 ? `
+                          <tr>
+                            <td style="padding: 8px 0; color: #16a34a; font-size: 14px;">Discount${data.discountCode ? ` (${data.discountCode})` : ''}:</td>
+                            <td style="text-align: right; padding: 8px 0; color: #16a34a; font-size: 14px;">-PKR ${data.discountAmount.toLocaleString()}</td>
+                          </tr>
+                          ` : ''}
                           <tr style="font-size: 18px; font-weight: bold;">
                             <td style="padding: 16px 0 8px 0; border-top: 2px solid #D9D9D9; color: #1D1D20; font-size: 18px;"><strong>Total:</strong></td>
                             <td style="text-align: right; padding: 16px 0 8px 0; border-top: 2px solid #D9D9D9; color: #B8960C; font-size: 18px; font-weight: 700;">PKR ${data.total.toLocaleString()}</td>
