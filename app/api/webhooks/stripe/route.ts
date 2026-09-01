@@ -128,22 +128,25 @@ export async function POST(request: NextRequest) {
               INSERT INTO orders (
                 order_number, email, phone, status, payment_status,
                 subtotal, tax, shipping, total, currency,
-                shipping_address, billing_address, payment_method, payment_intent_id
+                shipping_address, billing_address, payment_method, payment_intent_id,
+                discount_code, discount_amount
               ) VALUES (
-                ${metadata.orderNumber}, 
-                ${metadata.email}, 
-                ${metadata.phone || null}, 
-                'PROCESSING', 
+                ${metadata.orderNumber},
+                ${metadata.email},
+                ${metadata.phone || null},
+                'PROCESSING',
                 'PAID',
-                ${parseFloat(metadata.subtotal || '0')}, 
-                ${parseFloat(metadata.tax || '0')}, 
-                ${parseFloat(metadata.shipping || '0')}, 
-                ${parseFloat(metadata.total || '0')}, 
+                ${parseFloat(metadata.subtotal || '0')},
+                ${parseFloat(metadata.tax || '0')},
+                ${parseFloat(metadata.shipping || '0')},
+                ${parseFloat(metadata.total || '0')},
                 'PKR',
-                ${JSON.stringify(shippingAddress)}::jsonb, 
-                ${billingAddress ? JSON.stringify(billingAddress) : null}::jsonb, 
+                ${JSON.stringify(shippingAddress)}::jsonb,
+                ${billingAddress ? JSON.stringify(billingAddress) : null}::jsonb,
                 'STRIPE',
-                ${session.payment_intent as string || null}
+                ${session.payment_intent as string || null},
+                ${metadata.discountCode || null},
+                ${parseFloat(metadata.discountAmount || '0')}
               ) RETURNING *
             `
 
@@ -244,6 +247,8 @@ export async function POST(request: NextRequest) {
               tax: parseFloat(metadata.tax || '0'),
               shipping: parseFloat(metadata.shipping || '0'),
               total: parseFloat(metadata.total || '0'),
+              discountCode: metadata.discountCode || undefined,
+              discountAmount: parseFloat(metadata.discountAmount || '0'),
               currency: 'PKR',
               shippingAddress: shippingAddress,
               paymentMethod: 'STRIPE',

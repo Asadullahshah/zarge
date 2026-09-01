@@ -14,6 +14,7 @@ import {
   Star,
   Percent,
   FileText,
+  Tag,
   X,
 } from "lucide-react"
 
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/admin/categories", label: "Categories", icon: Folder },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { href: "/admin/sales", label: "Sales", icon: Percent },
+  { href: "/admin/discount-codes", label: "Discount Codes", icon: Tag },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/messages", label: "Messages", icon: MessageSquare },
   { href: "/admin/blog", label: "Blog", icon: BookOpen },

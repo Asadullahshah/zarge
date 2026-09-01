@@ -10,6 +10,7 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "create-admin": "tsx scripts/create-admin.ts",
     "create-reviews-table": "tsx scripts/create-reviews-table.ts",
+    "create-discount-codes-table": "tsx scripts/create-discount-codes-table.ts",
     "optimize-hero-videos": "bash scripts/optimize-hero-videos.sh"
   },
   "dependencies": {

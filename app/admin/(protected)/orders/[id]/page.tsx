@@ -215,6 +215,16 @@ export default async function OrderDetailPage({
                 {parseFloat(order.shipping) > 0 ? formatPrice(parseFloat(order.shipping)) : "Free"}
               </span>
             </div>
+            {parseFloat(order.discount_amount) > 0 && (
+              <div className="flex justify-between">
+                <span className="text-[#BDBDBD]">
+                  Discount{order.discount_code ? ` (${order.discount_code})` : ""}
+                </span>
+                <span className="text-green-400">
+                  -{formatPrice(parseFloat(order.discount_amount))}
+                </span>
+              </div>
+            )}
             <div className="flex justify-between pt-2 border-t border-[#1A1A1B] font-semibold">
               <span>Total</span>
               <span>{formatPrice(parseFloat(order.total))}</span>

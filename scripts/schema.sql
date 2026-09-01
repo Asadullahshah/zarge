@@ -282,3 +282,23 @@ CREATE TABLE IF NOT EXISTS settings (
 
 CREATE INDEX IF NOT EXISTS idx_settings_key ON settings(key);
 
+-- Discount codes table (percentage or fixed-amount codes customers can apply at checkout)
+CREATE TABLE IF NOT EXISTS discount_codes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  code TEXT UNIQUE NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('PERCENTAGE', 'FIXED')),
+  value DECIMAL(10, 2) NOT NULL CHECK (value > 0),
+  enabled BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_discount_codes_code ON discount_codes(code);
+
+CREATE TRIGGER update_discount_codes_updated_at BEFORE UPDATE ON discount_codes
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Discount applied to an order, recorded at checkout time (applied after subtotal + tax + shipping)
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_code TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_amount DECIMAL(10, 2) NOT NULL DEFAULT 0;
+

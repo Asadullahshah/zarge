@@ -7,6 +7,7 @@ import { sendOrderConfirmationWhatsApp } from "@/lib/whatsapp"
 import { formatDateTimeInKarachi } from "@/lib/date-utils"
 import { generateOrderNumber } from "@/lib/utils"
 import { getCheckoutRates } from "@/lib/store-settings"
+import { findEnabledDiscountCode, computeDiscountAmount } from "@/lib/discount-codes"
 
 // Only treat Stripe as configured when a real key is present (not the placeholder "sk_test_...")
 const stripeSecret = process.env.STRIPE_SECRET_KEY
@@ -26,7 +27,7 @@ function getSessionId() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, phone, paymentMethod = "STRIPE", shippingAddress, billingAddress } = body
+    const { email, phone, paymentMethod = "STRIPE", shippingAddress, billingAddress, discountCode } = body
 
     if ((!email && !phone) || !shippingAddress) {
       return NextResponse.json(
@@ -138,6 +139,20 @@ export async function POST(request: NextRequest) {
     const tax = Math.round(subtotal * (taxRate / 100) * 100) / 100
     const total = subtotal + tax + shipping
 
+    // Discount codes are applied AFTER the total (subtotal + tax + shipping) has been calculated.
+    // Re-validate server-side rather than trusting the client - the code may have been disabled
+    // or removed since the customer applied it on the checkout page.
+    let discountAmount = 0
+    let appliedDiscountCode: string | null = null
+    if (discountCode) {
+      const discount = await findEnabledDiscountCode(discountCode)
+      if (discount) {
+        discountAmount = computeDiscountAmount(total, discount)
+        appliedDiscountCode = discount.code
+      }
+    }
+    const finalTotal = Math.round((total - discountAmount) * 100) / 100
+
     // Add shipping/tax as their own Stripe line items so the actual charge matches the order total
     if (shipping > 0) {
       lineItems.push({
@@ -171,11 +186,13 @@ export async function POST(request: NextRequest) {
         INSERT INTO orders (
           order_number, email, phone, status, payment_status,
           subtotal, tax, shipping, total, currency,
-          shipping_address, billing_address, payment_method
+          shipping_address, billing_address, payment_method,
+          discount_code, discount_amount
         ) VALUES (
           ${orderNumber}, ${email}, ${phone || null}, 'PENDING', 'PENDING',
-          ${subtotal}, ${tax}, ${shipping}, ${total}, 'PKR',
-          ${JSON.stringify(shippingAddress)}, ${billingAddress ? JSON.stringify(billingAddress) : null}, ${paymentMethod}
+          ${subtotal}, ${tax}, ${shipping}, ${finalTotal}, 'PKR',
+          ${JSON.stringify(shippingAddress)}, ${billingAddress ? JSON.stringify(billingAddress) : null}, ${paymentMethod},
+          ${appliedDiscountCode}, ${discountAmount}
         ) RETURNING *
       `
 
@@ -213,7 +230,9 @@ export async function POST(request: NextRequest) {
           subtotal: subtotal,
           tax: tax,
           shipping: shipping,
-          total: total,
+          total: finalTotal,
+          discountCode: appliedDiscountCode || undefined,
+          discountAmount: discountAmount,
           currency: 'PKR',
           shippingAddress: shippingAddress,
           paymentMethod: paymentMethod,
@@ -255,11 +274,25 @@ export async function POST(request: NextRequest) {
 
     const orderNumber = generateOrderNumber()
 
+    // Line items sum to the pre-discount total; apply the discount as a Stripe coupon so the
+    // actual charge matches finalTotal without needing negative-amount line items.
+    let discounts: Stripe.Checkout.SessionCreateParams.Discount[] | undefined
+    if (discountAmount > 0) {
+      const coupon = await stripe.coupons.create({
+        amount_off: Math.round(discountAmount * 100),
+        currency: "pkr",
+        duration: "once",
+        name: appliedDiscountCode || "Discount",
+      })
+      discounts = [{ coupon: coupon.id }]
+    }
+
     // Store order data in metadata to create order after successful payment
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
+      discounts,
       success_url: `https://www.zargeofficial.com/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `https://www.zargeofficial.com/checkout?canceled=true`,
       customer_email: email,
@@ -272,7 +305,9 @@ export async function POST(request: NextRequest) {
         subtotal: subtotal.toString(),
         tax: tax.toString(),
         shipping: shipping.toString(),
-        total: total.toString(),
+        total: finalTotal.toString(),
+        discountCode: appliedDiscountCode || '',
+        discountAmount: discountAmount.toString(),
         orderItems: JSON.stringify(orderItemsData),
         cartId: cartData.id,
       },
