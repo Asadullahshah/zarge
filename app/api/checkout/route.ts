@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { sql } from "@/lib/db"
 import { cookies } from "next/headers"
 import Stripe from "stripe"
-import { sendOrderConfirmationEmail } from "@/lib/email"
+import { sendOrderConfirmationEmailSMTP } from "@/lib/email"
 import { sendOrderConfirmationWhatsApp } from "@/lib/whatsapp"
 import { formatDateTimeInKarachi } from "@/lib/date-utils"
 import { generateOrderNumber } from "@/lib/utils"
@@ -195,7 +195,7 @@ export async function POST(request: NextRequest) {
 
       // Send order confirmation email (only when an email was provided)
       if (email) {
-        await sendOrderConfirmationEmail({
+        await sendOrderConfirmationEmailSMTP({
           orderNumber: orderNumber,
           email: email,
           customerName: `${shippingAddress.firstName} ${shippingAddress.lastName}`,

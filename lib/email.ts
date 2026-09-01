@@ -3,6 +3,7 @@
  * Uses Resend API (recommended) or can be configured with other services
  */
 
+import nodemailer from "nodemailer"
 import { formatDateTimeInKarachi } from "./date-utils"
 
 interface OrderConfirmationEmailData {
@@ -92,11 +93,7 @@ export async function sendOrderConfirmationEmail(data: OrderConfirmationEmailDat
   }
 }
 
-async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean> {
-  try {
-    const resend = await import("resend")
-    const resendClient = new resend.Resend(process.env.RESEND_API_KEY)
-
+function buildOrderConfirmationHTML(data: OrderConfirmationEmailData): string {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.zargeofficial.com'
 
     const ensureAbsoluteUrl = (url: string | undefined): string | undefined => {
@@ -159,7 +156,7 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
                     <td style="padding: 40px 30px; background-color: #FFFFFF;">
                       <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #1D1D20;">Dear ${data.customerName},</p>
 
-                      <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #575757;">Thank you for your order! We&apos;re excited to confirm that we&apos;ve received your order and payment.</p>
+                      <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #575757;">${data.paymentMethod === 'COD' || data.paymentMethod === 'BANK' ? "Thank you for your order! We&apos;re excited to confirm that we&apos;ve received your order." : "Thank you for your order! We&apos;re excited to confirm that we&apos;ve received your order and payment."}</p>
 
                       <!-- Order Details Card -->
                       <div style="background-color: #F5F5F5; border: 1px solid #D9D9D9; border-radius: 8px; padding: 24px; margin: 30px 0;">
@@ -175,7 +172,7 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
                           </tr>
                           <tr>
                             <td style="padding: 8px 0; color: #575757; font-size: 14px;"><strong style="color: #1D1D20;">Payment Method:</strong></td>
-                            <td style="padding: 8px 0; text-align: right; color: #575757; font-size: 14px;">${data.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Credit/Debit Card'}</td>
+                            <td style="padding: 8px 0; text-align: right; color: #575757; font-size: 14px;">${data.paymentMethod === 'COD' ? 'Cash on Delivery' : data.paymentMethod === 'BANK' ? 'Bank Transfer' : 'Credit/Debit Card'}</td>
                           </tr>
                         </table>
                       </div>
@@ -230,9 +227,12 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
                         </p>
                       </div>
 
-                      ${data.paymentMethod === 'COD' ? `
+                      ${(data.paymentMethod === 'COD' || data.paymentMethod === 'BANK') ? `
                       <div style="background-color: rgba(206, 173, 90, 0.12); border: 1px solid rgba(206, 173, 90, 0.35); border-radius: 8px; padding: 16px; margin: 30px 0;">
-                        <p style="margin: 0; color: #8A6D1E; font-size: 14px; line-height: 1.6;"><strong>Cash on Delivery:</strong> Please have the exact amount ready when your order arrives. Our delivery person will collect the payment upon delivery.</p>
+                        <p style="margin: 0 0 8px 0; color: #8A6D1E; font-size: 14px; line-height: 1.6;"><strong>Please confirm your order:</strong> Reply to this email to confirm your order.</p>
+                        <p style="margin: 0; color: #8A6D1E; font-size: 14px; line-height: 1.6;">${data.paymentMethod === 'COD'
+                          ? '<strong>Cash on Delivery:</strong> Please have the exact amount ready when your order arrives. Our delivery person will collect the payment upon delivery.'
+                          : "<strong>Bank Transfer:</strong> Please reply to this email with the name on your bank account so we can verify your payment. We'll confirm receipt and then proceed with your order."}</p>
                       </div>
                       ` : ''}
 
@@ -262,6 +262,15 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
       </html>
     `
 
+    return emailHtml
+}
+
+async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean> {
+  try {
+    const resend = await import("resend")
+    const resendClient = new resend.Resend(process.env.RESEND_API_KEY)
+
+    const emailHtml = buildOrderConfirmationHTML(data)
     const fromEmail = process.env.RESEND_FROM_EMAIL || "Zarge <noreply@zargeofficial.com>"
 
     console.log("📧 Attempting to send email via Resend:", {
@@ -287,6 +296,46 @@ async function sendWithResend(data: OrderConfirmationEmailData): Promise<boolean
     return true
   } catch (error: any) {
     console.error("❌ Error sending email with Resend:", error?.message || error)
+    console.error("Error stack:", error?.stack)
+    return false
+  }
+}
+
+const hostingerSmtpPort = Number(process.env.HOSTINGER_SMTP_PORT) || 465
+const hostingerTransporter = process.env.HOSTINGER_SMTP_HOST
+  ? nodemailer.createTransport({
+      host: process.env.HOSTINGER_SMTP_HOST,
+      port: hostingerSmtpPort,
+      secure: hostingerSmtpPort === 465,
+      auth: {
+        user: process.env.HOSTINGER_SMTP_USER,
+        pass: process.env.HOSTINGER_SMTP_PASS,
+      },
+    })
+  : null
+
+export async function sendOrderConfirmationEmailSMTP(data: OrderConfirmationEmailData): Promise<boolean> {
+  if (!hostingerTransporter) {
+    console.warn("⚠️ Hostinger SMTP env vars are not configured. Email will not be sent.")
+    return false
+  }
+
+  try {
+    const emailHtml = buildOrderConfirmationHTML(data)
+
+    console.log("📧 Sending order confirmation email via SMTP to:", data.email)
+
+    await hostingerTransporter.sendMail({
+      from: `"Zargé" <${process.env.HOSTINGER_SMTP_USER}>`,
+      to: data.email,
+      subject: `Order Confirmation - ${data.orderNumber}`,
+      html: emailHtml,
+    })
+
+    console.log("✅ Order confirmation email sent successfully via SMTP to:", data.email)
+    return true
+  } catch (error: any) {
+    console.error("❌ Error sending order confirmation email via SMTP:", error?.message || error)
     console.error("Error stack:", error?.stack)
     return false
   }
