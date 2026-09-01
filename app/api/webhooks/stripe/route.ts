@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sql } from "@/lib/db"
 import Stripe from "stripe"
-import { sendOrderConfirmationEmail } from "@/lib/email"
+import { sendOrderConfirmationEmailSMTP } from "@/lib/email"
 import { formatDateTimeInKarachi } from "@/lib/date-utils"
 
 const stripe = process.env.STRIPE_SECRET_KEY
@@ -238,7 +238,7 @@ export async function POST(request: NextRequest) {
           // Send order confirmation email (with retry logic built-in)
           console.log("📧 [WEBHOOK] Sending order confirmation email to:", metadata.email)
           try {
-            const emailSent = await sendOrderConfirmationEmail({
+            const emailSent = await sendOrderConfirmationEmailSMTP({
               orderNumber: metadata.orderNumber,
               email: metadata.email,
               customerName: `${shippingAddress.firstName || ''} ${shippingAddress.lastName || ''}`.trim() || metadata.email,

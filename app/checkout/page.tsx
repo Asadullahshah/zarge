@@ -393,9 +393,9 @@ function CheckoutForm() {
 
       const { url, orderNumber } = responseData
 
-      // For COD orders, redirect to success page directly
-      if (data.paymentMethod === "COD") {
-        console.log("COD order created, redirecting to success page")
+      // For COD / Bank Transfer orders, redirect to success page directly (no Stripe session)
+      if (data.paymentMethod === "COD" || data.paymentMethod === "BANK") {
+        console.log(`${data.paymentMethod} order created, redirecting to success page`)
         router.push(`/checkout/success?order_number=${orderNumber}`)
         return
       }
