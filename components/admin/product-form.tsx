@@ -17,6 +17,7 @@ const productSchema = z.object({
   sku: z.string().optional(),
   shortDesc: z.string().min(1, "Short description is required"),
   description: z.string().optional(),
+  designStory: z.string().optional(),
   type: z.enum(["STITCHED", "UNSTITCHED", "SEMI_FORMAL", "FORMAL", "HOME", "SHALWAR_KAMEEZ"]),
   gender: z.enum(["MEN", "WOMEN", "UNISEX"]),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
@@ -85,6 +86,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
           sku: product.sku,
           shortDesc: product.short_desc,
           description: product.description,
+          designStory: product.design_story,
           type: product.type,
           gender: product.gender,
           status: product.status,
@@ -121,6 +123,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
         sku: data.sku,
         shortDesc: data.shortDesc,
         description: data.description,
+        designStory: data.designStory,
         type: data.type,
         gender: data.gender,
         status: data.status,
@@ -310,6 +313,16 @@ export function ProductForm({ product, categories }: ProductFormProps) {
           <textarea
             id="description"
             {...register("description")}
+            className="flex min-h-[120px] w-full rounded-md border border-input bg-card px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="designStory">Design Story</Label>
+          <textarea
+            id="designStory"
+            {...register("designStory")}
+            placeholder="Share the inspiration and story behind this product's design. Leave blank to hide this section on the product page."
             className="flex min-h-[120px] w-full rounded-md border border-input bg-card px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>

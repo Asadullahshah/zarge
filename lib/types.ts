@@ -27,6 +27,7 @@ export interface Product {
   sku?: string
   shortDesc?: string
   description?: string
+  designStory?: string
   type: ProductType
   gender: Gender
   status: ProductStatus

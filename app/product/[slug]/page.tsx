@@ -452,6 +452,17 @@ export default async function ProductPage({
           variants={product.variants || []}
         />
 
+        {/* Design Story */}
+        {product.design_story && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-serif font-bold mb-4">Design Story</h2>
+            <div
+              className="prose prose-neutral max-w-none text-gray-600"
+              dangerouslySetInnerHTML={{ __html: product.design_story }}
+            />
+          </div>
+        )}
+
         {/* Full Description */}
         {product.description && (
           <div className="mb-12">
