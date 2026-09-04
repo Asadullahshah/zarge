@@ -205,13 +205,20 @@ export async function POST(request: NextRequest) {
         WHERE id = ${finalVariantId} AND stock >= ${stockToSubtract}
         RETURNING stock
       `
-      
+
       if (stockUpdate.length === 0) {
         return NextResponse.json(
           { error: `Insufficient stock. Only ${availableStock} items available.` },
           { status: 400 }
         )
       }
+
+      // Keep the aggregate product stock in sync with the variant it belongs to
+      await sql`
+        UPDATE products
+        SET stock = GREATEST(0, stock - ${stockToSubtract}), updated_at = NOW()
+        WHERE id = ${productId}
+      `
     } else {
       // Update product stock
       const stockUpdate = await sql`
@@ -282,6 +289,12 @@ export async function DELETE(request: NextRequest) {
           SET stock = stock + ${quantity}, updated_at = NOW()
           WHERE id = ${variant_id}
         `
+        // Keep the aggregate product stock in sync with the variant it belongs to
+        await sql`
+          UPDATE products
+          SET stock = stock + ${quantity}, updated_at = NOW()
+          WHERE id = ${product_id}
+        `
       } else {
         await sql`
           UPDATE products
@@ -351,6 +364,12 @@ export async function PATCH(request: NextRequest) {
           SET stock = stock + ${current_quantity}, updated_at = NOW()
           WHERE id = ${variant_id}
         `
+        // Keep the aggregate product stock in sync with the variant it belongs to
+        await sql`
+          UPDATE products
+          SET stock = stock + ${current_quantity}, updated_at = NOW()
+          WHERE id = ${product_id}
+        `
       } else {
         await sql`
           UPDATE products
@@ -385,6 +404,12 @@ export async function PATCH(request: NextRequest) {
             UPDATE variants
             SET stock = stock - ${quantityDiff}, updated_at = NOW()
             WHERE id = ${variant_id}
+          `
+          // Keep the aggregate product stock in sync with the variant it belongs to
+          await sql`
+            UPDATE products
+            SET stock = stock - ${quantityDiff}, updated_at = NOW()
+            WHERE id = ${product_id}
           `
         } else {
           await sql`

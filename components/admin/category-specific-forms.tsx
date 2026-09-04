@@ -236,6 +236,14 @@ export function CategorySpecificForm({
     }
   }, [selectedSizes, selectedColors]) // Only run when sizes/colors change, not on every render
 
+  // Keep the aggregate "Stock Quantity" field in sync with the sum of the per-size/color matrix
+  useEffect(() => {
+    if (selectedSizes.length > 0 || selectedColors.length > 0) {
+      const total = Object.values(variantStock).reduce((sum, stock) => sum + (stock || 0), 0)
+      setValue("stock", String(total), { shouldValidate: true })
+    }
+  }, [variantStock, selectedSizes.length, selectedColors.length, setValue])
+
   const onSubmit = async (data: ProductFormData) => {
     setLoading(true)
     setError("")
@@ -823,7 +831,14 @@ export function CategorySpecificForm({
               type="number"
               {...register("stock")}
               placeholder="0"
+              readOnly={selectedSizes.length > 0 || selectedColors.length > 0}
+              className={selectedSizes.length > 0 || selectedColors.length > 0 ? "bg-[#1A1A1B] cursor-not-allowed" : ""}
             />
+            {(selectedSizes.length > 0 || selectedColors.length > 0) && (
+              <p className="text-xs text-[#BDBDBD] mt-1">
+                Auto-calculated from the "Stock by Size & Color" totals above.
+              </p>
+            )}
             {errors.stock && <p className="text-destructive text-sm mt-1">{errors.stock.message}</p>}
           </div>
         </div>
