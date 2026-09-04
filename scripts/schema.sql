@@ -301,4 +301,5 @@ CREATE TRIGGER update_discount_codes_updated_at BEFORE UPDATE ON discount_codes
 -- Discount applied to an order, recorded at checkout time (applied after subtotal + tax + shipping)
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_code TEXT;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount_amount DECIMAL(10, 2) NOT NULL DEFAULT 0;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS design_story TEXT;
 

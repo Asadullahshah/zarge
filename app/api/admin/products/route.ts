@@ -88,6 +88,7 @@ export async function POST(request: NextRequest) {
       sku,
       shortDesc,
       description,
+      designStory,
       type,
       gender,
       pieceCount,
@@ -229,14 +230,14 @@ export async function POST(request: NextRequest) {
     // Insert product
     const result = await sql`
       INSERT INTO products (
-        name, slug, sku, short_desc, description, type, gender, status,
+        name, slug, sku, short_desc, description, design_story, type, gender, status,
         price, sale_price, stock, weight, tags, seo_title, seo_desc,
         seo_keywords, canonical_url, faq_data, piece_count, fabric_type,
         fabric_material, care_instructions, available_sizes, available_colors,
         color_swatches, measurements, country_of_origin, featured
       ) VALUES (
         ${name}, ${productSlug}, ${sku || null}, ${shortDesc || null},
-        ${description || null}, ${type || null}, ${gender || null}, ${status || "DRAFT"},
+        ${description || null}, ${designStory || null}, ${type || null}, ${gender || null}, ${status || "DRAFT"},
         ${parsedPrice}, ${parsedSalePrice}, ${parsedStock}, ${parsedWeight},
         ${tagsArray}::TEXT[],
         ${seoTitle || null}, ${seoDesc || null},

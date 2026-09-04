@@ -21,6 +21,7 @@ const baseProductSchema = z.object({
   sku: z.string().optional(),
   shortDesc: z.string().min(1, "Short description is required"),
   description: z.string().optional(),
+  designStory: z.string().optional(),
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
   price: z.string().refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, "Valid price required"),
   salePrice: z.string().optional(),
@@ -115,6 +116,7 @@ export function CategorySpecificForm({
           sku: product.sku,
           shortDesc: product.short_desc,
           description: product.description,
+          designStory: product.design_story,
           status: product.status,
           price: product.price?.toString(),
           salePrice: product.sale_price?.toString(),
@@ -410,6 +412,17 @@ export function CategorySpecificForm({
             rows={6}
             className="flex w-full rounded-md border border-input bg-card px-3 py-2 text-sm"
             placeholder="Full product description, features, and details"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="designStory">Design Story</Label>
+          <textarea
+            id="designStory"
+            {...register("designStory")}
+            rows={6}
+            className="flex w-full rounded-md border border-input bg-card px-3 py-2 text-sm"
+            placeholder="Share the inspiration and story behind this product's design. Leave blank to hide this section on the product page."
           />
         </div>
       </section>
