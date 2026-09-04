@@ -16,8 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { formatPrice } from "@/lib/utils"
+import { notifyCartUpdated } from "@/context/cart-context"
 import Image from "next/image"
 import Link from "next/link"
+import { Trash2 } from "lucide-react"
 
 const PAKISTAN_STATES = [
   "Punjab",
@@ -329,6 +331,28 @@ function CheckoutForm() {
     }
     fetchCart()
   }, [])
+
+  const removeItem = async (itemId: string) => {
+    try {
+      const response = await fetch(`/api/cart?itemId=${itemId}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+      if (response.ok) {
+        const cartResponse = await fetch("/api/cart")
+        const data = cartResponse.ok ? await cartResponse.json() : { items: [], total: 0 }
+        const remainingItems = data.items || []
+        setCartItems(remainingItems)
+        setCartTotal(data.total || 0)
+        notifyCartUpdated()
+        if (remainingItems.length === 0) {
+          router.back()
+        }
+      }
+    } catch (err) {
+      console.error("Error removing item:", err)
+    }
+  }
 
   const onSubmit = async (data: CheckoutFormData) => {
     console.log("=== FORM SUBMISSION STARTED ===")
@@ -883,6 +907,14 @@ function CheckoutForm() {
                           <p className="text-sm text-black">Quantity: {item.quantity}</p>
                           <p className="text-sm font-semibold mt-1">{formatPrice(item.total)}</p>
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(item.id)}
+                          aria-label={`Remove ${item.productName} from cart`}
+                          className="flex-shrink-0 self-start text-destructive transition-colors hover:text-destructive/80"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
                       </div>
                     ))}
                   </div>
