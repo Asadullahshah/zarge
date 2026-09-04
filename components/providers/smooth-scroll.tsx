@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
+import { usePathname } from "next/navigation"
 import Lenis from "lenis"
 
 /**
@@ -14,6 +15,9 @@ export function SmoothScroll({
   enabled?: boolean
   children: React.ReactNode
 }) {
+  const lenisRef = useRef<Lenis | null>(null)
+  const pathname = usePathname()
+
   useEffect(() => {
     if (!enabled) return
 
@@ -25,6 +29,7 @@ export function SmoothScroll({
       wheelMultiplier: 0.9,
       touchMultiplier: 1.5,
     })
+    lenisRef.current = lenis
 
     let rafId = 0
     const raf = (time: number) => {
@@ -36,8 +41,17 @@ export function SmoothScroll({
     return () => {
       cancelAnimationFrame(rafId)
       lenis.destroy()
+      lenisRef.current = null
     }
   }, [enabled])
+
+  useEffect(() => {
+    // Lenis tracks its own virtual scroll position, which survives client-side
+    // navigation since the layout (and this provider) never unmounts between
+    // pages. Without this, new pages can open mid-scroll instead of at the top.
+    window.scrollTo(0, 0)
+    lenisRef.current?.scrollTo(0, { immediate: true })
+  }, [pathname])
 
   return <>{children}</>
 }
