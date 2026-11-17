@@ -15,7 +15,6 @@ import {
   Percent,
   FileText,
   Tag,
-  BookOpen,
   X,
 } from "lucide-react"
 
