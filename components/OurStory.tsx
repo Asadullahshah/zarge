@@ -1,33 +1,120 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 
-export function OurStory() {
+// useLayoutEffect runs before paint (no flicker) but warns on the server
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect
+
+type StoryParagraph = { italic: boolean; lines: string[] }
+
+// Blank line = new paragraph. A paragraph starting with ">" is serif italic,
+// and each of its lines is shown on its own line.
+function parseOurStory(text: string): StoryParagraph[] {
+  return text
+    .replace(/\r\n/g, "\n")
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => {
+      const italic = block.startsWith(">")
+      const lines = block
+        .split("\n")
+        .map((line) => (italic ? line.replace(/^>\s?/, "") : line).trim())
+        .filter(Boolean)
+      return { italic, lines }
+    })
+}
+
+function StoryParagraphs({ paragraphs, className }: { paragraphs: StoryParagraph[]; className: string }) {
+  return (
+    <>
+      {paragraphs.map((p, i) =>
+        p.italic ? (
+          <p key={i} className="font-serif italic text-lg">
+            {p.lines.map((line, j) => (
+              <span key={j}>
+                {j > 0 && <br />}
+                {line}
+              </span>
+            ))}
+          </p>
+        ) : (
+          <p key={i} className={className}>
+            {p.lines.join(" ")}
+          </p>
+        )
+      )}
+    </>
+  )
+}
+
+export function OurStory({ text }: { text: string }) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [overflowing, setOverflowing] = useState(false)
+  // Height that fits only whole paragraphs (null = show everything)
+  const [cutHeight, setCutHeight] = useState<number | null>(null)
+  // How many paragraphs are shown in the grey area; the panel continues from here
+  const [visibleCount, setVisibleCount] = useState<number | null>(null)
+  const boxRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
+  const paragraphs = parseOurStory(text)
+
+  // Count how many whole paragraphs fit in the box. If some don't fit, cut
+  // the box right after the last one that does (never mid-paragraph) and
+  // show the gradient + Read More.
+  useIsomorphicLayoutEffect(() => {
+    const box = boxRef.current
+    const list = listRef.current
+    if (!box || !list) return
+    const check = () => {
+      const maxHeight = parseFloat(getComputedStyle(box).maxHeight)
+      const items = Array.from(list.children) as HTMLElement[]
+      let lastBottom = 0
+      let fitCount = 0
+      for (const item of items) {
+        const bottom = item.offsetTop + item.offsetHeight
+        if (bottom > maxHeight) break
+        lastBottom = bottom
+        fitCount++
+      }
+      // Always show at least the first paragraph in full
+      if (fitCount === 0 && items[0]) {
+        lastBottom = items[0].offsetTop + items[0].offsetHeight
+        fitCount = 1
+      }
+      const overflow = fitCount < items.length
+      setOverflowing(overflow)
+      setCutHeight(overflow ? lastBottom : null)
+      setVisibleCount(fitCount)
+    }
+    check()
+    const observer = new ResizeObserver(check)
+    observer.observe(list)
+    return () => observer.disconnect()
+  }, [text])
 
   return (
     <section data-theme="light" id="our-story" className="pt-16 pb-0 text-center">
-      
+
       {/* Text content — light background */}
-      <div className="max-w-2xl mx-auto space-y-6 px-8 md:px-16">
-        <h2 className="font-serif text-4xl font-bold mb-4 text-black">
+      <div className="max-w-2xl mx-auto px-8 md:px-16">
+        <h2 className="font-serif text-4xl font-bold mb-6 text-black">
           Our Story
         </h2>
-        <p className="font-sans text-base leading-8 font-light text-black">
-          Zarg&eacute; was never meant to be just clothing.
-        </p>
-        <p className="font-sans text-base leading-8 font-light text-black">
-          It started with a feeling—one that&apos;s hard to translate, but impossible to ignore. A quiet strength. A softness that carries weight.
-          In Pashto, Zarg&eacute; reflects something close to the heart—something emotional, personal, and deeply human. That meaning sits at the core of everything we create.
-        </p>
-        <p className="font-sans text-base leading-8 font-light text-black">
-          For six months, we worked behind the scenes in Lahore, obsessing over every detail—fabric, texture, thread, and form. Not just to make T-shirts, but to build pieces that feel like something.
-          Something you don&apos;t just wear, but connect with.
-        </p>
-        <p className="font-sans text-base leading-8 font-light text-black">
-          Each design tells a story without saying too much.
-        </p>
+        {/* Fixed-height box: only whole paragraphs that fit are shown */}
+        <div
+          ref={boxRef}
+          className="relative max-h-[26rem] overflow-hidden"
+          style={cutHeight !== null ? { height: cutHeight } : undefined}
+        >
+          <div ref={listRef} className="space-y-6 text-black">
+            <StoryParagraphs
+              paragraphs={paragraphs}
+              className="font-sans text-base leading-8 font-light text-black"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Image container with modal inside */}
@@ -40,8 +127,13 @@ export function OurStory() {
           className="object-cover object-center"
         />
 
+        {/* Dark gradient overlay behind Read More (only when text overflows) */}
+        {overflowing && !modalOpen && (
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/80 via-black/40 to-transparent" />
+        )}
+
         {/* Read More button */}
-        {!modalOpen && (
+        {overflowing && !modalOpen && (
           <div className="relative top-5">
             <button
               onClick={() => setModalOpen(true)}
@@ -68,19 +160,8 @@ export function OurStory() {
             </button>
 
             <div className="space-y-4 text-white text-left text-sm leading-8 font-light mt-6 max-w-lg mx-auto font-sans">
-              <p>A bloom that happens in silence.</p>
-              <p>A symbol of resilience wrapped in stillness.</p>
-              <p>A reminder to believe, even when no one&apos;s watching.</p>
-              <p>We chose embroidery because it lasts. It doesn&apos;t fade like prints. It becomes part of the fabric—just like experiences become part of us. Every stitch carries intention. Every thread holds meaning.</p>
-              <p>Our oversized silhouettes, crafted from premium French Cotton Terry, are designed to give you space—physically and mentally. Space to move. Space to feel. Space to be.</p>
-              <p>Zarg&eacute; is for those who don&apos;t need to be loud to be seen.</p>
-              <p>For those who understand that growth is often invisible.</p>
-              <p>For those who carry stories within them.</p>
-              <p>This is not fast fashion.</p>
-              <p>This is not just design.</p>
-              <p className="font-serif italic text-lg">
-                This is Zarg&eacute;<br />where emotion meets form,<br />and stories are worn, not told.
-              </p>
+              {/* Only the paragraphs that didn't fit in the grey area */}
+              <StoryParagraphs paragraphs={paragraphs.slice(visibleCount ?? 0)} className="" />
             </div>
           </div>
         </div>

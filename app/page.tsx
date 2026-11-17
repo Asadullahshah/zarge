@@ -5,6 +5,7 @@ import Image from "next/image"
 import { RotateCcw, Truck } from "lucide-react"
 import { HeroSectionV2 } from "@/components/home/HeroSectionV2"
 import { OurStory } from "@/components/OurStory"
+import { getOurStory } from "@/lib/our-story"
 
 // Force dynamic rendering to show latest products
 export const dynamic = 'force-dynamic'
@@ -53,6 +54,8 @@ export const metadata: Metadata = {
 const CATEGORY_FALLBACK_IMAGE = "/img/silentbloom.png"
 
 export default async function HomePage() {
+  const ourStoryText = await getOurStory()
+
   // ── Products for the hero carousel (with device-specific "home" images) ──
   const heroProductsRaw = await sql`
     SELECT
@@ -175,7 +178,7 @@ export default async function HomePage() {
 
       {/* Our Story- Zargé */}
       {/* <div data-theme="dark"> */}
-      <OurStory />
+      <OurStory text={ourStoryText} />
       {/* </div> */}
 
       {/* Policies */}
