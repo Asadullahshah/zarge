@@ -28,6 +28,7 @@ const navItems = [
   { href: "/admin/messages", label: "Messages", icon: MessageSquare },
   { href: "/admin/blog", label: "Blog", icon: BookOpen },
   { href: "/admin/policies", label: "Policies", icon: FileText },
+  { href: "/admin/our-story", label: "Our Story", icon: BookOpen },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ]
 
